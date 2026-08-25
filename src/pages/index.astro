@@ -96,7 +96,7 @@ const toneText: Record<Tone, string> = {
 
 <BaseLayout
   title="Kineti Ultrafast Agent Harness"
-  description="A single Rust binary (~3 MB) that turns any LLM into a governed agent — or a governed swarm. Context integrity enforced mechanically, every action chained cryptographically, money capped by real circuit breakers."
+  description="3 MB Rust program that makes any language model act as a controlled agent. It maintains consistent context, verifies each action cryptographically, limits spending with circuit breakers, runs workers in separate processes, and blocks deployment unless verification proofs are current."
 >
   <!-- HERO + INSTALL (merged) -->
   <section class="border-b border-line">
@@ -105,21 +105,17 @@ const toneText: Record<Tone, string> = {
         The only mathematically verifiable agent harness.
       </h1>
       <p class="mt-6 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
-        A single Rust binary (~3 MB) that turns any LLM into a governed agent — or a governed swarm of them:
-        context integrity enforced mechanically, every action chained cryptographically, money capped by real
-        circuit breakers, parallel workers isolated in their own trees, and shipping refused unless proofs are
-        fresh.
+        3 MB Rust program that makes any language model act as a controlled agent. It maintains consistent
+        context, verifies each action cryptographically, limits spending with circuit breakers, runs workers in
+        separate processes, and blocks deployment unless verification proofs are current.
       </p>
     </div>
     <div class="mx-auto max-w-6xl px-4 pb-16 sm:px-6">
       <h2 class="text-xs tracking-widest text-muted"><span class="text-accent">##</span> INSTALL</h2>
       <Terminal class="mt-8 max-w-2xl" />
       <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">
-        The script verifies every download against the release's
-        <code class="text-accent">SHA256SUMS</code>, never asks for sudo, and installs to
-        <code class="text-accent">/usr/local/bin</code> when writable, else
-        <code class="text-accent">~/.local/bin</code> (then <code class="text-accent">~/.cargo/bin</code>; override
-        with <code class="text-accent">$KINETI_INSTALL_DIR</code>).
+        The script checks each download with the release’s
+        <code class="text-accent">SHA256SUMS</code>. It runs without admin rights.
       </p>
 
       <div class="mt-10 flex flex-wrap gap-3">
