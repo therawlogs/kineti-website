@@ -1,0 +1,79 @@
+---
+import DocsLayout from "../../layouts/DocsLayout.astro";
+
+const toc = [
+  { id: "sec-install", label: "01 INSTALL" },
+  { id: "sec-first-run", label: "02 FIRST GOVERNED RUN" },
+  { id: "sec-see", label: "03 WHAT YOU WILL SEE" },
+];
+---
+
+<DocsLayout
+  title="Getting started — Kineti"
+  description="Install Kineti, run your first task, and see the checks: stop for spec approval, block on old proof, and stop on spend limit."
+  active="getting-started"
+  {toc}
+>
+  <!-- 1. INSTALL -->
+  <section id="sec-install" data-doc-section aria-labelledby="h-install" class="scroll-mt-20 border-b border-line py-10">
+    <h2 id="h-install" class="text-sm font-bold tracking-widest text-fg"><span class="mr-2 text-accent">01</span>INSTALL</h2>
+    <pre class="mt-6 overflow-x-auto rounded-none border border-line bg-surface px-5 py-4 text-xs leading-relaxed sm:text-sm"><code><span class="text-muted">$</span> <span class="font-bold text-fg">curl -fsSL https://getkineti.com/install.sh | sh</span></code></pre>
+    <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">Or build from source:</p>
+    <pre class="mt-4 overflow-x-auto rounded-none border border-line bg-surface px-5 py-4 text-xs leading-relaxed sm:text-sm"><code><span class="text-muted">$</span> <span class="font-bold text-fg">cargo install --git https://github.com/therawlogs/kineti</span></code></pre>
+    <p class="mt-6 max-w-3xl text-sm leading-relaxed text-muted">
+      Sign in: add an API key for your provider (<code class="text-accent">GEMINI_API_KEY</code>,
+      <code class="text-accent">XAI_API_KEY</code>) <strong class="text-fg">or</strong> run
+      <code class="text-accent">kineti login</code> for OAuth. Keys stay in env vars. Tokens are saved in
+      <code class="text-accent">~/.kineti/auth/</code> (readable only by you). Secrets never appear in logs.
+    </p>
+  </section>
+
+  <!-- 2. FIRST GOVERNED RUN -->
+  <section id="sec-first-run" data-doc-section aria-labelledby="h-first-run" class="scroll-mt-20 border-b border-line py-10">
+    <h2 id="h-first-run" class="text-sm font-bold tracking-widest text-fg"><span class="mr-2 text-accent">02</span>FIRST RUN WITH CHECKS</h2>
+    <pre class="mt-6 overflow-x-auto rounded-none border border-line bg-surface px-5 py-4 text-xs leading-relaxed sm:text-sm"><code><span class="font-bold text-fg">kineti init</span>                                   <span class="text-muted"># create .kineti/ and kineti.toml you can edit</span>
+<span class="font-bold text-fg">kineti provider-test</span> <span class="text-soft">--provider gemini</span>        <span class="text-muted"># test the connection</span>
+<span class="font-bold text-fg">kineti task</span> <span class="text-soft">--task "create hello.txt"</span>         <span class="text-muted"># run one task with checks</span>
+<span class="font-bold text-fg">kineti run</span> <span class="text-soft">--goal "build X"</span>                   <span class="text-muted"># run all 13 steps with gates</span>
+<span class="font-bold text-fg">kineti receipt</span>                                <span class="text-muted"># show run log with hashes</span>
+<span class="font-bold text-fg">kineti verify</span> <span class="text-soft">--all</span>                           <span class="text-muted"># check full history</span></code></pre>
+  </section>
+
+  <!-- 3. WHAT YOU WILL SEE -->
+  <section id="sec-see" data-doc-section aria-labelledby="h-see" class="scroll-mt-20 py-10">
+    <h2 id="h-see" class="text-sm font-bold tracking-widest text-fg"><span class="mr-2 text-accent">03</span>WHAT YOU WILL SEE</h2>
+    <ul class="mt-6 max-w-3xl list-disc space-y-3 pl-5 text-sm leading-relaxed text-muted marker:text-accent">
+      <li>You see steps 1 to 13. Files are created as you go.</li>
+      <li>
+        At step 6 it <strong class="text-fg">stops and waits</strong> for you to type
+        <code class="text-accent">y</code>. Try <code class="text-accent">n</code> first — it will not write code
+        and will make a new spec instead.
+      </li>
+      <li>
+        Change a file by hand after step 9, then let it try to ship: you see
+        <code class="text-danger">SHIP REFUSED — STALE proof</code>. Run
+        <code class="text-accent">kineti evidence --cmd "&lt;check command&gt;"</code> to make a fresh proof, then
+        it ships.
+      </li>
+      <li>
+        If you go over your spend limit, it stops between steps until you create
+        <code class="text-accent">.kineti/spend.reset</code> by hand.
+      </li>
+    </ul>
+    <p class="mt-8 max-w-3xl text-sm leading-relaxed text-muted">
+      Full scripted walkthrough (the recording script behind the homepage demo):
+      <a
+        href="https://github.com/therawlogs/kineti/blob/main/docs/DEMO.md"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="text-accent hover:underline">90-second demo</a
+      >.
+    </p>
+    <p class="mt-8 max-w-3xl text-sm leading-relaxed text-muted">
+      Next:
+      <a href="/docs/swarm" class="text-accent hover:underline">Swarm guide</a> ·
+      <a href="/docs/cli" class="text-accent hover:underline">CLI reference</a> ·
+      <a href="/docs/configuration" class="text-accent hover:underline">Configuration</a>
+    </p>
+  </section>
+</DocsLayout>

@@ -1,0 +1,101 @@
+---
+import DocsLayout from "../../layouts/DocsLayout.astro";
+
+const toc = [
+  { id: "sec-report", label: "01 REPORT A PROBLEM" },
+  { id: "sec-scope", label: "02 WHAT IS IN SCOPE" },
+  { id: "sec-limits", label: "03 WHAT IS NOT YET COVERED" },
+];
+
+const scope = [
+  "Tools escaping the project folder, including symlink tricks",
+  "Model following instructions hidden in untrusted content that lead to tool use",
+  "Tampered logs that still pass the hash check",
+  "Spend limit bypass (reserve races, lock problems)",
+  "Daemon socket attacks: .kineti/kineti.sock must stay 0600",
+  "Token theft: ~/.kineti/auth/* must stay 0600 and never appear in logs or child process setup",
+  "Worktree delete going outside .kineti/worktrees/<id>",
+];
+
+const limitations = [
+  {
+    title: "Shell has your user permissions",
+    body: "bash runs with your user rights inside the project folder. There is no extra sandbox yet (planned: system sandbox profiles). Swarm workers are also not sandboxed inside their folders — safety comes from separate folders and git merge, not from the OS.",
+  },
+  {
+    title: "Input screening is pattern matching",
+    body: "Checking for instruction-like lines uses pattern matching, not a second model.",
+  },
+  {
+    title: "Network is not blocked",
+    body: "Network access for child processes is not blocked.",
+  },
+  {
+    title: "Tokens depend on your account safety",
+    body: "Tokens on disk are only as safe as your user account. If the whole machine is compromised, the tokens can be read like any other file.",
+  },
+  {
+    title: "Daemon socket is same-user only",
+    body: "The daemon socket is 0600 (same user only). It does not stop malware already running as your user.",
+  },
+];
+---
+
+<DocsLayout
+  title="Security — Kineti"
+  description="How to report problems, what is in scope, and what is not yet fully covered. Use this to decide if Kineti fits your risk."
+  active="security"
+  {toc}
+>
+  <section data-doc-section class="scroll-mt-20 border-b border-line py-10">
+    <h1 class="text-xl font-bold tracking-tight text-fg sm:text-2xl">Security</h1>
+    <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">
+      Copied from <code class="text-accent">SECURITY.md</code> in the repo. The repo is the source of truth.
+    </p>
+  </section>
+
+  <section id="sec-report" data-doc-section aria-labelledby="h-report" class="scroll-mt-20 border-b border-line py-10">
+    <h2 id="h-report" class="text-sm font-bold tracking-widest text-fg"><span class="mr-2 text-accent">01</span>REPORT A PROBLEM</h2>
+    <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">
+      Tell us privately on GitHub
+      <a
+        href="https://github.com/therawlogs/kineti/security/advisories/new"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="text-accent hover:underline">Security Advisories</a
+      >. Do not open a public issue for a flaw that can be used to attack. We reply within 7 days.
+    </p>
+  </section>
+
+  <section id="sec-scope" data-doc-section aria-labelledby="h-scope" class="scroll-mt-20 border-b border-line py-10">
+    <h2 id="h-scope" class="text-sm font-bold tracking-widest text-fg"><span class="mr-2 text-accent">02</span>WHAT IS IN SCOPE</h2>
+    <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">
+      Kineti runs model-chosen commands on your machine. These are in scope:
+    </p>
+    <ul class="mt-6 max-w-3xl list-disc space-y-3 pl-5 text-sm leading-relaxed text-muted marker:text-accent">
+      {scope.map((item) => <li>{item}</li>)}
+    </ul>
+  </section>
+
+  <section id="sec-limits" data-doc-section aria-labelledby="h-limits" class="scroll-mt-20 py-10">
+    <h2 id="h-limits" class="text-sm font-bold tracking-widest text-fg"><span class="mr-2 text-accent">03</span>WHAT IS NOT YET FULLY COVERED <span class="text-muted">(v0.1)</span></h2>
+    <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">We list these up front so you can decide:</p>
+    <ul class="mt-6 max-w-3xl space-y-4">
+      {
+        limitations.map((item) => (
+          <li class="border-l-2 border-line pl-4 text-sm leading-relaxed text-muted transition-colors hover:border-accent">
+            <strong class="text-fg">{item.title}</strong> — {item.body}
+          </li>
+        ))
+      }
+    </ul>
+    <p class="mt-8 max-w-3xl border-l-2 border-danger bg-surface px-4 py-3 text-sm font-bold leading-relaxed text-fg">
+      Use Kineti to reduce risk and keep proof — not as a hard wall against a fully compromised machine.
+    </p>
+    <p class="mt-8 text-sm leading-relaxed text-muted">
+      Next: <a href="/docs/architecture" class="text-accent hover:underline">Architecture</a> ·
+      <a href="/docs/governance" class="text-accent hover:underline">Governance</a> ·
+      <a href="/docs/changelog" class="text-accent hover:underline">Changelog</a>
+    </p>
+  </section>
+</DocsLayout>

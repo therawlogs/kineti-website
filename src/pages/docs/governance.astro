@@ -1,0 +1,164 @@
+---
+import DocsLayout from "../../layouts/DocsLayout.astro";
+
+const toc = [
+  { id: "sec-laws", label: "01 THREE RULES" },
+  { id: "sec-stages", label: "02 STAGES AND GATES" },
+  { id: "sec-checks", label: "03 CHECKS THAT RUN" },
+  { id: "sec-why", label: "04 WHY THIS WAY" },
+];
+
+const laws = [
+  {
+    n: "1",
+    title: "Ideas are suggestions only.",
+    body: "Prompts and guides can suggest what to do. They cannot change the rules or skip checks.",
+  },
+  {
+    n: "2",
+    title: "Programs enforce the rules.",
+    body: "Checks for budget, safety, and proof are code. The code runs the same way every time. Words cannot bypass it.",
+  },
+  {
+    n: "3",
+    title: "Everything is saved with proof.",
+    body: "Each step is saved in a log that is linked with hashes. If one byte changes, the check fails.",
+  },
+];
+
+const gates = [
+  {
+    gate: "Feasibility (5)",
+    fires: "budget, data, or team check fails",
+    failure: "go back to diagnosis. No code has been written yet.",
+  },
+  {
+    gate: "Spec (6)",
+    fires: "spec is written",
+    failure: "HARD STOP: waits for you to type y. Steps 1–6 can only read files.",
+  },
+  {
+    gate: "Ship (11)",
+    fires: "ready to ship",
+    failure: "blocked unless tests match the current code, security checks pass, history is clean, and files are clean.",
+  },
+];
+
+const inventory = [
+  {
+    name: "Spend limit",
+    body: "All model calls use reserve then settle. There are limits for the whole run, each stage, and each worker. Over the limit stops the run. Only you can resume by creating .kineti/spend.reset.",
+  },
+  { name: "Folder lock", body: "Tools can only work inside your project folder. Anything outside fails." },
+  {
+    name: "Input screening",
+    body: "All tool output is marked as data. Lines that look like instructions are set aside, not run.",
+  },
+  {
+    name: "Input checks",
+    body: "Checks on shape and range run between what is seen and what is decided.",
+  },
+  {
+    name: "Test tie to code",
+    body: "Test results are tied to a hash of the code. If you edit the code, you must run tests again. Old proof does not ship.",
+  },
+  {
+    name: "Send log",
+    body: "Every outbound send is saved before it leaves. Secrets are removed from the log.",
+  },
+  {
+    name: "Undo log",
+    body: "Each file change saves how to undo it. Undo runs from newest to oldest.",
+  },
+  {
+    name: "Clean file check",
+    body: "Before ship, all files are checked for names, home paths, or secrets. Zero matches needed.",
+  },
+];
+---
+
+<DocsLayout
+  title="Governance — Kineti"
+  description="How Kineti enforces rules: three plain rules, 13 steps, 3 gates, and 8 checks that run as code."
+  active="governance"
+  {toc}
+>
+  <section data-doc-section class="scroll-mt-20 border-b border-line py-10">
+    <h1 class="text-xl font-bold tracking-tight text-fg sm:text-2xl">Governance — how rules are enforced</h1>
+    <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">
+      Most tools use words to tell the model how to behave. Kineti uses code that the model cannot change.
+      A gate is a yes/no check. A budget is math. History is a hash chain. These run the same way every time.
+    </p>
+  </section>
+
+  <section id="sec-laws" data-doc-section aria-labelledby="h-laws" class="scroll-mt-20 border-b border-line py-10">
+    <h2 id="h-laws" class="text-sm font-bold tracking-widest text-fg"><span class="mr-2 text-accent">01</span>THREE RULES</h2>
+    <div class="mt-8 grid grid-cols-1 gap-4 md:grid-cols-3">
+      {
+        laws.map((law) => (
+          <article class="rounded-none border border-line bg-surface p-6 transition-colors hover:border-accent">
+            <p class="text-[10px] tracking-widest text-muted">RULE {law.n}</p>
+            <h3 class="mt-2 text-lg font-bold text-fg">{law.title}</h3>
+            <p class="mt-3 text-sm leading-relaxed text-muted">{law.body}</p>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  <section id="sec-stages" data-doc-section aria-labelledby="h-stages" class="scroll-mt-20 border-b border-line py-10">
+    <h2 id="h-stages" class="text-sm font-bold tracking-widest text-fg"><span class="mr-2 text-accent">02</span>13 STEPS, 3 GATES</h2>
+    <pre class="mt-8 overflow-x-auto rounded-none border border-line bg-surface px-5 py-4 text-[11px] leading-relaxed text-soft sm:text-xs"><code>1 officehours ─▶ 2 diagnose ─▶ 3 design ─▶ 4 architecture ─▶ 5 FEASIBILITY GATE
+     ▲                                                            │ fail → back to 2
+     │                                                            ▼ pass
+     └── 13 retro ◀─ 12 watch ◀─ 11 SHIP GATE ◀─ 10 security ◀─ 9 qa ◀─ 8 review ◀─ 7 build ─▶ 6 SPEC STOP (human)</code></pre>
+    <div class="mt-8 overflow-x-auto border border-line">
+      <table class="w-full min-w-[760px] border-collapse text-left text-sm">
+        <thead>
+          <tr class="border-b border-line bg-surface-2 text-xs tracking-widest text-muted">
+            <th scope="col" class="px-4 py-3 font-normal">GATE</th>
+            <th scope="col" class="px-4 py-3 font-normal">WHEN IT RUNS</th>
+            <th scope="col" class="px-4 py-3 font-normal">WHAT HAPPENS IF IT FAILS</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            gates.map((g) => (
+              <tr class="border-b border-line transition-colors last:border-b-0 hover:bg-surface-2">
+                <td class="px-4 py-3 font-bold whitespace-nowrap text-accent">{g.gate}</td>
+                <td class="px-4 py-3 leading-relaxed text-muted">{g.fires}</td>
+                <td class="px-4 py-3 leading-relaxed text-soft">{g.failure}</td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="sec-checks" data-doc-section aria-labelledby="h-checks" class="scroll-mt-20 border-b border-line py-10">
+    <h2 id="h-checks" class="text-sm font-bold tracking-widest text-fg"><span class="mr-2 text-accent">03</span>CHECKS THAT RUN <span class="text-muted">(ALL ARE CODE)</span></h2>
+    <ul class="mt-8 grid max-w-5xl grid-cols-1 gap-x-8 gap-y-4 md:grid-cols-2">
+      {
+        inventory.map((item) => (
+          <li class="border-l-2 border-line pl-4 text-sm leading-relaxed text-muted transition-colors hover:border-accent">
+            <strong class="text-fg">{item.name}</strong> — {item.body}
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <section id="sec-why" data-doc-section aria-labelledby="h-why" class="scroll-mt-20 py-10">
+    <h2 id="h-why" class="text-sm font-bold tracking-widest text-fg"><span class="mr-2 text-accent">04</span>WHY THIS WAY</h2>
+    <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">
+      The strong guarantees (no code without your approval, no runaway spend, no hidden history edits) are in
+      code the model does not control. The easy-to-change parts (prompts) stay editable. The hard parts are built
+      into one ~3 MB binary.
+    </p>
+    <p class="mt-8 text-sm leading-relaxed text-muted">
+      Next: <a href="/docs/architecture" class="text-accent hover:underline">Architecture</a> ·
+      <a href="/docs/security" class="text-accent hover:underline">Security</a>
+    </p>
+  </section>
+</DocsLayout>

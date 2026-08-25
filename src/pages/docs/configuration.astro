@@ -1,0 +1,140 @@
+---
+import DocsLayout from "../../layouts/DocsLayout.astro";
+
+const toc = [
+  { id: "sec-schema", label: "01 COMPLETE SCHEMA" },
+  { id: "sec-defaults", label: "02 DEFAULTS CHEAT-SHEET" },
+  { id: "sec-reset", label: "03 RESET PROTOCOL" },
+];
+
+const defaults = [
+  {
+    key: "limits.global_usd",
+    def: "50.0",
+    notes: "stops the run when spend goes over",
+  },
+  {
+    key: "limits.per_stage_usd",
+    def: "10.0",
+    notes: "limit per step; 0 turns it off",
+  },
+  {
+    key: "limits.max_worker_usd",
+    def: "0 (off)",
+    notes: "limit per worker; spend check still stops overuse",
+  },
+  { key: "limits.context_char_budget", def: "24000", notes: "characters" },
+  { key: "execution.mode", def: '"single"', notes: "" },
+  { key: "execution.max_parallel_workers", def: "4", notes: "" },
+  {
+    key: "execution.worker_isolation",
+    def: '"auto"',
+    notes: "git repo → separate copy, else temp folder",
+  },
+  {
+    key: "providers.gemini",
+    def: "included",
+    notes: "GEMINI_API_KEY, free, 0 cost",
+  },
+  {
+    key: "providers.grok",
+    def: "included",
+    notes: "XAI_API_KEY, 12.5/25.0 per 1M tokens",
+  },
+];
+---
+
+<DocsLayout
+  title="Configuration — Kineti"
+  description="All settings in kineti.toml: providers, sign-in, run mode, spend limits, and file checks. Data, not code."
+  active="configuration"
+  {toc}
+>
+  <!-- INTRO -->
+  <section data-doc-section class="scroll-mt-20 border-b border-line py-10">
+    <h1 class="text-xl font-bold tracking-tight text-fg sm:text-2xl">Configuration</h1>
+    <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">
+      All settings are in <code class="text-accent">kineti.toml</code> in your project folder — model names,
+      prices, spend limits, run mode, and sign-in. Data, not code. Providers use the OpenAI format; Gemini
+      and Grok use one client today.
+    </p>
+    <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">
+      If the file is missing or has an error, Kineti uses built-in defaults and shows a warning. Settings may
+      be missing, but checks still run.
+    </p>
+  </section>
+
+  <!-- 1. COMPLETE SCHEMA -->
+  <section id="sec-schema" data-doc-section aria-labelledby="h-schema" class="scroll-mt-20 border-b border-line py-10">
+    <h2 id="h-schema" class="text-sm font-bold tracking-widest text-fg"><span class="mr-2 text-accent">01</span>COMPLETE SCHEMA</h2>
+    <pre class="mt-6 overflow-x-auto rounded-none border border-line bg-surface px-5 py-4 text-xs leading-relaxed sm:text-sm"><code><span class="text-muted"># ── Providers ────────────────────────────────────────────────────────</span>
+<span class="text-accent">[providers.&lt;name&gt;]</span>                     <span class="text-muted"># any name; referenced by --provider</span>
+<span class="text-soft">base_url</span>          = <span class="text-fg">"https://…"</span>        <span class="text-muted"># required — OpenAI-compatible endpoint</span>
+<span class="text-soft">api_key_env</span>       = <span class="text-fg">"NAME_OF_ENV_VAR"</span>  <span class="text-muted"># required</span>
+<span class="text-soft">default_model</span>     = <span class="text-fg">"model-id"</span>         <span class="text-muted"># required</span>
+<span class="text-soft">price_per_1m_input</span>  = <span class="text-fg">0.0</span>              <span class="text-muted"># optional, USD per 1M input tokens (default 0.0)</span>
+<span class="text-soft">price_per_1m_output</span> = <span class="text-fg">0.0</span>              <span class="text-muted"># optional, USD per 1M output tokens (default 0.0)</span>
+
+<span class="text-muted"># Optional OAuth2/PKCE per provider — token wins over env key:</span>
+<span class="text-accent">[providers.&lt;name&gt;.auth]</span>
+<span class="text-soft">client_id</span>     = <span class="text-fg">"kineti-cli"</span>
+<span class="text-soft">authorize_url</span> = <span class="text-fg">"https://idp.example.com/authorize"</span>
+<span class="text-soft">token_url</span>     = <span class="text-fg">"https://idp.example.com/token"</span>
+<span class="text-soft">scopes</span>        = <span class="text-fg">"openid profile"</span>       <span class="text-muted"># optional</span>
+
+<span class="text-muted"># ── Execution ────────────────────────────────────────────────────────</span>
+<span class="text-accent">[execution]</span>
+<span class="text-soft">mode</span>                 = <span class="text-fg">"single"</span>         <span class="text-muted"># "single" | "swarm"</span>
+<span class="text-soft">max_parallel_workers</span> = <span class="text-fg">4</span>               <span class="text-muted"># dependency-wave width in swarm mode</span>
+<span class="text-soft">worker_isolation</span>    = <span class="text-fg">"auto"</span>           <span class="text-muted"># auto | git | scratchpad</span>
+
+<span class="text-muted"># ── Limits ───────────────────────────────────────────────────────────</span>
+<span class="text-accent">[limits]</span>
+<span class="text-soft">global_usd</span>          = <span class="text-fg">50.0</span>             <span class="text-muted"># whole-run ceiling</span>
+<span class="text-soft">per_stage_usd</span>       = <span class="text-fg">10.0</span>             <span class="text-muted"># ENFORCED per-stage ceiling; 0 disables</span>
+<span class="text-soft">max_worker_usd</span>      = <span class="text-fg">0</span>                <span class="text-muted"># swarm-only per-worker ceiling; 0 disables</span>
+<span class="text-soft">context_char_budget</span> = <span class="text-fg">24000</span>            <span class="text-muted"># context integrity budget</span>
+<span class="text-soft">verify_command</span>      = <span class="text-fg">""</span>               <span class="text-muted"># proof the ship gate binds to, e.g. "./greeting.sh"</span>
+
+<span class="text-muted"># ── Clean files ──────────────────────────────────────────────────────</span>
+<span class="text-accent">[clean_files]</span>
+<span class="text-soft">forbid</span> = <span class="text-fg">[]</span>                            <span class="text-muted"># extra case-insensitive forbidden substrings (team/client/project names)</span></code></pre>
+  </section>
+
+  <!-- 2. DEFAULTS CHEAT-SHEET -->
+  <section id="sec-defaults" data-doc-section aria-labelledby="h-defaults" class="scroll-mt-20 border-b border-line py-10">
+    <h2 id="h-defaults" class="text-sm font-bold tracking-widest text-fg"><span class="mr-2 text-accent">02</span>DEFAULTS CHEAT-SHEET</h2>
+    <div class="mt-6 overflow-x-auto border border-line">
+      <table class="w-full min-w-[720px] border-collapse text-left text-sm">
+        <thead>
+          <tr class="border-b border-line bg-surface-2 text-xs tracking-widest text-muted">
+            <th scope="col" class="px-4 py-3 font-normal">KEY</th>
+            <th scope="col" class="px-4 py-3 font-normal">DEFAULT</th>
+            <th scope="col" class="px-4 py-3 font-normal">NOTES</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            defaults.map((d) => (
+              <tr class="border-b border-line transition-colors last:border-b-0 hover:bg-surface-2">
+                <td class="px-4 py-3 font-bold whitespace-nowrap text-fg">{d.key}</td>
+                <td class="px-4 py-3 whitespace-nowrap text-accent">{d.def}</td>
+                <td class="px-4 py-3 leading-relaxed text-muted">{d.notes}</td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 3. RESET PROTOCOL -->
+  <section id="sec-reset" data-doc-section aria-labelledby="h-reset" class="scroll-mt-20 py-10">
+    <h2 id="h-reset" class="text-sm font-bold tracking-widest text-fg"><span class="mr-2 text-accent">03</span>HOW TO RESUME AFTER STOP</h2>
+    <p class="mt-4 max-w-3xl border-l-2 border-danger bg-surface px-4 py-3 text-sm leading-relaxed text-soft">
+      If you go over any spend limit, the run stops. To start again, create
+      <code class="text-accent">.kineti/spend.reset</code> by hand. There is no flag, API, or setting that
+      restarts it for you.
+    </p>
+  </section>
+</DocsLayout>

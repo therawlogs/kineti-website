@@ -1,0 +1,93 @@
+---
+import DocsLayout from "../../layouts/DocsLayout.astro";
+
+const toc = [
+  { id: "why-not-prompts", label: "01 Why not just prompts?" },
+  { id: "vs-langchain", label: "02 How is this different?" },
+  { id: "special-training", label: "03 Need special model?" },
+  { id: "spend-explodes", label: "04 What if spend jumps?" },
+  { id: "trust-history", label: "05 Can I trust history?" },
+  { id: "why-daemon", label: "06 Why a daemon?" },
+  { id: "code-sent", label: "07 Is my code sent anywhere?" },
+  { id: "not-solved", label: "08 What is not solved yet?" },
+];
+
+const faqs = [
+  {
+    id: "why-not-prompts",
+    q: "Why not just prompts?",
+    a: "Prompts are suggestions. Long context rewrites them, and there is no way to force the model to follow them. In Kineti, the important rules are code: the spec stop waits for your y, the spend check is math, the ship check compares hashes. No rule depends on the model agreeing.",
+  },
+  {
+    id: "vs-langchain",
+    q: "How is this different from frameworks like LangChain?",
+    a: "Frameworks give you parts. You build loops, memory, and rules yourself and hope they work together. Kineti gives you a full run with rules built in: steps, gates, spend log, saved history, and receipts are there before your first prompt. You set data in kineti.toml, not the control flow. If you want to build your own system, use a framework. If you want rules out of the box, use Kineti.",
+  },
+  {
+    id: "special-training",
+    q: "Does the model need special training?",
+    a: "No. Any endpoint that speaks the OpenAI wire format works. Gemini and Grok are already set up with the same client. Model names and prices are data in kineti.toml, not built into the binary.",
+  },
+  {
+    id: "spend-explodes",
+    q: "What if spend jumps mid-run?",
+    a: "The reserve/settle step checks after each call. If a limit is hit, the run stops between steps. To resume, you must create .kineti/spend.reset by hand. There is no flag to override this.",
+  },
+  {
+    id: "trust-history",
+    q: "Can I trust the history it shows?",
+    a: "You can check it. Run kineti verify --all. It recalcutes every hash for the main log and all worker branches. If one byte was changed, it names the branch. The ship gate blocks if history is not clean.",
+  },
+  {
+    id: "why-daemon",
+    q: "Why a daemon?",
+    a: "The daemon shares one spend counter across many CLI runs and makes log writes O(1). Warm calls are microseconds. It is optional: if no daemon answers, each command runs directly with the same checks. CI proves both ways give the same result.",
+  },
+  {
+    id: "code-sent",
+    q: "Is my code sent anywhere?",
+    a: "Only to the model providers you choose. Each send is saved before it leaves (with secrets removed) and shows in kineti receipt. There is no telemetry, no phone-home, no analytics.",
+  },
+  {
+    id: "not-solved",
+    q: "What is not solved yet?",
+    a: "OS-level sandbox for bash, WASI build, and search over the saved graph. See Security for the full list. We prefer to state limits clearly.",
+  },
+];
+---
+
+<DocsLayout
+  title="FAQ — Kineti"
+  description="Plain answers: why not prompts, how Kineti differs, spend handling, history proof, daemon, data sent, and open limits."
+  active="faq"
+  {toc}
+>
+  <section data-doc-section class="scroll-mt-20 border-b border-line py-10">
+    <h1 class="text-xl font-bold tracking-tight text-fg sm:text-2xl">FAQ</h1>
+    <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">
+      Short, plain answers. Each question has a link you can share.
+    </p>
+  </section>
+
+  {
+    faqs.map((item, i) => (
+      <section id={item.id} data-doc-section aria-labelledby={`h-${item.id}`} class="scroll-mt-20 border-b border-line py-10 last:border-b-0">
+        <h2 id={`h-${item.id}`} class="text-sm font-bold tracking-widest text-fg">
+          <span class="mr-2 text-accent">{String(i + 1).padStart(2, "0")}</span>
+          <a href={`#${item.id}`} class="hover:text-accent">
+            {item.q}
+          </a>
+        </h2>
+        <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">{item.a}</p>
+      </section>
+    ))
+  }
+
+  <section class="py-10">
+    <p class="max-w-3xl text-sm leading-relaxed text-muted">
+      More: <a href="/docs/security" class="text-accent hover:underline">Security</a> ·
+      <a href="/docs/architecture" class="text-accent hover:underline">Architecture</a> ·
+      <a href="/docs/governance" class="text-accent hover:underline">Governance</a>
+    </p>
+  </section>
+</DocsLayout>

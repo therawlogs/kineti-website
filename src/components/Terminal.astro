@@ -1,0 +1,28 @@
+---
+interface Props {
+  command?: string;
+  class?: string;
+}
+
+const { command = "curl -fsSL https://getkineti.com/install.sh | sh", class: className = "" } = Astro.props;
+---
+
+<div class:list={["relative border border-line bg-surface", className]}>
+  <div class="flex items-center justify-between border-b border-line px-4 py-2">
+    <div class="flex items-center gap-2 text-xs text-muted">
+      <span class="inline-block h-2 w-2 bg-danger"></span>
+      <span class="inline-block h-2 w-2 bg-muted"></span>
+      <span class="inline-block h-2 w-2 bg-accent"></span>
+      <span class="ml-2">sh</span>
+    </div>
+    <button
+      type="button"
+      data-copy-install
+      class="rounded-none border border-line bg-surface-2 px-2 py-0.5 text-xs text-fg transition-colors hover:border-accent"
+      title="Copy to clipboard"
+    >
+      <span data-copy-label>copy</span>
+    </button>
+  </div>
+  <pre class="overflow-x-auto px-4 py-4 text-sm text-accent"><code><span class="text-muted">$</span> {command}</code></pre>
+</div>

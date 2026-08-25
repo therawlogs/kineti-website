@@ -1,0 +1,146 @@
+---
+import DocsLayout from "../../layouts/DocsLayout.astro";
+
+const toc = [
+  { id: "sec-header", label: "01 HEADER CONTRACT" },
+  { id: "sec-memory", label: "02 MEMORY CONTRACT" },
+  { id: "sec-example", label: "03 EXAMPLE" },
+  { id: "sec-args", label: "04 ARGUMENTS & PAYLOADS" },
+  { id: "sec-python", label: "05 PYTHON QUICKSTART" },
+];
+
+const headerContract = [
+  '#include "kineti.h"   /* grab kineti.h from the Release assets */',
+  "",
+  "typedef struct KinetiResult {",
+  "    bool ok;            /* false => payload holds the error text  */",
+  "    char *payload;      /* JSON on success, error text on failure */",
+  "} KinetiResult;",
+  "",
+  "const char *kineti_version(void);                 /* static storage — do NOT free */",
+  "void        kineti_free_string(char *ptr);        /* NULL is a no-op */",
+  "KinetiResult kineti_run    (const char *args_json);",
+  "KinetiResult kineti_verify (const char *args_json);",
+  "KinetiResult kineti_receipt(const char *args_json);",
+];
+
+const cExample = [
+  'KinetiResult r = kineti_run("{\\"goal\\":\\"create hello.txt\\",",',
+  '                             "\\"provider\\":\\"gemini\\"}");',
+  "/* r.ok ? JSON payload : error text */",
+  'KinetiResult v = kineti_verify("{\\"all\\":true}");',
+  "KinetiResult q = kineti_receipt(NULL);",
+  "kineti_free_string(r.payload); kineti_free_string(v.payload);",
+  "kineti_free_string(q.payload);",
+];
+
+const memoryContract = [
+  {
+    lead: "Input text:",
+    body: "Ends with a zero byte, UTF-8. You own it. Kineti does not free it.",
+  },
+  {
+    lead: "Output text:",
+    body: "You own it once returned. Free it once with kineti_free_string(). NULL means out of memory.",
+  },
+  {
+    lead: "Errors:",
+    body: "Failures come back as ok=false with an error string. No crash crosses the border.",
+  },
+  {
+    lead: "One run at a time:",
+    body: "Do not run two kineti_run() calls at the same time in one process.",
+  },
+];
+
+function codeHtml(lines: string[]): string[] {
+  return lines.map((l) =>
+    l
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/(\/\*.*?\*\/)/g, '<span class="text-muted">$1</span>')
+  );
+}
+---
+
+<DocsLayout
+  title="C API — Kineti"
+  description="Use Kineti from C, Python (ctypes/cffi), or any C-compatible language via libkineti."
+  active="c-api"
+  {toc}
+>
+  <!-- INTRO -->
+  <section data-doc-section class="scroll-mt-20 border-b border-line py-10">
+    <h1 class="text-xl font-bold tracking-tight text-fg sm:text-2xl">C API — use Kineti from code</h1>
+    <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">
+      Each release includes <code class="text-accent">libkineti</code> and
+      <code class="text-accent">include/kineti.h</code> on GitHub. Works from C, Python
+      (ctypes/cffi), and other hosts. Run all calls with your project folder as the current folder.
+    </p>
+  </section>
+
+  <!-- 1. HEADER CONTRACT -->
+  <section id="sec-header" data-doc-section aria-labelledby="h-header" class="scroll-mt-20 border-b border-line py-10">
+    <h2 id="h-header" class="text-sm font-bold tracking-widest text-fg"><span class="mr-2 text-accent">01</span>HEADER CONTRACT</h2>
+    <pre class="mt-6 overflow-x-auto rounded-none border border-line bg-surface px-5 py-4 text-xs leading-relaxed text-soft sm:text-sm"><code>{codeHtml(headerContract).map((l) => <Fragment set:html={l + "\n"} />)}</code></pre>
+  </section>
+
+  <!-- 2. MEMORY CONTRACT -->
+  <section id="sec-memory" data-doc-section aria-labelledby="h-memory" class="scroll-mt-20 border-b border-line py-10">
+    <h2 id="h-memory" class="text-sm font-bold tracking-widest text-fg"><span class="mr-2 text-accent">02</span>MEMORY CONTRACT</h2>
+    <ul class="mt-6 max-w-3xl list-disc space-y-3 pl-5 text-sm leading-relaxed text-muted marker:text-accent">
+      {
+        memoryContract.map((item) => (
+          <li>
+            <strong class="text-fg">{item.lead}</strong> {item.body}
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <!-- 3. EXAMPLE -->
+  <section id="sec-example" data-doc-section aria-labelledby="h-example" class="scroll-mt-20 border-b border-line py-10">
+    <h2 id="h-example" class="text-sm font-bold tracking-widest text-fg"><span class="mr-2 text-accent">03</span>EXAMPLE</h2>
+    <pre class="mt-6 overflow-x-auto rounded-none border border-line bg-surface px-5 py-4 text-xs leading-relaxed text-soft sm:text-sm"><code>{codeHtml(cExample).map((l) => <Fragment set:html={l + "\n"} />)}</code></pre>
+  </section>
+
+  <!-- 4. ARGUMENTS & PAYLOADS -->
+  <section id="sec-args" data-doc-section aria-labelledby="h-args" class="scroll-mt-20 border-b border-line py-10">
+    <h2 id="h-args" class="text-sm font-bold tracking-widest text-fg"><span class="mr-2 text-accent">04</span>ARGS AND RESULTS</h2>
+    <div class="mt-6 max-w-3xl space-y-4 text-sm leading-relaxed text-muted">
+      <p>
+        <code class="text-accent">kineti_run</code> args:
+        <code class="text-fg">{'{goal*, provider?, model?, cap?, mode? ("single"|"swarm"), auto_approve_spec?}'}</code> —
+        <code class="text-fg">auto_approve_spec=true</code> lets the calling program approve the spec. This is
+        logged as <code class="text-danger">"ffi auto-approval"</code>. On ok, you get:
+        <code class="text-fg">{'{"exit","stage_reached","spec_approved","shipped_at"}'}</code>.
+      </p>
+      <p>
+        <code class="text-accent">kineti_verify</code>: <code class="text-fg">{'{"all": bool}'}</code>.
+        <code class="text-fg">all=false</code> → <code class="text-fg">{'{"ok","records","head"}'}</code>;
+        <code class="text-fg">all=true</code> → also
+        <code class="text-fg">{"\"branches\":[{branch,records,head}]"}</code>,
+        <code class="text-fg">{"\"orphans\":[…]"}</code>, <code class="text-fg">{"\"errors\":[…]"}</code>.
+        If the log was changed, you get <code class="text-fg">ok=false</code> with error text.
+      </p>
+      <p>
+        <code class="text-accent">kineti_receipt</code>: result has <code class="text-fg">spend</code>
+        (main/workers/total), <code class="text-fg">gates</code> steps, <code class="text-fg">dag</code>
+        state, <code class="text-fg">egress</code> tags, and
+        <code class="text-fg">clean_files_violations</code>.
+      </p>
+    </div>
+  </section>
+
+  <!-- 5. PYTHON QUICKSTART -->
+  <section id="sec-python" data-doc-section aria-labelledby="h-python" class="scroll-mt-20 py-10">
+    <h2 id="h-python" class="text-sm font-bold tracking-widest text-fg"><span class="mr-2 text-accent">05</span>PYTHON QUICKSTART</h2>
+    <pre class="mt-6 overflow-x-auto rounded-none border border-line bg-surface px-5 py-4 text-xs leading-relaxed sm:text-sm"><code><span class="text-accent">from</span> <span class="text-soft">ctypes</span> <span class="text-accent">import</span> <span class="text-soft">CDLL, c_char_p, c_bool, Structure, POINTER</span>
+<span class="text-accent">class</span> <span class="text-fg">R</span>(Structure): <span class="text-soft">_fields_</span> = [(<span class="text-fg">"ok"</span>, c_bool), (<span class="text-fg">"payload"</span>, c_char_p)]
+k = CDLL(<span class="text-fg">"./libkineti.so"</span>); k.kineti_run.restype = R
+r = k.kineti_run(<span class="text-fg">b'&#123;"goal":"create hello.txt"&#125;'</span>)
+<span class="text-accent">print</span>(r.payload.decode())</code></pre>
+  </section>
+</DocsLayout>

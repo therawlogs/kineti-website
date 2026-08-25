@@ -1,0 +1,100 @@
+---
+import DocsLayout from "../../layouts/DocsLayout.astro";
+
+const toc = [
+  { id: "sec-assets", label: "01 RELEASE FILES" },
+  { id: "sec-v01", label: "02 v0.1.0 — WHAT SHIPPED" },
+  { id: "sec-deferred", label: "03 WHAT IS LATER" },
+  { id: "sec-migrate", label: "04 UPGRADE NOTES" },
+];
+
+const assets = [
+  "kineti-linux-x64",
+  "kineti-linux-arm64",
+  "kineti-linux-x64-static",
+  "kineti-linux-arm64-static",
+  "kineti-darwin-arm64",
+  "kineti-darwin-x64",
+  "SHA256SUMS",
+  "include/kineti.h",
+];
+
+const shipped = [
+  "Model loop with file checks, input screening, input limit, shape checks, signal raise, and step-based tool limits",
+  "Undo log and test tied to code hash",
+  "Send log with secrets removed",
+  "13 steps with all three gates (go back to diagnosis, stop for spec, block ship)",
+  "Daemon (kinetid) with shared reserve/settle and per-stage limits; direct run proven identical in CI",
+  "Branch-and-merge logs with orphan check",
+  "Git-worktree swarm with task split contract and one-try merge rule",
+  "One hash-linked receipt for the whole run",
+  "Login with PKCE OAuth (RFC 7636 S256) or env key",
+  "C API (kineti_run / kineti_verify / kineti_receipt)",
+];
+
+const deferred = [
+  "OS sandbox for child processes",
+  "WASI build",
+  "Search over the saved graph",
+];
+---
+
+<DocsLayout
+  title="Changelog — Kineti"
+  description="Release files, how to verify SHA256SUMS, what shipped in v0.1.0, what is planned later, and upgrade notes."
+  active="changelog"
+  {toc}
+>
+  <section data-doc-section class="scroll-mt-20 border-b border-line py-10">
+    <h1 class="text-xl font-bold tracking-tight text-fg sm:text-2xl">Changelog</h1>
+    <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">
+      Binaries come from GitHub Releases only. This site only serves
+      <code class="text-accent">install.sh</code>, which matches the tagged commit byte for byte.
+    </p>
+  </section>
+
+  <section id="sec-assets" data-doc-section aria-labelledby="h-assets" class="scroll-mt-20 border-b border-line py-10">
+    <h2 id="h-assets" class="text-sm font-bold tracking-widest text-fg"><span class="mr-2 text-accent">01</span>RELEASE FILES</h2>
+    <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">Each release includes:</p>
+    <ul class="mt-6 grid max-w-3xl grid-cols-1 gap-2 sm:grid-cols-2">
+      {
+        assets.map((a) => (
+          <li class="border border-line bg-surface px-3 py-2 text-sm text-soft">
+            <span class="text-accent">·</span> {a}
+          </li>
+        ))
+      }
+    </ul>
+    <div class="mt-8 max-w-3xl">
+      <h3 class="text-sm font-bold text-fg">Check after install</h3>
+      <pre class="mt-3 overflow-x-auto rounded-none border border-line bg-surface px-5 py-4 text-xs leading-relaxed sm:text-sm"><code><span class="text-muted">$</span> <span class="font-bold text-fg">curl -fsSL https://getkineti.com/install.sh | sh</span>
+<span class="text-muted"># from the release page:</span>
+<span class="font-bold text-fg">sha256sum -c SHA256SUMS</span></code></pre>
+    </div>
+  </section>
+
+  <section id="sec-v01" data-doc-section aria-labelledby="h-v01" class="scroll-mt-20 border-b border-line py-10">
+    <h2 id="h-v01" class="text-sm font-bold tracking-widest text-fg"><span class="mr-2 text-accent">02</span>v0.1.0 — WHAT SHIPPED</h2>
+    <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">Shipped and checked by 109 tests:</p>
+    <ol class="mt-6 max-w-3xl list-decimal space-y-2 pl-5 text-sm leading-relaxed text-muted marker:text-accent">
+      {shipped.map((item) => <li>{item}</li>)}
+    </ol>
+  </section>
+
+  <section id="sec-deferred" data-doc-section aria-labelledby="h-deferred" class="scroll-mt-20 border-b border-line py-10">
+    <h2 id="h-deferred" class="text-sm font-bold tracking-widest text-fg"><span class="mr-2 text-accent">03</span>WHAT IS PLANNED LATER</h2>
+    <ul class="mt-6 max-w-3xl list-disc space-y-2 pl-5 text-sm leading-relaxed text-muted marker:text-accent">
+      {deferred.map((item) => <li>{item}</li>)}
+    </ul>
+  </section>
+
+  <section id="sec-migrate" data-doc-section aria-labelledby="h-migrate" class="scroll-mt-20 py-10">
+    <h2 id="h-migrate" class="text-sm font-bold tracking-widest text-fg"><span class="mr-2 text-accent">04</span>UPGRADE NOTES</h2>
+    <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">None — first release.</p>
+    <p class="mt-8 text-sm leading-relaxed text-muted">
+      Next: <a href="/docs/getting-started" class="text-accent hover:underline">Getting started</a> ·
+      <a href="/docs/security" class="text-accent hover:underline">Security</a> ·
+      <a href="https://github.com/therawlogs/kineti/releases" target="_blank" rel="noopener noreferrer" class="text-accent hover:underline">Releases →</a>
+    </p>
+  </section>
+</DocsLayout>

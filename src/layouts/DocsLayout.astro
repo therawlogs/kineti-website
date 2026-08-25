@@ -1,0 +1,199 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+
+interface TocItem {
+  id: string;
+  label: string;
+  sub?: boolean;
+}
+
+interface Props {
+  title: string;
+  description: string;
+  active: string;
+  toc?: TocItem[];
+}
+
+const { title, description, active, toc = [] } = Astro.props;
+
+const pages = [
+  { slug: "getting-started", num: "01", label: "Getting started" },
+  { slug: "governance", num: "02", label: "Governance" },
+  { slug: "architecture", num: "03", label: "Architecture" },
+  { slug: "swarm", num: "04", label: "Swarm guide" },
+  { slug: "cli", num: "05", label: "CLI reference" },
+  { slug: "configuration", num: "06", label: "Configuration" },
+  { slug: "security", num: "07", label: "Security" },
+  { slug: "c-api", num: "08", label: "C API" },
+  { slug: "faq", num: "09", label: "FAQ" },
+  { slug: "changelog", num: "10", label: "Changelog" },
+];
+
+const related = [{ href: "/benchmarks", label: "Benchmarks" }];
+---
+
+<BaseLayout title={title} description={description}>
+  <div class="mx-auto max-w-6xl px-4 sm:px-6">
+    <div class="lg:grid lg:grid-cols-[220px_minmax(0,1fr)] lg:gap-10">
+      <!-- SIDEBAR -->
+      <aside
+        class="overflow-x-hidden border-b border-line lg:sticky lg:top-[53px] lg:h-[calc(100vh-53px)] lg:overflow-y-auto lg:border-b-0 lg:border-r lg:py-10 lg:pr-6"
+      >
+        <div class="pb-8">
+          <label class="sr-only" for="doc-search">Search this page</label>
+          <input
+            type="search"
+            id="doc-search"
+            class="doc-search w-full rounded-none border border-line bg-surface px-3 py-2 text-xs text-fg placeholder:text-muted focus:border-accent focus:outline-none"
+            placeholder="Search this page..."
+            autocomplete="off"
+          />
+        </div>
+
+        <nav class="pb-6" aria-label="Documentation pages">
+          <p class="px-3 pb-3 text-[10px] tracking-widest text-muted">DOCUMENTATION</p>
+          <ul class="space-y-0.5">
+            {
+              pages.map((p) => (
+                <li>
+                  <a
+                    href={`/docs/${p.slug}`}
+                    aria-current={active === p.slug ? "page" : undefined}
+                    class:list={[
+                      "block border-l-2 py-1 pl-3 pr-2 text-sm transition-colors",
+                      active === p.slug
+                        ? "border-accent bg-surface text-accent"
+                        : "border-transparent text-muted hover:bg-surface hover:text-fg",
+                    ]}
+                  >
+                    <span class="mr-2 text-[10px] text-muted">{p.num}</span>
+                    {p.label}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+
+        {
+          toc.length > 0 && (
+            <nav class="pb-4" aria-label="On this page">
+              <p class="px-3 pb-2 text-[10px] tracking-widest text-muted">ON THIS PAGE</p>
+              <ul class="space-y-0.5">
+                {toc.map((item) => (
+                  <li>
+                    <a
+                      href={`#${item.id}`}
+                      data-toc
+                      class:list={[
+                        "block border-l-2 border-transparent py-1 text-muted transition-colors hover:bg-surface hover:text-fg",
+                        item.sub ? "pl-7 text-xs" : "pl-3 text-sm",
+                      ]}
+                    >
+                      {item.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          )
+        }
+
+        <nav class="pb-4 lg:pb-0" aria-label="Related pages">
+          <p class="px-3 pb-2 text-[10px] tracking-widest text-muted">RELATED</p>
+          <ul class="space-y-0.5">
+            {
+              related.map((r) => (
+                <li>
+                  <a
+                    href={r.href}
+                    class="block border-l-2 border-transparent py-1 pl-3 text-sm text-muted transition-colors hover:bg-surface hover:text-fg"
+                  >
+                    {r.label}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+      </aside>
+
+      <!-- CONTENT -->
+      <div class="min-w-0">
+        <p id="doc-no-results" hidden class="py-10 text-sm text-danger">[NO MATCHING SECTIONS]</p>
+        <slot />
+      </div>
+    </div>
+  </div>
+
+  <script is:inline>
+    (function () {
+      var inputs = Array.prototype.slice.call(document.querySelectorAll(".doc-search"));
+      var sections = Array.prototype.slice.call(document.querySelectorAll("[data-doc-section]"));
+      var links = Array.prototype.slice.call(document.querySelectorAll("[data-toc]"));
+      var emptyMsg = document.getElementById("doc-no-results");
+      if (!sections.length || !links.length) return;
+
+      function targetFor(link) {
+        return document.getElementById(link.getAttribute("href").slice(1));
+      }
+
+      function applyFilter(raw) {
+        var q = raw.trim().toLowerCase();
+        var visible = 0;
+        sections.forEach(function (sec) {
+          var hit = !q || sec.textContent.toLowerCase().indexOf(q) !== -1;
+          sec.hidden = !hit;
+          if (hit) visible++;
+        });
+        links.forEach(function (link) {
+          var t = targetFor(link);
+          var hit = t && !t.hidden && (!q || t.textContent.toLowerCase().indexOf(q) !== -1);
+          link.hidden = !hit;
+        });
+        if (emptyMsg) emptyMsg.hidden = visible > 0;
+      }
+
+      inputs.forEach(function (input) {
+        input.addEventListener("input", function () {
+          inputs.forEach(function (other) {
+            if (other !== input) other.value = input.value;
+          });
+          applyFilter(input.value);
+        });
+      });
+
+      function onScroll() {
+        var pos = window.scrollY + 120;
+        var current = -1;
+        links.forEach(function (link, i) {
+          var t = targetFor(link);
+          if (!t || t.hidden) return;
+          if (t.getBoundingClientRect().top + window.scrollY <= pos) current = i;
+        });
+        links.forEach(function (link, i) {
+          var active = i === current && !link.hidden;
+          link.classList.toggle("text-accent", active);
+          link.classList.toggle("bg-surface-2", active);
+          link.classList.toggle("text-muted", !active);
+        });
+      }
+
+      var ticking = false;
+      window.addEventListener(
+        "scroll",
+        function () {
+          if (!ticking) {
+            ticking = true;
+            requestAnimationFrame(function () {
+              onScroll();
+              ticking = false;
+            });
+          }
+        },
+        { passive: true }
+      );
+      onScroll();
+    })();
+  </script>
+</BaseLayout>

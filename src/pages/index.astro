@@ -1,0 +1,199 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Terminal from "../components/Terminal.astro";
+
+type Tone = "cmd" | "ok" | "halt" | "dim" | "bright";
+
+interface Line {
+  t: Tone;
+  s: string;
+}
+
+const guarantees = [
+  {
+    g: "No runaway spend",
+    m: "Spend reserved then settled. Limits per run, step, and worker. Human file to resume.",
+    t: "ASI-04",
+  },
+  {
+    g: "No unapproved code",
+    m: "Steps 1–6 read only. Step 6 waits for your y.",
+    t: "human gate",
+  },
+  {
+    g: "No silent edits",
+    m: "Each record hashed and chained. One byte change fails check, by branch.",
+    t: "hash chain",
+  },
+  {
+    g: "No prompt injection",
+    m: "Tool output is data. Instruction lines are set aside.",
+    t: "ASI-01",
+  },
+  {
+    g: "No unchecked results",
+    m: "Checks on shape and range before next step.",
+    t: "ASI-02",
+  },
+  {
+    g: "No hidden actions",
+    m: "Root goal saved with every record.",
+    t: "goal lock",
+  },
+  {
+    g: "No stale ship",
+    m: "Tests tied to code hash. Old proof cannot ship.",
+    t: "fresh proof",
+  },
+  {
+    g: "No hidden sends",
+    m: "Every send logged first. Secrets removed.",
+    t: "ASI-05",
+  },
+  {
+    g: "No partial history",
+    m: "Worker logs merged with two-parent records. Orphans block ship.",
+    t: "DAG merge",
+  },
+  {
+    g: "No clashing writes",
+    m: "Each worker in its own folder. Writes cannot cross.",
+    t: "isolated",
+  },
+];
+
+const stream: Line[] = [
+  { t: "cmd", s: 'kineti run --goal "Create greeting.sh that prints KINETI SHIPS"' },
+  { t: "dim", s: "\u2554\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2557" },
+  { t: "dim", s: "\u2551 STAGE  6/13 \u2014 spec                   \u2551" },
+  { t: "dim", s: "\u255a\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u255d" },
+  { t: "halt", s: "\u2550\u2550\u2550 SPEC HARD STOP \u2550\u2550\u2550  \u2026 awaiting human approval [y/N]" },
+  { t: "ok", s: "\u2500\u2500 iteration 12 \u2500\u2500 \u2699 bash \u2192 ./greeting.sh" },
+  { t: "ok", s: "\u2714 proofs FRESH (./greeting.sh)" },
+  { t: "bright", s: "\ud83d\udea2 SHIPPED." },
+];
+
+function esc(s: string): string {
+  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+function render(line: Line): string {
+  if (line.t === "cmd") {
+    return `<span class="font-bold text-fg">${esc(line.s)}</span>`;
+  }
+  const token = line.t === "halt" ? '<span class="font-bold text-danger">' : '<span class="text-accent">';
+  return esc(line.s).replace(/\[[^\]]*\]/g, (m) => `${token}${m}</span>`);
+}
+
+const toneText: Record<Tone, string> = {
+  cmd: "",
+  ok: "text-soft",
+  halt: "text-danger",
+  dim: "text-muted",
+  bright: "text-accent font-bold",
+};
+---
+
+<BaseLayout
+  title="Kineti — Agent = Model + Harness"
+  description="A single Rust binary (~3 MB) that turns any LLM into a governed agent — or a governed swarm. Context integrity enforced mechanically, every action chained cryptographically, money capped by real circuit breakers."
+>
+  <!-- HERO + INSTALL (merged) -->
+  <section class="border-b border-line">
+    <div class="mx-auto max-w-6xl px-4 pt-16 pb-8 sm:px-6 sm:pt-24">
+      <h1 class="max-w-3xl text-3xl font-bold leading-tight tracking-tight text-fg sm:text-5xl">
+        The only mathematically verifiable agent harness.
+      </h1>
+      <p class="mt-6 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
+        One ~3 MB binary for any model. Every step is checked. Every action is hashed. Spend is capped.
+        Nothing ships without fresh tests.
+      </p>
+    </div>
+    <div class="mx-auto max-w-6xl px-4 pb-16 sm:px-6">
+      <h2 class="text-xs tracking-widest text-muted"><span class="text-accent">##</span> INSTALL</h2>
+      <Terminal class="mt-8 max-w-2xl" />
+      <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">
+        Verified with <code class="text-accent">SHA256SUMS</code>. No sudo. Installs to
+        <code class="text-accent">/usr/local/bin</code> or <code class="text-accent">~/.local/bin</code>. One
+        ~3 MB binary. No dependencies.
+      </p>
+
+      <div class="mt-10 flex flex-wrap gap-3">
+        <a
+          href="/docs/getting-started"
+          class="rounded-none border border-accent bg-surface-2 px-4 py-2 text-sm font-bold text-accent transition-colors hover:bg-surface"
+          >Get started →</a
+        >
+        <a
+          href="/docs/governance"
+          class="rounded-none border border-line bg-surface px-4 py-2 text-sm text-fg transition-colors hover:border-accent"
+          >Why it works →</a
+        >
+        <a
+          href="https://github.com/therawlogs/kineti"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="rounded-none border border-line bg-surface px-4 py-2 text-sm text-fg transition-colors hover:border-accent"
+          >GitHub →</a
+        >
+      </div>
+    </div>
+  </section>
+
+  <!-- GUARANTEES TABLE -->
+  <section class="border-b border-line">
+    <div class="mx-auto max-w-6xl px-4 py-16 sm:px-6">
+      <h2 class="text-xs tracking-widest text-muted">
+        <span class="text-accent">##</span> HOW IT HOLDS
+      </h2>
+      <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">
+        Prompts do not enforce. Code does. Each row is a check that runs the same way every time:
+      </p>
+      <div class="mt-8 overflow-x-auto border border-line">
+        <table class="w-full min-w-[860px] border-collapse text-left text-sm">
+          <thead>
+            <tr class="border-b border-line bg-surface-2 text-xs tracking-widest text-muted">
+              <th scope="col" class="px-4 py-3 font-normal">GUARANTEE</th>
+              <th scope="col" class="px-4 py-3 font-normal">MECHANISM</th>
+              <th scope="col" class="px-4 py-3 font-normal">THREAT MODEL</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              guarantees.map((row) => (
+                <tr class="border-b border-line transition-colors last:border-b-0 hover:bg-surface-2">
+                  <td class="px-4 py-3 font-bold whitespace-nowrap text-fg">{row.g}</td>
+                  <td class="px-4 py-3 leading-relaxed text-muted">{row.m}</td>
+                  <td class="px-4 py-3 whitespace-nowrap text-accent">{row.t}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- DEMO RUN -->
+  <section>
+    <div class="mx-auto max-w-6xl px-4 py-16 sm:px-6">
+      <p class="text-sm font-bold tracking-wide text-accent">Propose. Enforce. Remember.</p>
+      <div class="mt-6 max-w-2xl border border-line bg-surface">
+        <div class="flex items-center justify-between border-b border-line px-4 py-2">
+          <div class="flex items-center gap-2 text-xs text-muted">
+            <span class="inline-block h-2 w-2 bg-danger"></span>
+            <span class="inline-block h-2 w-2 bg-muted"></span>
+            <span class="inline-block h-2 w-2 bg-accent"></span>
+            <span class="ml-2">kineti — governed run</span>
+          </div>
+          <span class="text-xs text-accent">DEMO</span>
+        </div>
+        <pre class="overflow-x-auto px-4 py-4 text-xs leading-relaxed sm:text-sm"><code>{
+          stream.map((line) => (
+            <span class:list={[toneText[line.t], "block"]} set:html={render(line) + "\n"} />
+          ))
+        }<span class="cursor-blink"></span></code></pre>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

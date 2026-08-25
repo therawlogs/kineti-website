@@ -1,0 +1,142 @@
+---
+import DocsLayout from "../../layouts/DocsLayout.astro";
+
+const toc = [
+  { id: "sec-process", label: "01 HOW IT RUNS" },
+  { id: "sec-money", label: "02 MONEY CHECK" },
+  { id: "sec-memory", label: "03 SAVED HISTORY" },
+  { id: "sec-context", label: "04 INPUT SAFETY STEPS" },
+  { id: "sec-embed", label: "05 USE FROM OTHER CODE" },
+  { id: "sec-startup", label: "06 STARTUP" },
+];
+---
+
+<DocsLayout
+  title="Architecture — Kineti"
+  description="How Kineti is built: one small binary, daemon or direct run, spend checks, hash-linked history, 6 input safety steps, and how to call it from code."
+  active="architecture"
+  {toc}
+>
+  <section data-doc-section class="scroll-mt-20 border-b border-line py-10">
+    <h1 class="text-xl font-bold tracking-tight text-fg sm:text-2xl">Architecture — how it is built</h1>
+    <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">
+      One Rust binary (~3 MB, built small with strip + lto + opt-level="z"). No extra runtime. Only a few
+      libraries: clap, serde, ureq, sha2, toml, regex.
+    </p>
+  </section>
+
+  <section id="sec-process" data-doc-section aria-labelledby="h-process" class="scroll-mt-20 border-b border-line py-10">
+    <h2 id="h-process" class="text-sm font-bold tracking-widest text-fg"><span class="mr-2 text-accent">01</span>HOW IT RUNS</h2>
+    <pre class="mt-8 overflow-x-auto rounded-none border border-line bg-surface px-5 py-4 text-[11px] leading-relaxed text-soft sm:text-xs"><code>┌─ kineti CLI ──────────────┐      ┌─ kinetid (`kineti serve`) ──────┐
+│ steps 1–13              │ UDS  │ shared spend counter          │
+│ model loop · file checks │◄────►│ saved log pointers            │
+│ input screening · checks .sock  │ .kineti/kineti.sock (mode 0600) │
+│ test tie · undo · log    0600  └────────────────────────────────┘
+└───────────────────────────┘
+        │ same code runs with or without daemon
+        ▼
+   model providers over HTTPS (OpenAI format)</code></pre>
+    <div class="mt-8 max-w-3xl space-y-4 text-sm leading-relaxed text-muted">
+      <p>
+        <strong class="text-fg">Daemon.</strong> <code class="text-accent">kinetid</code> keeps the shared spend
+        count and saved log pointers. Writes are O(1). Many CLI runs can share one spend counter. Warm calls take
+        tens of microseconds. If no daemon is running, every command runs directly — same code either way, proven
+        identical by CI. Full history check is not in the fast path; it still must pass at the ship gate and
+        <code class="text-accent">kineti verify --all</code>. Without the daemon, parallel runs use a file lock
+        and <strong class="text-fg">stop rather than race</strong>.
+      </p>
+    </div>
+  </section>
+
+  <section id="sec-money" data-doc-section aria-labelledby="h-money" class="scroll-mt-20 border-b border-line py-10">
+    <h2 id="h-money" class="text-sm font-bold tracking-widest text-fg"><span class="mr-2 text-accent">02</span>MONEY CHECK — RESERVE THEN SETTLE</h2>
+    <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">
+      Each model call reserves an estimate before the request and settles the true cost after. This uses an atomic
+      micro-dollar counter. Even with many workers, the total cannot go over. Limits are checked at settle: whole
+      run, each stage, each worker. Over any limit stops the run. To resume, you must create
+      <code class="text-accent">.kineti/spend.reset</code> by hand.
+    </p>
+    <div class="mt-6 overflow-x-auto border border-line">
+      <table class="w-full min-w-[560px] border-collapse text-left text-sm">
+        <thead>
+          <tr class="border-b border-line bg-surface-2 text-xs tracking-widest text-muted">
+            <th scope="col" class="px-4 py-3 font-normal">STEP</th>
+            <th scope="col" class="px-4 py-3 font-normal">WHAT HAPPENS</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-line transition-colors hover:bg-surface-2">
+            <td class="px-4 py-3 font-bold text-accent">reserve</td>
+            <td class="px-4 py-3 leading-relaxed text-muted">Estimate tokens × price → take from counter before the request</td>
+          </tr>
+          <tr class="border-b border-line transition-colors hover:bg-surface-2">
+            <td class="px-4 py-3 font-bold text-accent">call</td>
+            <td class="px-4 py-3 leading-relaxed text-muted">Provider replies with true token counts</td>
+          </tr>
+          <tr class="border-b border-line transition-colors hover:bg-surface-2">
+            <td class="px-4 py-3 font-bold text-accent">settle</td>
+            <td class="px-4 py-3 leading-relaxed text-muted">Refund if estimate was high, or take more if low. Check all limits.</td>
+          </tr>
+          <tr class="transition-colors hover:bg-surface-2">
+            <td class="px-4 py-3 font-bold text-danger">halt</td>
+            <td class="px-4 py-3 leading-relaxed text-muted">Over limit → stop between stages. Only <code class="text-accent">.kineti/spend.reset</code> resumes.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="sec-memory" data-doc-section aria-labelledby="h-memory" class="scroll-mt-20 border-b border-line py-10">
+    <h2 id="h-memory" class="text-sm font-bold tracking-widest text-fg"><span class="mr-2 text-accent">03</span>SAVED HISTORY — LINKED LOG</h2>
+    <div class="mt-4 max-w-3xl space-y-4 text-sm leading-relaxed text-muted">
+      <p>
+        <code class="text-accent">.kineti/journal.jsonl</code> saves each action as a typed record linked by cause
+        edges (<code class="text-soft">caused · triggers · blocks · enables · …</code>). Each link is checked for
+        loops and time order before saving. Records age
+        <code class="text-soft">active → warm → cold → archive</code>. Nothing is deleted.
+      </p>
+      <p>
+        Each swarm worker writes its own log (<code class="text-accent">journal.w-&lt;task&gt;.jsonl</code>). After
+        merge, workers' logs are joined to the main log with a two-parent merge record. Check is by branch name:
+        <code class="text-accent">kineti verify --all</code> checks every branch, names the branch if a byte was
+        changed, and blocks ship if any branch is orphaned or was extended after merge.
+      </p>
+    </div>
+  </section>
+
+  <section id="sec-context" data-doc-section aria-labelledby="h-context" class="scroll-mt-20 border-b border-line py-10">
+    <h2 id="h-context" class="text-sm font-bold tracking-widest text-fg"><span class="mr-2 text-accent">04</span>INPUT SAFETY STEPS</h2>
+    <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">Six steps between the model and the system:</p>
+    <ol class="mt-6 max-w-3xl list-decimal space-y-3 pl-5 text-sm leading-relaxed text-muted marker:text-accent">
+      <li><strong class="text-fg">Trim input</strong> — cut to the allowed character limit.</li>
+      <li><strong class="text-fg">Mark tool output as data</strong> — lines that look like instructions are set aside, not run.</li>
+      <li><strong class="text-fg">Check shape and range</strong> — validate what was seen before deciding.</li>
+      <li><strong class="text-fg">Raise signals</strong> — show odd cases instead of hiding them.</li>
+      <li><strong class="text-fg">Limit tools by step</strong> — only the tools allowed for this step exist. Read-only until spec is approved.</li>
+      <li><strong class="text-fg">Lock to folder</strong> — every tool can only touch the project folder.</li>
+    </ol>
+  </section>
+
+  <section id="sec-embed" data-doc-section aria-labelledby="h-embed" class="scroll-mt-20 border-b border-line py-10">
+    <h2 id="h-embed" class="text-sm font-bold tracking-widest text-fg"><span class="mr-2 text-accent">05</span>USE FROM OTHER CODE</h2>
+    <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">
+      The same binary builds as <code class="text-accent">libkineti</code> with a safe C interface — see
+      <a href="/docs/c-api" class="text-accent hover:underline">C API</a>. Errors come back as
+      <code class="text-fg">ok=false</code> plus text. A panic never crosses the boundary.
+    </p>
+  </section>
+
+  <section id="sec-startup" data-doc-section aria-labelledby="h-startup" class="scroll-mt-20 py-10">
+    <h2 id="h-startup" class="text-sm font-bold tracking-widest text-fg"><span class="mr-2 text-accent">06</span>STARTUP</h2>
+    <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">
+      CI checks startup time (<code class="text-accent">tests/perf_startup.rs</code>) and binary size
+      (<code class="text-accent">scripts/size-gate.sh</code>). Fast-path flags skip work before the main command
+      list is even built.
+    </p>
+    <p class="mt-8 text-sm leading-relaxed text-muted">
+      Next: <a href="/docs/security" class="text-accent hover:underline">Security</a> ·
+      <a href="/docs/c-api" class="text-accent hover:underline">C API</a> ·
+      <a href="/docs/governance" class="text-accent hover:underline">Governance</a>
+    </p>
+  </section>
+</DocsLayout>
