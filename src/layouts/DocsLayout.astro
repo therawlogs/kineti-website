@@ -29,7 +29,7 @@ const pages = [
   { slug: "changelog", num: "10", label: "Changelog" },
 ];
 
-const related = [{ href: "/benchmarks", label: "Benchmarks" }];
+const related: { href: string; label: string }[] = [];
 ---
 
 <BaseLayout title={title} description={description}>
@@ -99,23 +99,25 @@ const related = [{ href: "/benchmarks", label: "Benchmarks" }];
           )
         }
 
-        <nav class="pb-4 lg:pb-0" aria-label="Related pages">
-          <p class="px-3 pb-2 text-[10px] tracking-widest text-muted">RELATED</p>
-          <ul class="space-y-0.5">
-            {
-              related.map((r) => (
-                <li>
-                  <a
-                    href={r.href}
-                    class="block border-l-2 border-transparent py-1 pl-3 text-sm text-muted transition-colors hover:bg-surface hover:text-fg"
-                  >
-                    {r.label}
-                  </a>
-                </li>
-              ))
-            }
-          </ul>
-        </nav>
+        {
+          related.length > 0 && (
+            <nav class="pb-4 lg:pb-0" aria-label="Related pages">
+              <p class="px-3 pb-2 text-[10px] tracking-widest text-muted">RELATED</p>
+              <ul class="space-y-0.5">
+                {related.map((r) => (
+                  <li>
+                    <a
+                      href={r.href}
+                      class="block border-l-2 border-transparent py-1 pl-3 text-sm text-muted transition-colors hover:bg-surface hover:text-fg"
+                    >
+                      {r.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          )
+        }
       </aside>
 
       <!-- CONTENT -->

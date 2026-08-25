@@ -1,8 +1,5 @@
 ---
-const nav = [
-  { href: "/docs/getting-started", label: "Docs" },
-  { href: "/benchmarks", label: "Benchmarks" },
-];
+const nav = [{ href: "/docs/getting-started", label: "Docs" }];
 const path = Astro.url.pathname.replace(/\/$/, "") || "/";
 const isActive = (href: string) =>
   path === href || (href === "/docs/getting-started" && path.startsWith("/docs"));
