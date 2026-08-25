@@ -18,14 +18,32 @@ const toc = [
   <section id="sec-install" data-doc-section aria-labelledby="h-install" class="scroll-mt-20 border-b border-line py-10">
     <h2 id="h-install" class="text-sm font-bold tracking-widest text-fg"><span class="mr-2 text-accent">01</span>INSTALL</h2>
     <pre class="mt-6 overflow-x-auto rounded-none border border-line bg-surface px-5 py-4 text-xs leading-relaxed sm:text-sm"><code><span class="text-muted">$</span> <span class="font-bold text-fg">curl -fsSL https://getkineti.com/install.sh | sh</span></code></pre>
-    <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">Or build from source:</p>
-    <pre class="mt-4 overflow-x-auto rounded-none border border-line bg-surface px-5 py-4 text-xs leading-relaxed sm:text-sm"><code><span class="text-muted">$</span> <span class="font-bold text-fg">cargo install --git https://github.com/therawlogs/kineti</span></code></pre>
-    <p class="mt-6 max-w-3xl text-sm leading-relaxed text-muted">
-      Sign in: add an API key for your provider (<code class="text-accent">GEMINI_API_KEY</code>,
-      <code class="text-accent">XAI_API_KEY</code>) <strong class="text-fg">or</strong> run
-      <code class="text-accent">kineti login</code> for OAuth. Keys stay in env vars. Tokens are saved in
-      <code class="text-accent">~/.kineti/auth/</code> (readable only by you). Secrets never appear in logs.
+    <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">Pin a version (optional):</p>
+    <pre class="mt-3 overflow-x-auto rounded-none border border-line bg-surface px-5 py-4 text-xs leading-relaxed sm:text-sm"><code><span class="text-muted">$</span> <span class="font-bold text-fg">curl -fsSL https://getkineti.com/install.sh | sh -s v0.1.0</span></code></pre>
+    <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">
+      Supported platforms: <strong class="text-fg">macOS</strong> (Apple silicon &amp; Intel) and
+      <strong class="text-fg">Linux</strong> x64/arm64 — Linux installs the zero-dependency musl-static build
+      when available. The script checks every download against the release's
+      <code class="text-accent">SHA256SUMS</code> before executing it and never asks for sudo.
     </p>
+    <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">
+      Install location, in order: <code class="text-accent">$KINETI_INSTALL_DIR</code> →
+      <code class="text-accent">/usr/local/bin</code> (only if writable) →
+      <code class="text-accent">~/.local/bin</code> → <code class="text-accent">~/.cargo/bin</code>.
+    </p>
+    <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">Or from source:</p>
+    <pre class="mt-3 overflow-x-auto rounded-none border border-line bg-surface px-5 py-4 text-xs leading-relaxed sm:text-sm"><code><span class="text-muted">$</span> <span class="font-bold text-fg">cargo install --git https://github.com/therawlogs/kineti</span></code></pre>
+    <p class="mt-6 max-w-3xl text-sm leading-relaxed text-muted">
+      Credentials: an API key per provider (<code class="text-accent">GEMINI_API_KEY</code>,
+      <code class="text-accent">XAI_API_KEY</code>) <strong class="text-fg">or</strong> an OAuth token via
+      <code class="text-accent">kineti login</code>. Keys live in env vars; tokens in
+      <code class="text-accent">~/.kineti/auth/</code> with mode 0600. Nothing secret is ever logged.
+    </p>
+    <h3 class="mt-8 text-sm font-bold text-fg">Uninstall</h3>
+    <pre class="mt-3 overflow-x-auto rounded-none border border-line bg-surface px-5 py-4 text-xs leading-relaxed sm:text-sm"><code><span class="font-bold text-fg">rm -f /usr/local/bin/kineti "$HOME/.local/bin/kineti" "$HOME/.cargo/bin/kineti"</span>
+<span class="font-bold text-fg">rm -rf ~/.kineti/auth</span>          <span class="text-muted"># stored login tokens</span>
+<span class="text-muted"># per project where you ran kineti init:</span>
+<span class="font-bold text-fg">rm -rf .kineti kineti.toml</span></code></pre>
   </section>
 
   <!-- 2. FIRST GOVERNED RUN -->

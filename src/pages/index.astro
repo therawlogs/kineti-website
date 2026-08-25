@@ -12,53 +12,53 @@ interface Line {
 const guarantees = [
   {
     g: "No runaway spend",
-    m: "Spend reserved then settled. Limits per run, step, and worker. Human file to resume.",
+    m: "Reserve/settle ledger with per-stage + per-worker ceilings; only a human flag file resumes",
     t: "ASI-04",
   },
   {
     g: "No unapproved code",
-    m: "Steps 1–6 read only. Step 6 waits for your y.",
-    t: "human gate",
+    m: "Stages 1–6 get read-only tools; SPEC gate requires literal human y",
+    t: "alignment-as-architecture",
   },
   {
-    g: "No silent edits",
-    m: "Each record hashed and chained. One byte change fails check, by branch.",
-    t: "hash chain",
+    g: "No silent history edits",
+    m: "Every record sha256-chained into a branch-and-merge DAG; one flipped byte fails verification — per branch, by name",
+    t: "audit integrity",
   },
   {
-    g: "No prompt injection",
-    m: "Tool output is data. Instruction lines are set aside.",
+    g: "No injection execution",
+    m: "Tool output wrapped as DATA; instruction-shaped lines quarantined",
     t: "ASI-01",
   },
   {
-    g: "No unchecked results",
-    m: "Checks on shape and range before next step.",
+    g: "No unverified results",
+    m: "Schema/range validation between observation and reasoning",
     t: "ASI-02",
   },
   {
-    g: "No hidden actions",
-    m: "Root goal saved with every record.",
-    t: "goal lock",
+    g: "No untraceable actions",
+    m: "Immutable root goal pinned into every envelope + record",
+    t: "goal drift",
   },
   {
-    g: "No stale ship",
-    m: "Tests tied to code hash. Old proof cannot ship.",
-    t: "fresh proof",
+    g: "No stale ships",
+    m: "Test proofs bind to code fingerprints; STALE blocks ship",
+    t: "drift",
   },
   {
-    g: "No hidden sends",
-    m: "Every send logged first. Secrets removed.",
+    g: "No unlogged egress",
+    m: "Outbound sends recorded before they leave, keys redacted",
     t: "ASI-05",
   },
   {
     g: "No partial history",
-    m: "Worker logs merged with two-parent records. Orphans block ship.",
-    t: "DAG merge",
+    m: "Worker journals fold into the main chain via deterministic two-parent merge records; orphan branches block ship",
+    t: "audit integrity",
   },
   {
-    g: "No clashing writes",
-    m: "Each worker in its own folder. Writes cannot cross.",
-    t: "isolated",
+    g: "No rogue parallel writes",
+    m: "Every swarm worker lives in its own git worktree (or scratchpad); the fence binds to it",
+    t: "race conditions",
   },
 ];
 
@@ -101,21 +101,37 @@ const toneText: Record<Tone, string> = {
   <!-- HERO + INSTALL (merged) -->
   <section class="border-b border-line">
     <div class="mx-auto max-w-6xl px-4 pt-16 pb-8 sm:px-6 sm:pt-24">
-      <h1 class="max-w-3xl text-3xl font-bold leading-tight tracking-tight text-fg sm:text-5xl">
+      <p class="text-sm font-bold tracking-widest text-accent">Agent = Model + Harness. Kineti is the harness.</p>
+      <h1 class="mt-3 max-w-3xl text-3xl font-bold leading-tight tracking-tight text-fg sm:text-5xl">
         The only mathematically verifiable agent harness.
       </h1>
       <p class="mt-6 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
-        One ~3 MB binary for any model. Every step is checked. Every action is hashed. Spend is capped.
-        Nothing ships without fresh tests.
+        A single Rust binary (~3 MB) that turns any LLM into a governed agent — or a governed swarm of them:
+        context integrity enforced mechanically, every action chained cryptographically, money capped by real
+        circuit breakers, parallel workers isolated in their own trees, and shipping refused unless proofs are
+        fresh.
       </p>
+      <p class="mt-4 max-w-3xl text-sm font-bold tracking-wide text-accent">Skills propose. Programs enforce. Memory remembers.</p>
     </div>
     <div class="mx-auto max-w-6xl px-4 pb-16 sm:px-6">
       <h2 class="text-xs tracking-widest text-muted"><span class="text-accent">##</span> INSTALL</h2>
       <Terminal class="mt-8 max-w-2xl" />
+      <pre class="mt-4 max-w-2xl overflow-x-auto rounded-none border border-line bg-surface px-4 py-3 text-xs leading-relaxed text-soft sm:text-sm"><code><span class="text-muted"># pin a version (optional):</span> <span class="font-bold text-fg">curl -fsSL https://getkineti.com/install.sh | sh -s v0.1.0</span></code></pre>
       <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">
-        Verified with <code class="text-accent">SHA256SUMS</code>. No sudo. Installs to
-        <code class="text-accent">/usr/local/bin</code> or <code class="text-accent">~/.local/bin</code>. One
-        ~3 MB binary. No dependencies.
+        The script verifies every download against the release's
+        <code class="text-accent">SHA256SUMS</code>, never asks for sudo, and installs to
+        <code class="text-accent">/usr/local/bin</code> when writable, else
+        <code class="text-accent">~/.local/bin</code> (then <code class="text-accent">~/.cargo/bin</code>; override
+        with <code class="text-accent">$KINETI_INSTALL_DIR</code>).
+      </p>
+      <p class="mt-3 max-w-3xl text-sm leading-relaxed text-muted">
+        Platforms: <strong class="text-fg">macOS</strong> (Apple silicon &amp; Intel) and
+        <strong class="text-fg">Linux</strong> x64/arm64 — Linux prefers zero-dependency musl-static builds. No
+        runtime, no node_modules, no framework — one ~3 MB binary.
+      </p>
+      <p class="mt-4 max-w-3xl text-xs leading-relaxed text-muted">
+        Apache-2.0 · 109 test-pinned behaviors · checksum-verified installer · musl-static Linux builds · daemon or
+        direct, same code both ways (CI-proven identical).
       </p>
 
       <div class="mt-10 flex flex-wrap gap-3">
@@ -144,10 +160,11 @@ const toneText: Record<Tone, string> = {
   <section class="border-b border-line">
     <div class="mx-auto max-w-6xl px-4 py-16 sm:px-6">
       <h2 class="text-xs tracking-widest text-muted">
-        <span class="text-accent">##</span> HOW IT HOLDS
+        <span class="text-accent">##</span> WHY PROMPT GUARDRAILS FAIL — AND WHAT REPLACES THEM
       </h2>
       <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">
-        Prompts do not enforce. Code does. Each row is a check that runs the same way every time:
+        Prompt-based guardrails fail in production because prompts don't survive translation and have no enforcement
+        mechanism. Kineti moves governance out of the prompt and into harness control flow:
       </p>
       <div class="mt-8 overflow-x-auto border border-line">
         <table class="w-full min-w-[860px] border-collapse text-left text-sm">

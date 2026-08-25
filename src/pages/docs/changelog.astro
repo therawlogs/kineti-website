@@ -48,9 +48,23 @@ const deferred = [
   <section data-doc-section class="scroll-mt-20 border-b border-line py-10">
     <h1 class="text-xl font-bold tracking-tight text-fg sm:text-2xl">Changelog</h1>
     <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">
-      Binaries come from GitHub Releases only. This site only serves
-      <code class="text-accent">install.sh</code>, which matches the tagged commit byte for byte.
+      Assets per release: <code class="text-accent">kineti-linux-x64</code>,
+      <code class="text-accent">kineti-linux-arm64</code>,
+      <code class="text-accent">kineti-linux-x64-static</code>,
+      <code class="text-accent">kineti-linux-arm64-static</code>,
+      <code class="text-accent">kineti-darwin-arm64</code>,
+      <code class="text-accent">kineti-darwin-x64</code>, aggregated
+      <code class="text-accent">SHA256SUMS</code>, and
+      <code class="text-accent">include/kineti.h</code>. Binaries are served from GitHub Releases only — this
+      domain serves nothing but <code class="text-accent">install.sh</code>, kept byte-identical to the
+      repository's main branch by an automated sync job and checked weekly by CI.
     </p>
+    <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">
+      Install integrity check:
+    </p>
+    <pre class="mt-3 max-w-3xl overflow-x-auto rounded-none border border-line bg-surface px-5 py-4 text-xs leading-relaxed sm:text-sm"><code><span class="text-muted">$</span> <span class="font-bold text-fg">curl -fsSL https://getkineti.com/install.sh | sh</span>
+<span class="text-muted"># verify after install:</span>
+<span class="font-bold text-fg">sha256sum -c SHA256SUMS</span>   <span class="text-muted"># from the release page</span></code></pre>
   </section>
 
   <section id="sec-assets" data-doc-section aria-labelledby="h-assets" class="scroll-mt-20 border-b border-line py-10">
@@ -74,11 +88,17 @@ const deferred = [
   </section>
 
   <section id="sec-v01" data-doc-section aria-labelledby="h-v01" class="scroll-mt-20 border-b border-line py-10">
-    <h2 id="h-v01" class="text-sm font-bold tracking-widest text-fg"><span class="mr-2 text-accent">02</span>v0.1.0 — WHAT SHIPPED</h2>
-    <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">Shipped and checked by 109 tests:</p>
+    <h2 id="h-v01" class="text-sm font-bold tracking-widest text-fg"><span class="mr-2 text-accent">02</span>v0.1.0 — initial public release (2026-08-25)</h2>
+    <p class="mt-2 max-w-3xl text-xs tracking-widest text-muted">Tag <code class="text-accent">v0.1.0</code> · 8 assets · every download checksum-verifiable via <code class="text-accent">SHA256SUMS</code></p>
+    <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">Shipped and test-pinned (109 tests):</p>
     <ol class="mt-6 max-w-3xl list-decimal space-y-2 pl-5 text-sm leading-relaxed text-muted marker:text-accent">
       {shipped.map((item) => <li>{item}</li>)}
     </ol>
+    <p class="mt-6 max-w-3xl text-sm leading-relaxed text-muted">
+      Deferred deliberately (tracked): syscall sandboxing for spawned processes, WASI compilation, semantic/vector
+      recall over the causal graph.
+    </p>
+    <p class="mt-3 max-w-3xl text-sm leading-relaxed text-muted">Migration notes: none — first release.</p>
   </section>
 
   <section id="sec-deferred" data-doc-section aria-labelledby="h-deferred" class="scroll-mt-20 border-b border-line py-10">

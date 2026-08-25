@@ -10,6 +10,8 @@ const toc = [
   { id: "why-daemon", label: "06 Why a daemon?" },
   { id: "code-sent", label: "07 Is my code sent anywhere?" },
   { id: "not-solved", label: "08 What is not solved yet?" },
+  { id: "uninstall", label: "09 How do I uninstall?" },
+  { id: "install-tamper", label: "10 Can the install script be tampered with?" },
 ];
 
 const faqs = [
@@ -52,6 +54,16 @@ const faqs = [
     id: "not-solved",
     q: "What is not solved yet?",
     a: "OS-level sandbox for bash, WASI build, and search over the saved graph. See Security for the full list. We prefer to state limits clearly.",
+  },
+  {
+    id: "uninstall",
+    q: "How do I uninstall?",
+    a: "Three deletions, nothing hidden: rm -f /usr/local/bin/kineti \"$HOME/.local/bin/kineti\" \"$HOME/.cargo/bin/kineti\"; rm -rf ~/.kineti/auth; per project rm -rf .kineti kineti.toml. No launch agents, no system directories, no leftovers.",
+  },
+  {
+    id: "install-tamper",
+    q: "Can the install script on your domain be tampered with?",
+    a: "The domain serves exactly one file, install.sh, and a CI job re-syncs it byte-identical from the repository's main branch within minutes of any change; a weekly CI check hard-fails if the served bytes ever drift. The script itself verifies every binary download against the release's published SHA256SUMS before executing it — so even a compromised domain cannot swap in a different binary without the checksum mismatch stopping the install.",
   },
 ];
 ---
