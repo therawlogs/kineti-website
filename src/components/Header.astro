@@ -11,7 +11,7 @@ const isActive = (href: string) => {
 };
 ---
 
-<header transition:persist class="sticky top-0 z-50 border-b border-line bg-bg/90 backdrop-blur-sm supports-[backdrop-filter]:bg-bg/80" style="will-change: transform; transform: translateZ(0);">
+<header transition:persist="header" class="sticky top-0 z-50 border-b border-line bg-bg/90 backdrop-blur-sm supports-[backdrop-filter]:bg-bg/80" style="will-change: transform; transform: translateZ(0);">
   <div class="mx-auto flex max-w-6xl flex-wrap items-center gap-x-6 gap-y-2 px-4 py-3 sm:flex-nowrap sm:gap-y-0 sm:px-6 sm:py-0 sm:h-[53px]">
     <a href="/" class="flex shrink-0 items-center gap-2 whitespace-nowrap">
       <span class="text-base font-bold tracking-wide text-fg">KINETI</span>
@@ -58,4 +58,32 @@ const isActive = (href: string) => {
       </a>
     </div>
   </div>
+  <script is:inline>
+    (function () {
+      function updateNav() {
+        var path = location.pathname.replace(/\/$/, "") || "/";
+        document.querySelectorAll("header nav a").forEach(function (a) {
+          var href = a.getAttribute("href");
+          var active = false;
+          if (href === "/docs") active = path === "/docs" || path.startsWith("/docs/");
+          else if (href === "/pricing") active = path === "/pricing" || path.startsWith("/pricing");
+          else active = path === href;
+          if (active) {
+            a.setAttribute("aria-current", "page");
+            a.classList.remove("text-muted", "hover:text-fg");
+            a.classList.add("text-accent");
+          } else {
+            a.removeAttribute("aria-current");
+            a.classList.remove("text-accent");
+            a.classList.add("text-muted", "hover:text-fg");
+          }
+        });
+      }
+      document.addEventListener("astro:page-load", updateNav);
+      document.addEventListener("astro:after-swap", updateNav);
+      // run on initial load and on persist swaps
+      if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", updateNav);
+      else updateNav();
+    })();
+  </script>
 </header>
