@@ -32,7 +32,7 @@ const toc = [
     <span class="text-soft">steps:</span>
       <span class="text-soft">- uses: actions/checkout@v4</span>
       <span class="text-soft">- name: Install Kineti (pinned)</span>
-        <span class="text-soft">run: curl -fsSL https://getkineti.com/install.sh | sh -s v0.1.0</span>
+        <span class="text-soft">run: curl -fsSL https://getkineti.com/install.sh | sh -s v0.2.0</span>
       <span class="text-soft">- name: Ship check + verify</span>
         <span class="text-soft">run: |</span>
           <span class="text-fg">kineti ship-check</span>
@@ -49,7 +49,7 @@ const toc = [
   <span class="text-soft">image: ubuntu:latest</span>
   <span class="text-soft">before_script:</span>
     <span class="text-soft">- apt-get update &amp;&amp; apt-get install -y curl ca-certificates</span>
-    <span class="text-soft">- curl -fsSL https://getkineti.com/install.sh | sh -s v0.1.0</span>
+    <span class="text-soft">- curl -fsSL https://getkineti.com/install.sh | sh -s v0.2.0</span>
     <span class="text-soft">- export PATH="$HOME/.local/bin:$PATH"</span>
   <span class="text-soft">script:</span>
     <span class="text-soft">- kineti ship-check</span>

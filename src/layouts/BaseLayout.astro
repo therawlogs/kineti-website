@@ -1,5 +1,4 @@
 ---
-import { ClientRouter } from "astro:transitions";
 import Header from "../components/Header.astro";
 import "../styles/global.css";
 
@@ -23,7 +22,6 @@ const INSTALL_CMD = "curl -fsSL https://getkineti.com/install.sh | sh";
     <title>{title}</title>
     <link rel="canonical" href={`https://www.getkineti.com${Astro.url.pathname}`} />
     <link rel="preconnect" href="https://github.com" />
-    <ClientRouter />
     <script is:inline>
       (function () {
         var mq = window.matchMedia("(prefers-color-scheme: light)");
@@ -35,15 +33,6 @@ const INSTALL_CMD = "curl -fsSL https://getkineti.com/install.sh | sh";
         else if (mq.addListener) mq.addListener(apply);
       })();
     </script>
-    <style>
-      @view-transition {
-        navigation: auto;
-      }
-      ::view-transition-group(root) {
-        animation-duration: 0.18s;
-        animation-timing-function: ease;
-      }
-    </style>
   </head>
   <body class="flex min-h-screen flex-col bg-bg text-fg">
     <Header />

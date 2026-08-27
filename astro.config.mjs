@@ -14,8 +14,8 @@ export default defineConfig({
     "/changelog": "/docs/getting-started",
   },
   prefetch: {
-    prefetchAll: true,
-    defaultStrategy: "viewport",
+    prefetchAll: false,
+    defaultStrategy: "hover",
   },
   build: {
     inlineStylesheets: "always",

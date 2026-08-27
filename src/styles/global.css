@@ -48,6 +48,37 @@ html {
   scroll-behavior: smooth;
 }
 
+a,
+button {
+  transition:
+    color 150ms ease,
+    background-color 150ms ease,
+    border-color 150ms ease,
+    opacity 150ms ease,
+    transform 150ms ease;
+}
+
+a:active,
+button:active {
+  transform: translateY(0.5px);
+  opacity: 0.95;
+}
+
+*:focus-visible {
+  outline: 1px solid var(--accent);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  a,
+  button {
+    transition: none;
+  }
+}
+
 /* Hide all scrollbars site-wide but keep scroll - thorough */
 html,
 body {
