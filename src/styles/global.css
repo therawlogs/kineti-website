@@ -48,6 +48,24 @@ html {
   scroll-behavior: smooth;
 }
 
+/* View transitions — soft fade, no flash */
+@view-transition {
+  navigation: auto;
+}
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 180ms;
+  animation-timing-function: cubic-bezier(0.2, 0, 0, 1);
+}
+::view-transition-old(header),
+::view-transition-new(header) {
+  animation-duration: 180ms;
+}
+/* Persisted header must not animate */
+[data-astro-transition-persist="header"] {
+  view-transition-name: header;
+}
+
 a,
 button {
   transition:
@@ -76,6 +94,10 @@ button:active {
   a,
   button {
     transition: none;
+  }
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: 0ms;
   }
 }
 

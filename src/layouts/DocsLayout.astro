@@ -48,7 +48,7 @@ const related: { href: string; label: string }[] = [];
         </div>
 
         <nav class="pb-6" aria-label="Documentation pages">
-          <p class="px-3 pb-3 text-[10px] tracking-widest text-muted">DOCUMENTATION</p>
+          <p class="px-3 pb-3 text-xs tracking-wide text-muted">Documentation</p>
           <ul class="space-y-0.5">
             {
               pages.map((p) => (
@@ -75,7 +75,7 @@ const related: { href: string; label: string }[] = [];
         {
           toc.length > 0 && (
             <nav class="pb-4" aria-label="On this page">
-              <p class="px-3 pb-2 text-[10px] tracking-widest text-muted">ON THIS PAGE</p>
+              <p class="px-3 pb-2 text-xs tracking-wide text-muted">On this page</p>
               <ul class="space-y-0.5">
                 {toc.map((item) => (
                   <li>
@@ -83,7 +83,7 @@ const related: { href: string; label: string }[] = [];
                       href={`#${item.id}`}
                       data-toc
                       class:list={[
-                        "block border-l-2 border-transparent py-1 text-muted transition-colors hover:bg-surface hover:text-fg",
+                        "block border-l-2 border-transparent py-1.5 text-muted transition-colors hover:bg-surface hover:text-fg",
                         item.sub ? "pl-7 text-xs" : "pl-3 text-sm",
                       ]}
                     >
@@ -99,7 +99,7 @@ const related: { href: string; label: string }[] = [];
         {
           related.length > 0 && (
             <nav class="pb-4 lg:pb-0" aria-label="Related pages">
-              <p class="px-3 pb-2 text-[10px] tracking-widest text-muted">RELATED</p>
+              <p class="px-3 pb-2 text-[10px] tracking-wide text-muted">RELATED</p>
               <ul class="space-y-0.5">
                 {related.map((r) => (
                   <li>

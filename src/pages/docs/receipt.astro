@@ -2,9 +2,9 @@
 import DocsLayout from "../../layouts/DocsLayout.astro";
 
 const toc = [
-  { id: "sec-stored", label: "01 WHAT IS STORED" },
-  { id: "sec-never", label: "02 WHAT IS NEVER STORED" },
-  { id: "sec-verify", label: "03 HOW VERIFY --ALL WORKS" },
+  { id: "sec-stored", label: "01 What is stored" },
+  { id: "sec-never", label: "02 What is never stored" },
+  { id: "sec-verify", label: "03 How verify --all works" },
 ];
 ---
 
@@ -22,7 +22,7 @@ const toc = [
   </section>
 
   <section id="sec-stored" data-doc-section aria-labelledby="h-stored" class="scroll-mt-20 border-b border-line py-10">
-    <h2 id="h-stored" class="text-sm font-bold tracking-widest text-fg"><span class="mr-2 text-accent">01</span>WHAT IS STORED</h2>
+    <h2 id="h-stored" class="text-sm font-bold tracking-wide text-fg"><span class="mr-2 text-accent">01</span>What is stored</h2>
     <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">Today, per record:</p>
     <ul class="mt-4 max-w-3xl list-disc space-y-2 pl-5 text-sm leading-relaxed text-muted marker:text-accent">
       <li><code class="text-accent">evidence</code>: <code class="text-soft">command, passed, exit_code, fingerprint (sha256 of tracked files), at</code> — in <code class="text-accent">.kineti/evidence.json</code></li>
@@ -40,7 +40,7 @@ const toc = [
   </section>
 
   <section id="sec-never" data-doc-section aria-labelledby="h-never" class="scroll-mt-20 border-b border-line py-10">
-    <h2 id="h-never" class="text-sm font-bold tracking-widest text-fg"><span class="mr-2 text-accent">02</span>WHAT IS NEVER STORED</h2>
+    <h2 id="h-never" class="text-sm font-bold tracking-wide text-fg"><span class="mr-2 text-accent">02</span>What is never stored</h2>
     <ul class="mt-4 max-w-3xl list-disc space-y-2 pl-5 text-sm leading-relaxed text-muted marker:text-accent">
       <li>Keys / raw secrets. <code class="text-accent">GEMINI_API_KEY</code>, <code class="text-accent">XAI_API_KEY</code> stay in env vars. OAuth tokens stay in <code class="text-accent">~/.kineti/auth/*</code> 0600 and never appear in logs or child env.</li>
       <li>Your source beyond fingerprints. The receipt stores hashes, not file contents.</li>
@@ -50,7 +50,7 @@ const toc = [
   </section>
 
   <section id="sec-verify" data-doc-section aria-labelledby="h-verify" class="scroll-mt-20 py-10">
-    <h2 id="h-verify" class="text-sm font-bold tracking-widest text-fg"><span class="mr-2 text-accent">03</span>HOW VERIFY --ALL WORKS</h2>
+    <h2 id="h-verify" class="text-sm font-bold tracking-wide text-fg"><span class="mr-2 text-accent">03</span>How verify --all works</h2>
     <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">
       <code class="text-accent">kineti verify</code> recomputes every sha256 link on the main chain. <code class="text-accent">--all</code> also walks every merged branch, names the tampered branch, and refuses if an orphan or extended-after-merge branch exists. One flipped byte fails.
     </p>

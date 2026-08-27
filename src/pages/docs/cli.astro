@@ -2,9 +2,9 @@
 import DocsLayout from "../../layouts/DocsLayout.astro";
 
 const toc = [
-  { id: "sec-commands", label: "01 COMMANDS" },
-  { id: "sec-env", label: "02 ENVIRONMENT FLAGS" },
-  { id: "sec-exit", label: "03 EXIT CODES" },
+  { id: "sec-commands", label: "01 Commands" },
+  { id: "sec-env", label: "02 Environment flags" },
+  { id: "sec-exit", label: "03 Exit codes" },
 ];
 
 const commands = [
@@ -56,7 +56,7 @@ const commands = [
 const envFlags = [
   { key: "KINETI_FORCE_DIRECT=1", effect: "Skip the daemon even if one is running" },
   { key: "KINETI_NO_DAEMON=1", effect: "Never start or use a daemon" },
-  { key: "KINETI_INSTALL_DIR", effect: "Change where install.sh puts the binary" },
+  { key: "KINETI_Install_DIR", effect: "Change where install.sh puts the binary" },
 ];
 ---
 
@@ -75,13 +75,13 @@ const envFlags = [
     </p>
   </section>
 
-  <!-- 1. COMMANDS -->
+  <!-- 1. Commands -->
   <section id="sec-commands" data-doc-section aria-labelledby="h-commands" class="scroll-mt-20 border-b border-line py-10">
-    <h2 id="h-commands" class="text-sm font-bold tracking-widest text-fg"><span class="mr-2 text-accent">01</span>COMMANDS</h2>
+    <h2 id="h-commands" class="text-sm font-bold tracking-wide text-fg"><span class="mr-2 text-accent">01</span>Commands</h2>
     <div class="mt-6 overflow-x-auto border border-line">
       <table class="w-full min-w-[720px] border-collapse text-left text-sm">
         <thead>
-          <tr class="border-b border-line bg-surface-2 text-xs tracking-widest text-muted">
+          <tr class="border-b border-line bg-surface-2 text-xs tracking-wide text-muted">
             <th scope="col" class="px-4 py-3 font-normal">COMMAND</th>
             <th scope="col" class="px-4 py-3 font-normal">PURPOSE</th>
           </tr>
@@ -100,14 +100,14 @@ const envFlags = [
     </div>
   </section>
 
-  <!-- 2. ENVIRONMENT FLAGS -->
+  <!-- 2. Environment flags -->
   <section id="sec-env" data-doc-section aria-labelledby="h-env" class="scroll-mt-20 border-b border-line py-10">
-    <h2 id="h-env" class="text-sm font-bold tracking-widest text-fg"><span class="mr-2 text-accent">02</span>ENVIRONMENT FLAGS</h2>
+    <h2 id="h-env" class="text-sm font-bold tracking-wide text-fg"><span class="mr-2 text-accent">02</span>Environment flags</h2>
     <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">Flags that change how the binary runs:</p>
     <div class="mt-6 overflow-x-auto border border-line">
       <table class="w-full min-w-[560px] border-collapse text-left text-sm">
         <thead>
-          <tr class="border-b border-line bg-surface-2 text-xs tracking-widest text-muted">
+          <tr class="border-b border-line bg-surface-2 text-xs tracking-wide text-muted">
             <th scope="col" class="px-4 py-3 font-normal">ENV VAR</th>
             <th scope="col" class="px-4 py-3 font-normal">EFFECT</th>
           </tr>
@@ -126,9 +126,9 @@ const envFlags = [
     </div>
   </section>
 
-  <!-- 3. EXIT CODES -->
+  <!-- 3. Exit codes -->
   <section id="sec-exit" data-doc-section aria-labelledby="h-exit" class="scroll-mt-20 py-10">
-    <h2 id="h-exit" class="text-sm font-bold tracking-widest text-fg"><span class="mr-2 text-accent">03</span>EXIT CODES</h2>
+    <h2 id="h-exit" class="text-sm font-bold tracking-wide text-fg"><span class="mr-2 text-accent">03</span>Exit codes</h2>
     <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">
       <code class="text-accent">0</code> ok ·
       <code class="text-danger">1</code> stopped, changed log, dirty files, or refused — commands stop on error.

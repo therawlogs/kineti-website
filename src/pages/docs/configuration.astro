@@ -2,8 +2,8 @@
 import DocsLayout from "../../layouts/DocsLayout.astro";
 
 const toc = [
-  { id: "sec-schema", label: "01 COMPLETE SCHEMA" },
-  { id: "sec-defaults", label: "02 DEFAULTS CHEAT-SHEET" },
+  { id: "sec-schema", label: "01 Complete schema" },
+  { id: "sec-defaults", label: "02 DefaultS CHEAT-SHEET" },
   { id: "sec-reset", label: "03 RESET PROTOCOL" },
 ];
 
@@ -64,9 +64,9 @@ const defaults = [
     </p>
   </section>
 
-  <!-- 1. COMPLETE SCHEMA -->
+  <!-- 1. Complete schema -->
   <section id="sec-schema" data-doc-section aria-labelledby="h-schema" class="scroll-mt-20 border-b border-line py-10">
-    <h2 id="h-schema" class="text-sm font-bold tracking-widest text-fg"><span class="mr-2 text-accent">01</span>COMPLETE SCHEMA</h2>
+    <h2 id="h-schema" class="text-sm font-bold tracking-wide text-fg"><span class="mr-2 text-accent">01</span>Complete schema</h2>
     <pre class="mt-6 overflow-x-auto rounded-none border border-line bg-surface px-5 py-4 text-xs leading-relaxed sm:text-sm"><code><span class="text-muted"># ── Providers ────────────────────────────────────────────────────────</span>
 <span class="text-accent">[providers.&lt;name&gt;]</span>                     <span class="text-muted"># any name; referenced by --provider</span>
 <span class="text-soft">base_url</span>          = <span class="text-fg">"https://…"</span>        <span class="text-muted"># required — OpenAI-compatible endpoint</span>
@@ -101,15 +101,15 @@ const defaults = [
 <span class="text-soft">forbid</span> = <span class="text-fg">[]</span>                            <span class="text-muted"># extra case-insensitive forbidden substrings (team/client/project names)</span></code></pre>
   </section>
 
-  <!-- 2. DEFAULTS CHEAT-SHEET -->
+  <!-- 2. DefaultS CHEAT-SHEET -->
   <section id="sec-defaults" data-doc-section aria-labelledby="h-defaults" class="scroll-mt-20 border-b border-line py-10">
-    <h2 id="h-defaults" class="text-sm font-bold tracking-widest text-fg"><span class="mr-2 text-accent">02</span>DEFAULTS CHEAT-SHEET</h2>
+    <h2 id="h-defaults" class="text-sm font-bold tracking-wide text-fg"><span class="mr-2 text-accent">02</span>DefaultS CHEAT-SHEET</h2>
     <div class="mt-6 overflow-x-auto border border-line">
       <table class="w-full min-w-[720px] border-collapse text-left text-sm">
         <thead>
-          <tr class="border-b border-line bg-surface-2 text-xs tracking-widest text-muted">
+          <tr class="border-b border-line bg-surface-2 text-xs tracking-wide text-muted">
             <th scope="col" class="px-4 py-3 font-normal">KEY</th>
-            <th scope="col" class="px-4 py-3 font-normal">DEFAULT</th>
+            <th scope="col" class="px-4 py-3 font-normal">Default</th>
             <th scope="col" class="px-4 py-3 font-normal">NOTES</th>
           </tr>
         </thead>
@@ -130,7 +130,7 @@ const defaults = [
 
   <!-- 3. RESET PROTOCOL -->
   <section id="sec-reset" data-doc-section aria-labelledby="h-reset" class="scroll-mt-20 py-10">
-    <h2 id="h-reset" class="text-sm font-bold tracking-widest text-fg"><span class="mr-2 text-accent">03</span>HOW TO RESUME AFTER STOP</h2>
+    <h2 id="h-reset" class="text-sm font-bold tracking-wide text-fg"><span class="mr-2 text-accent">03</span>How to resume after stop</h2>
     <p class="mt-4 max-w-3xl border-l-2 border-danger bg-surface px-4 py-3 text-sm leading-relaxed text-soft">
       If you go over any spend limit, the run stops. To start again, create
       <code class="text-accent">.kineti/spend.reset</code> by hand. There is no flag, API, or setting that

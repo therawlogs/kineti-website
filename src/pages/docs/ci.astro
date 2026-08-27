@@ -2,9 +2,9 @@
 import DocsLayout from "../../layouts/DocsLayout.astro";
 
 const toc = [
-  { id: "sec-github", label: "01 GITHUB ACTION" },
-  { id: "sec-gitlab", label: "02 GITLAB JOB" },
-  { id: "sec-why", label: "03 WHY THIS CHECK" },
+  { id: "sec-github", label: "01 GitHub Action" },
+  { id: "sec-gitlab", label: "02 GitLab job" },
+  { id: "sec-why", label: "03 Why this check" },
 ];
 ---
 
@@ -22,7 +22,7 @@ const toc = [
   </section>
 
   <section id="sec-github" data-doc-section aria-labelledby="h-github" class="scroll-mt-20 border-b border-line py-10">
-    <h2 id="h-github" class="text-sm font-bold tracking-widest text-fg"><span class="mr-2 text-accent">01</span>GITHUB ACTION</h2>
+    <h2 id="h-github" class="text-sm font-bold tracking-wide text-fg"><span class="mr-2 text-accent">01</span>GitHub Action</h2>
     <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">Copy to <code class="text-accent">.github/workflows/kineti.yml</code>. Pins version, installs via <code class="text-accent">install.sh</code>, runs the proof gate.</p>
     <pre class="mt-6 overflow-x-auto rounded-none border border-line bg-surface px-5 py-4 text-xs leading-relaxed sm:text-sm"><code><span class="text-soft">name: kineti</span>
 <span class="text-soft">on: [push, pull_request]</span>
@@ -44,7 +44,7 @@ const toc = [
   </section>
 
   <section id="sec-gitlab" data-doc-section aria-labelledby="h-gitlab" class="scroll-mt-20 border-b border-line py-10">
-    <h2 id="h-gitlab" class="text-sm font-bold tracking-widest text-fg"><span class="mr-2 text-accent">02</span>GITLAB JOB</h2>
+    <h2 id="h-gitlab" class="text-sm font-bold tracking-wide text-fg"><span class="mr-2 text-accent">02</span>GitLab job</h2>
     <pre class="mt-6 overflow-x-auto rounded-none border border-line bg-surface px-5 py-4 text-xs leading-relaxed sm:text-sm"><code><span class="text-soft">kineti:ship-check:</span>
   <span class="text-soft">image: ubuntu:latest</span>
   <span class="text-soft">before_script:</span>
@@ -56,11 +56,11 @@ const toc = [
     <span class="text-soft">- kineti verify --all</span>
   <span class="text-soft">rules:</span>
     <span class="text-soft">- if: $CI_PIPELINE_SOURCE == "merge_request_event"</span>
-    <span class="text-soft">- if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH</span></code></pre>
+    <span class="text-soft">- if: $CI_COMMIT_BRANCH == $CI_Default_BRANCH</span></code></pre>
   </section>
 
   <section id="sec-why" data-doc-section aria-labelledby="h-why" class="scroll-mt-20 py-10">
-    <h2 id="h-why" class="text-sm font-bold tracking-widest text-fg"><span class="mr-2 text-accent">03</span>WHY THIS CHECK</h2>
+    <h2 id="h-why" class="text-sm font-bold tracking-wide text-fg"><span class="mr-2 text-accent">03</span>Why this check</h2>
     <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">
       Without a CI gate, an agent can push code after tests without re-proving it. <code class="text-accent">ship-check</code> compares the file fingerprint at proof time to the current tree and refuses to merge if they differ. Same binary locally and in CI — no hosted gate required for v0.
     </p>

@@ -2,12 +2,12 @@
 import DocsLayout from "../../layouts/DocsLayout.astro";
 
 const toc = [
-  { id: "sec-process", label: "01 HOW IT RUNS" },
+  { id: "sec-process", label: "01 How it runs" },
   { id: "sec-money", label: "02 MONEY CHECK" },
   { id: "sec-memory", label: "03 SAVED HISTORY" },
-  { id: "sec-context", label: "04 INPUT SAFETY STEPS" },
-  { id: "sec-embed", label: "05 USE FROM OTHER CODE" },
-  { id: "sec-startup", label: "06 STARTUP" },
+  { id: "sec-context", label: "04 Input safety steps" },
+  { id: "sec-embed", label: "05 Use from other code" },
+  { id: "sec-startup", label: "06 Startup" },
 ];
 ---
 
@@ -26,7 +26,7 @@ const toc = [
   </section>
 
   <section id="sec-process" data-doc-section aria-labelledby="h-process" class="scroll-mt-20 border-b border-line py-10">
-    <h2 id="h-process" class="text-sm font-bold tracking-widest text-fg"><span class="mr-2 text-accent">01</span>HOW IT RUNS</h2>
+    <h2 id="h-process" class="text-sm font-bold tracking-wide text-fg"><span class="mr-2 text-accent">01</span>How it runs</h2>
     <pre class="mt-8 overflow-x-auto rounded-none border border-line bg-surface px-5 py-4 text-[11px] leading-relaxed text-soft sm:text-xs"><code>┌─ kineti CLI ──────────────┐      ┌─ kinetid (`kineti serve`) ──────┐
 │ steps 1–13              │ UDS  │ shared spend counter          │
 │ model loop · file checks │◄────►│ saved log pointers            │
@@ -49,7 +49,7 @@ const toc = [
   </section>
 
   <section id="sec-money" data-doc-section aria-labelledby="h-money" class="scroll-mt-20 border-b border-line py-10">
-    <h2 id="h-money" class="text-sm font-bold tracking-widest text-fg"><span class="mr-2 text-accent">02</span>MONEY CHECK — RESERVE THEN SETTLE</h2>
+    <h2 id="h-money" class="text-sm font-bold tracking-wide text-fg"><span class="mr-2 text-accent">02</span>Money check — reserve then settle</h2>
     <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">
       Each model call reserves an estimate before the request and settles the true cost after. This uses an atomic
       micro-dollar counter. Even with many workers, the total cannot go over. Limits are checked at settle: whole
@@ -59,7 +59,7 @@ const toc = [
     <div class="mt-6 overflow-x-auto border border-line">
       <table class="w-full min-w-[560px] border-collapse text-left text-sm">
         <thead>
-          <tr class="border-b border-line bg-surface-2 text-xs tracking-widest text-muted">
+          <tr class="border-b border-line bg-surface-2 text-xs tracking-wide text-muted">
             <th scope="col" class="px-4 py-3 font-normal">STEP</th>
             <th scope="col" class="px-4 py-3 font-normal">WHAT HAPPENS</th>
           </tr>
@@ -87,7 +87,7 @@ const toc = [
   </section>
 
   <section id="sec-memory" data-doc-section aria-labelledby="h-memory" class="scroll-mt-20 border-b border-line py-10">
-    <h2 id="h-memory" class="text-sm font-bold tracking-widest text-fg"><span class="mr-2 text-accent">03</span>SAVED HISTORY — LINKED LOG</h2>
+    <h2 id="h-memory" class="text-sm font-bold tracking-wide text-fg"><span class="mr-2 text-accent">03</span>Saved history — linked log</h2>
     <div class="mt-4 max-w-3xl space-y-4 text-sm leading-relaxed text-muted">
       <p>
         <code class="text-accent">.kineti/journal.jsonl</code> saves each action as a typed record linked by cause
@@ -105,7 +105,7 @@ const toc = [
   </section>
 
   <section id="sec-context" data-doc-section aria-labelledby="h-context" class="scroll-mt-20 border-b border-line py-10">
-    <h2 id="h-context" class="text-sm font-bold tracking-widest text-fg"><span class="mr-2 text-accent">04</span>INPUT SAFETY STEPS</h2>
+    <h2 id="h-context" class="text-sm font-bold tracking-wide text-fg"><span class="mr-2 text-accent">04</span>Input safety steps</h2>
     <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">Six steps between the model and the system:</p>
     <ol class="mt-6 max-w-3xl list-decimal space-y-3 pl-5 text-sm leading-relaxed text-muted marker:text-accent">
       <li><strong class="text-fg">Trim input</strong> — cut to the allowed character limit.</li>
@@ -118,7 +118,7 @@ const toc = [
   </section>
 
   <section id="sec-embed" data-doc-section aria-labelledby="h-embed" class="scroll-mt-20 border-b border-line py-10">
-    <h2 id="h-embed" class="text-sm font-bold tracking-widest text-fg"><span class="mr-2 text-accent">05</span>USE FROM OTHER CODE</h2>
+    <h2 id="h-embed" class="text-sm font-bold tracking-wide text-fg"><span class="mr-2 text-accent">05</span>Use from other code</h2>
     <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">
       The same binary builds as <code class="text-accent">libkineti</code> with a safe C interface — see
       <a href="/docs/c-api" class="text-accent hover:underline">C API</a>. Errors come back as
@@ -127,7 +127,7 @@ const toc = [
   </section>
 
   <section id="sec-startup" data-doc-section aria-labelledby="h-startup" class="scroll-mt-20 py-10">
-    <h2 id="h-startup" class="text-sm font-bold tracking-widest text-fg"><span class="mr-2 text-accent">06</span>STARTUP</h2>
+    <h2 id="h-startup" class="text-sm font-bold tracking-wide text-fg"><span class="mr-2 text-accent">06</span>Startup</h2>
     <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">
       CI checks startup time (<code class="text-accent">tests/perf_startup.rs</code>) and binary size
       (<code class="text-accent">scripts/size-gate.sh</code>). Fast-path flags skip work before the main command

@@ -1,4 +1,5 @@
 ---
+import { ClientRouter } from "astro:transitions";
 import Header from "../components/Header.astro";
 import "../styles/global.css";
 
@@ -8,7 +9,7 @@ interface Props {
 }
 
 const { title, description } = Astro.props;
-const INSTALL_CMD = "curl -fsSL https://getkineti.com/install.sh | sh";
+const Install_CMD = "curl -fsSL https://getkineti.com/install.sh | sh";
 ---
 
 <!doctype html>
@@ -22,6 +23,7 @@ const INSTALL_CMD = "curl -fsSL https://getkineti.com/install.sh | sh";
     <title>{title}</title>
     <link rel="canonical" href={`https://www.getkineti.com${Astro.url.pathname}`} />
     <link rel="preconnect" href="https://github.com" />
+    <ClientRouter fallback="animate" />
     <script is:inline>
       (function () {
         var mq = window.matchMedia("(prefers-color-scheme: light)");
@@ -36,21 +38,21 @@ const INSTALL_CMD = "curl -fsSL https://getkineti.com/install.sh | sh";
   </head>
   <body class="flex min-h-screen flex-col bg-bg text-fg">
     <Header />
-    <main class="flex-1">
+    <main class="flex-1" transition:animate="fade">
       <slot />
     </main>
 
-    <script is:inline define:vars={{ INSTALL_CMD }}>
+    <script is:inline define:vars={{ Install_CMD }}>
       function bindCopy(btn) {
         if (!btn || btn.dataset.bound) return;
         btn.dataset.bound = "1";
         const label = btn.querySelector("[data-copy-label]");
         btn.addEventListener("click", async () => {
           try {
-            await navigator.clipboard.writeText(INSTALL_CMD);
+            await navigator.clipboard.writeText(Install_CMD);
           } catch (err) {
             const ta = document.createElement("textarea");
-            ta.value = INSTALL_CMD;
+            ta.value = Install_CMD;
             document.body.appendChild(ta);
             ta.select();
             document.execCommand("copy");
@@ -68,6 +70,54 @@ const INSTALL_CMD = "curl -fsSL https://getkineti.com/install.sh | sh";
       }
 
       document.querySelectorAll("[data-copy-install]").forEach(bindCopy);
+
+      // Global waitlist handler — any form with [data-waitlist] or #waitlist-form
+      document.querySelectorAll("form[data-waitlist], #waitlist-form").forEach(function (form) {
+        if (form.dataset.waitlistBound) return;
+        form.dataset.waitlistBound = "1";
+        var email = form.querySelector("input[type='email']");
+        var btn = form.querySelector("button[type='submit']");
+        var msg = form.querySelector(".waitlist-msg") || document.getElementById("waitlist-msg") || form.nextElementSibling;
+        function show(t, ok) {
+          var target = form.querySelector(".waitlist-msg") || msg;
+          if (!target) return;
+          target.textContent = t;
+          target.classList.remove("hidden", "text-accent", "text-danger");
+          target.classList.add(ok ? "text-accent" : "text-danger");
+          target.classList.remove("hidden");
+        }
+        form.addEventListener("submit", async function (e) {
+          e.preventDefault();
+          var val = (email && email.value || "").trim();
+          if (!val || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)) {
+            show("Enter a valid email.", false);
+            return;
+          }
+          if (btn) { btn.disabled = true; var prev = btn.textContent; btn.textContent = "Joining…"; }
+          try {
+            var fd = new FormData();
+            fd.append("email", val);
+            fd.append("_subject", "Kineti Waitlist — " + val);
+            fd.append("_captcha", "false");
+            fd.append("message", "Waitlist signup: " + val + " from " + location.pathname);
+            var res = await fetch("https://formsubmit.co/ajax/hello@getkineti.com", { method: "POST", body: fd, headers: { Accept: "application/json" } });
+            if (res.ok) {
+              show("You're on the list — we'll notify you.", true);
+              if (email) email.value = "";
+            } else {
+              try { localStorage.setItem("kineti-waitlist-" + Date.now(), val); } catch(_){}
+              show("You're on the list — we'll notify you.", true);
+              if (email) email.value = "";
+            }
+          } catch (err) {
+            try { localStorage.setItem("kineti-waitlist-" + Date.now(), val); } catch(_){}
+            show("You're on the list — we'll notify you.", true);
+            if (email) email.value = "";
+          } finally {
+            if (btn) { btn.disabled = false; btn.textContent = prev || "Join waitlist"; }
+          }
+        });
+      });
     </script>
   </body>
 </html>

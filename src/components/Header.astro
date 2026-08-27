@@ -1,6 +1,5 @@
 ---
 const nav = [
-  { href: "/", label: "Product" },
   { href: "/docs", label: "Docs" },
   { href: "/pricing", label: "Pricing" },
 ];
@@ -12,10 +11,10 @@ const isActive = (href: string) => {
 };
 ---
 
-<header class="sticky top-0 z-50 border-b border-line bg-bg/90 backdrop-blur-sm">
+<header transition:persist class="sticky top-0 z-50 border-b border-line bg-bg/90 backdrop-blur-sm supports-[backdrop-filter]:bg-bg/80" style="will-change: transform; transform: translateZ(0);">
   <div class="mx-auto flex max-w-6xl flex-wrap items-center gap-x-6 gap-y-2 px-4 py-3 sm:flex-nowrap sm:gap-y-0 sm:px-6 sm:py-0 sm:h-[53px]">
     <a href="/" class="flex shrink-0 items-center gap-2 whitespace-nowrap">
-      <span class="text-base font-bold tracking-widest text-fg">KINETI</span>
+      <span class="text-base font-bold tracking-wide text-fg">KINETI</span>
       <span class="rounded-none border border-line bg-surface-2 px-2 py-0.5 text-xs leading-none text-accent">v0.2.0</span>
     </a>
 

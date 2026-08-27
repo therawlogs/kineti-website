@@ -84,7 +84,7 @@ const faqs = [
   {
     faqs.map((item, i) => (
       <section id={item.id} data-doc-section aria-labelledby={`h-${item.id}`} class="scroll-mt-20 border-b border-line py-10 last:border-b-0">
-        <h2 id={`h-${item.id}`} class="text-sm font-bold tracking-widest text-fg">
+        <h2 id={`h-${item.id}`} class="text-sm font-bold tracking-wide text-fg">
           <span class="mr-2 text-accent">{String(i + 1).padStart(2, "0")}</span>
           <a href={`#${item.id}`} class="hover:text-accent">
             {item.q}

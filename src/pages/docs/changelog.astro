@@ -2,10 +2,10 @@
 import DocsLayout from "../../layouts/DocsLayout.astro";
 
 const toc = [
-  { id: "sec-assets", label: "01 RELEASE FILES" },
+  { id: "sec-assets", label: "01 Release files" },
   { id: "sec-v01", label: "02 v0.1.0 — WHAT SHIPPED" },
   { id: "sec-deferred", label: "03 WHAT IS LATER" },
-  { id: "sec-migrate", label: "04 UPGRADE NOTES" },
+  { id: "sec-migrate", label: "04 Upgrade notes" },
 ];
 
 const assets = [
@@ -68,7 +68,7 @@ const deferred = [
   </section>
 
   <section id="sec-assets" data-doc-section aria-labelledby="h-assets" class="scroll-mt-20 border-b border-line py-10">
-    <h2 id="h-assets" class="text-sm font-bold tracking-widest text-fg"><span class="mr-2 text-accent">01</span>RELEASE FILES</h2>
+    <h2 id="h-assets" class="text-sm font-bold tracking-wide text-fg"><span class="mr-2 text-accent">01</span>Release files</h2>
     <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">Each release includes:</p>
     <ul class="mt-6 grid max-w-3xl grid-cols-1 gap-2 sm:grid-cols-2">
       {
@@ -88,8 +88,8 @@ const deferred = [
   </section>
 
   <section id="sec-v01" data-doc-section aria-labelledby="h-v01" class="scroll-mt-20 border-b border-line py-10">
-    <h2 id="h-v01" class="text-sm font-bold tracking-widest text-fg"><span class="mr-2 text-accent">02</span>v0.1.0 — initial public release (2026-08-25)</h2>
-    <p class="mt-2 max-w-3xl text-xs tracking-widest text-muted">Tag <code class="text-accent">v0.1.0</code> · 8 assets · every download checksum-verifiable via <code class="text-accent">SHA256SUMS</code></p>
+    <h2 id="h-v01" class="text-sm font-bold tracking-wide text-fg"><span class="mr-2 text-accent">02</span>v0.1.0 — initial public release (2026-08-25)</h2>
+    <p class="mt-2 max-w-3xl text-xs tracking-wide text-muted">Tag <code class="text-accent">v0.1.0</code> · 8 assets · every download checksum-verifiable via <code class="text-accent">SHA256SUMS</code></p>
     <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">Shipped and test-pinned (109 tests):</p>
     <ol class="mt-6 max-w-3xl list-decimal space-y-2 pl-5 text-sm leading-relaxed text-muted marker:text-accent">
       {shipped.map((item) => <li>{item}</li>)}
@@ -102,14 +102,14 @@ const deferred = [
   </section>
 
   <section id="sec-deferred" data-doc-section aria-labelledby="h-deferred" class="scroll-mt-20 border-b border-line py-10">
-    <h2 id="h-deferred" class="text-sm font-bold tracking-widest text-fg"><span class="mr-2 text-accent">03</span>WHAT IS PLANNED LATER</h2>
+    <h2 id="h-deferred" class="text-sm font-bold tracking-wide text-fg"><span class="mr-2 text-accent">03</span>What is planned later</h2>
     <ul class="mt-6 max-w-3xl list-disc space-y-2 pl-5 text-sm leading-relaxed text-muted marker:text-accent">
       {deferred.map((item) => <li>{item}</li>)}
     </ul>
   </section>
 
   <section id="sec-migrate" data-doc-section aria-labelledby="h-migrate" class="scroll-mt-20 py-10">
-    <h2 id="h-migrate" class="text-sm font-bold tracking-widest text-fg"><span class="mr-2 text-accent">04</span>UPGRADE NOTES</h2>
+    <h2 id="h-migrate" class="text-sm font-bold tracking-wide text-fg"><span class="mr-2 text-accent">04</span>Upgrade notes</h2>
     <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">None — first release.</p>
     <p class="mt-8 text-sm leading-relaxed text-muted">
       Next: <a href="/docs/getting-started" class="text-accent hover:underline">Getting started</a> ·

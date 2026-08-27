@@ -5,7 +5,6 @@ import tailwindcss from "@tailwindcss/vite";
 export default defineConfig({
   redirects: {
     "/docs": "/docs/getting-started",
-    "/team": "/team",
     "/agencies": "/team",
     // legacy v0.1 — keep files but not top nav
     "/governance": "/docs/getting-started",
@@ -14,8 +13,8 @@ export default defineConfig({
     "/changelog": "/docs/getting-started",
   },
   prefetch: {
-    prefetchAll: false,
-    defaultStrategy: "hover",
+    prefetchAll: true,
+    defaultStrategy: "viewport",
   },
   build: {
     inlineStylesheets: "always",

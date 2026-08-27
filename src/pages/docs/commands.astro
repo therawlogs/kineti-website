@@ -2,9 +2,9 @@
 import DocsLayout from "../../layouts/DocsLayout.astro";
 
 const toc = [
-  { id: "sec-default", label: "01 DEFAULT" },
+  { id: "sec-default", label: "01 Default" },
   { id: "sec-legacy", label: "02 LEGACY (V0.1)" },
-  { id: "sec-env", label: "03 ENV & EXIT CODES" },
+  { id: "sec-env", label: "03 Env & exit codes" },
 ];
 
 const defaults = [
@@ -44,11 +44,11 @@ const legacy = [
   </section>
 
   <section id="sec-default" data-doc-section aria-labelledby="h-default" class="scroll-mt-20 border-b border-line py-10">
-    <h2 id="h-default" class="text-sm font-bold tracking-widest text-fg"><span class="mr-2 text-accent">01</span>DEFAULT</h2>
+    <h2 id="h-default" class="text-sm font-bold tracking-wide text-fg"><span class="mr-2 text-accent">01</span>Default</h2>
     <div class="mt-6 overflow-x-auto border border-line">
       <table class="w-full min-w-[720px] border-collapse text-left text-sm">
         <thead>
-          <tr class="border-b border-line bg-surface-2 text-xs tracking-widest text-muted">
+          <tr class="border-b border-line bg-surface-2 text-xs tracking-wide text-muted">
             <th scope="col" class="px-4 py-3 font-normal">COMMAND</th>
             <th scope="col" class="px-4 py-3 font-normal">PURPOSE</th>
           </tr>
@@ -68,12 +68,12 @@ const legacy = [
   </section>
 
   <section id="sec-legacy" data-doc-section aria-labelledby="h-legacy" class="scroll-mt-20 border-b border-line py-10">
-    <h2 id="h-legacy" class="text-sm font-bold tracking-widest text-fg"><span class="mr-2 text-accent">02</span>LEGACY PIPELINE (V0.1)</h2>
+    <h2 id="h-legacy" class="text-sm font-bold tracking-wide text-fg"><span class="mr-2 text-accent">02</span>Legacy pipeline (v0.1)</h2>
     <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">Hidden from default help, frozen. See tag <code class="text-accent">v0.1.0</code>. Swarm guide is <a href="/docs/swarm" class="text-accent hover:underline">v0.1 swarm</a>.</p>
     <div class="mt-6 overflow-x-auto border border-line">
       <table class="w-full min-w-[720px] border-collapse text-left text-sm">
         <thead>
-          <tr class="border-b border-line bg-surface-2 text-xs tracking-widest text-muted">
+          <tr class="border-b border-line bg-surface-2 text-xs tracking-wide text-muted">
             <th scope="col" class="px-4 py-3 font-normal">COMMAND</th>
             <th scope="col" class="px-4 py-3 font-normal">PURPOSE</th>
           </tr>
@@ -94,11 +94,11 @@ const legacy = [
   </section>
 
   <section id="sec-env" data-doc-section aria-labelledby="h-env" class="scroll-mt-20 py-10">
-    <h2 id="h-env" class="text-sm font-bold tracking-widest text-fg"><span class="mr-2 text-accent">03</span>ENV &amp; EXIT CODES</h2>
+    <h2 id="h-env" class="text-sm font-bold tracking-wide text-fg"><span class="mr-2 text-accent">03</span>ENV &amp; Exit codes</h2>
     <div class="mt-6 overflow-x-auto border border-line">
       <table class="w-full min-w-[560px] border-collapse text-left text-sm">
         <thead>
-          <tr class="border-b border-line bg-surface-2 text-xs tracking-widest text-muted">
+          <tr class="border-b border-line bg-surface-2 text-xs tracking-wide text-muted">
             <th scope="col" class="px-4 py-3 font-normal">ENV VAR</th>
             <th scope="col" class="px-4 py-3 font-normal">EFFECT</th>
           </tr>
@@ -106,7 +106,7 @@ const legacy = [
         <tbody>
           <tr class="border-b border-line"><td class="px-4 py-3 font-mono text-accent">KINETI_FORCE_DIRECT=1</td><td class="px-4 py-3 text-muted">Skip daemon even if one answers</td></tr>
           <tr class="border-b border-line"><td class="px-4 py-3 font-mono text-accent">KINETI_NO_DAEMON=1</td><td class="px-4 py-3 text-muted">Never spawn/connect daemon</td></tr>
-          <tr><td class="px-4 py-3 font-mono text-accent">KINETI_INSTALL_DIR</td><td class="px-4 py-3 text-muted">Install target override for install.sh</td></tr>
+          <tr><td class="px-4 py-3 font-mono text-accent">KINETI_Install_DIR</td><td class="px-4 py-3 text-muted">Install target override for install.sh</td></tr>
         </tbody>
       </table>
     </div>

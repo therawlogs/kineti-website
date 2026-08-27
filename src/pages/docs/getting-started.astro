@@ -2,9 +2,9 @@
 import DocsLayout from "../../layouts/DocsLayout.astro";
 
 const toc = [
-  { id: "sec-install", label: "01 INSTALL" },
-  { id: "sec-first", label: "02 FIRST EVIDENCE → SHIP-CHECK" },
-  { id: "sec-legacy", label: "03 LEGACY PIPELINE (V0.1)" },
+  { id: "sec-install", label: "Install" },
+  { id: "sec-first", label: "First evidence → ship-check" },
+  { id: "sec-legacy", label: "Legacy pipeline (v0.1)" },
 ];
 ---
 
@@ -14,12 +14,10 @@ const toc = [
   active="getting-started"
   {toc}
 >
-  <!-- 1. INSTALL -->
+  <!-- 1. Install -->
   <section id="sec-install" data-doc-section aria-labelledby="h-install" class="scroll-mt-20 border-b border-line py-10">
-    <h2 id="h-install" class="text-sm font-bold tracking-widest text-fg"><span class="mr-2 text-accent">01</span>INSTALL</h2>
+    <h2 id="h-install" class="text-sm font-bold tracking-wide text-fg">Install</h2>
     <pre class="mt-6 overflow-x-auto rounded-none border border-line bg-surface px-5 py-4 text-xs leading-relaxed sm:text-sm"><code><span class="text-muted">$</span> <span class="font-bold text-fg">curl -fsSL https://getkineti.com/install.sh | sh</span></code></pre>
-    <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">Pin a version (optional):</p>
-    <pre class="mt-3 overflow-x-auto rounded-none border border-line bg-surface px-5 py-4 text-xs leading-relaxed sm:text-sm"><code><span class="text-muted">$</span> <span class="font-bold text-fg">curl -fsSL https://getkineti.com/install.sh | sh -s v0.2.0</span></code></pre>
     <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">
       Supported platforms: <strong class="text-fg">macOS</strong> (Apple silicon &amp; Intel) and
       <strong class="text-fg">Linux</strong> x64/arm64 — Linux installs the zero-dependency musl-static build
@@ -27,7 +25,7 @@ const toc = [
       <code class="text-accent">SHA256SUMS</code> before executing it and never asks for sudo.
     </p>
     <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">
-      Install location, in order: <code class="text-accent">$KINETI_INSTALL_DIR</code> →
+      Install location, in order: <code class="text-accent">$KINETI_Install_DIR</code> →
       <code class="text-accent">/usr/local/bin</code> (only if writable) →
       <code class="text-accent">~/.local/bin</code> → <code class="text-accent">~/.cargo/bin</code>.
     </p>
@@ -44,9 +42,9 @@ const toc = [
 <span class="font-bold text-fg">rm -rf .kineti kineti.toml</span></code></pre>
   </section>
 
-  <!-- 2. FIRST EVIDENCE → SHIP-CHECK -->
+  <!-- 2. First evidence → ship-check -->
   <section id="sec-first" data-doc-section aria-labelledby="h-first" class="scroll-mt-20 border-b border-line py-10">
-    <h2 id="h-first" class="text-sm font-bold tracking-widest text-fg"><span class="mr-2 text-accent">02</span>FIRST EVIDENCE → SHIP-CHECK</h2>
+    <h2 id="h-first" class="text-sm font-bold tracking-wide text-fg">First evidence → ship-check</h2>
     <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">
       Default path is <code class="text-accent">init → evidence → ship-check → receipt → verify</code>. Works
       with any agent — Claude, Cursor, Grok, or a shell script.
@@ -70,12 +68,14 @@ const toc = [
 
   <!-- 3. LEGACY PIPELINE -->
   <section id="sec-legacy" data-doc-section aria-labelledby="h-legacy" class="scroll-mt-20 py-10">
-    <h2 id="h-legacy" class="text-sm font-bold tracking-widest text-fg"><span class="mr-2 text-accent">03</span>LEGACY PIPELINE (V0.1)</h2>
-    <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">
-      <code class="text-accent">kineti run --goal ...</code>, <code class="text-accent">resume</code>, <code class="text-accent">task</code> and swarm flags are frozen on tag <code class="text-accent">v0.1.0</code>. They still work but are hidden from default help. Use <code class="text-accent">kineti run --help</code> to see them, or read <a href="https://github.com/therawlogs/kineti/blob/main/docs/v0.1.md" target="_blank" rel="noopener noreferrer" class="text-accent hover:underline">docs/v0.1.md</a> on GitHub. See also <a href="/docs/swarm" class="text-accent hover:underline">v0.1 swarm</a>.
-    </p>
-    <p class="mt-4 max-w-3xl rounded-none border border-line bg-surface px-4 py-3 text-sm leading-relaxed text-muted">
-      <code class="text-accent">kineti serve</code> is the local ledger daemon (<code class="text-soft">.kineti/kineti.sock</code> 0600). Hosted gateway + dashboard is a separate service, not part of the OSS binary.
-    </p>
+    <div class="rounded-none border border-danger/40 bg-danger/10 p-6">
+      <h2 id="h-legacy" class="text-sm font-bold tracking-wide text-danger">Legacy pipeline (v0.1) — deprecated</h2>
+      <p class="mt-3 max-w-3xl text-sm leading-relaxed text-danger/80">
+        <code class="text-danger">kineti run --goal ...</code>, <code class="text-danger">resume</code>, <code class="text-danger">task</code> and swarm flags are frozen on tag <code class="text-danger">v0.1.0</code> and will be removed. They still work but are hidden from default help. Use <code class="text-danger">kineti run --help</code> to see them, or read <a href="https://github.com/therawlogs/kineti/blob/main/docs/v0.1.md" target="_blank" rel="noopener noreferrer" class="text-danger underline">docs/v0.1.md</a> on GitHub. See also <a href="/docs/swarm" class="text-danger underline">v0.1 swarm</a>.
+      </p>
+      <p class="mt-4 max-w-3xl rounded-none border border-danger/20 bg-bg px-4 py-3 text-sm leading-relaxed text-danger/70">
+        <code class="text-danger">kineti serve</code> is the local ledger daemon (<code class="text-danger/70">.kineti/kineti.sock</code> 0600). Hosted gateway + dashboard is a separate service, not part of the OSS binary.
+      </p>
+    </div>
   </section>
 </DocsLayout>

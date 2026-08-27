@@ -2,11 +2,11 @@
 import DocsLayout from "../../layouts/DocsLayout.astro";
 
 const toc = [
-  { id: "sec-header", label: "01 HEADER CONTRACT" },
-  { id: "sec-memory", label: "02 MEMORY CONTRACT" },
-  { id: "sec-example", label: "03 EXAMPLE" },
+  { id: "sec-header", label: "01 Header contract" },
+  { id: "sec-memory", label: "02 Memory contract" },
+  { id: "sec-example", label: "03 Example" },
   { id: "sec-args", label: "04 ARGUMENTS & PAYLOADS" },
-  { id: "sec-python", label: "05 PYTHON QUICKSTART" },
+  { id: "sec-python", label: "05 Python quickstart" },
 ];
 
 const headerContract = [
@@ -80,15 +80,15 @@ function codeHtml(lines: string[]): string[] {
     </p>
   </section>
 
-  <!-- 1. HEADER CONTRACT -->
+  <!-- 1. Header contract -->
   <section id="sec-header" data-doc-section aria-labelledby="h-header" class="scroll-mt-20 border-b border-line py-10">
-    <h2 id="h-header" class="text-sm font-bold tracking-widest text-fg"><span class="mr-2 text-accent">01</span>HEADER CONTRACT</h2>
+    <h2 id="h-header" class="text-sm font-bold tracking-wide text-fg"><span class="mr-2 text-accent">01</span>Header contract</h2>
     <pre class="mt-6 overflow-x-auto rounded-none border border-line bg-surface px-5 py-4 text-xs leading-relaxed text-soft sm:text-sm"><code>{codeHtml(headerContract).map((l) => <Fragment set:html={l + "\n"} />)}</code></pre>
   </section>
 
-  <!-- 2. MEMORY CONTRACT -->
+  <!-- 2. Memory contract -->
   <section id="sec-memory" data-doc-section aria-labelledby="h-memory" class="scroll-mt-20 border-b border-line py-10">
-    <h2 id="h-memory" class="text-sm font-bold tracking-widest text-fg"><span class="mr-2 text-accent">02</span>MEMORY CONTRACT</h2>
+    <h2 id="h-memory" class="text-sm font-bold tracking-wide text-fg"><span class="mr-2 text-accent">02</span>Memory contract</h2>
     <ul class="mt-6 max-w-3xl list-disc space-y-3 pl-5 text-sm leading-relaxed text-muted marker:text-accent">
       {
         memoryContract.map((item) => (
@@ -100,15 +100,15 @@ function codeHtml(lines: string[]): string[] {
     </ul>
   </section>
 
-  <!-- 3. EXAMPLE -->
+  <!-- 3. Example -->
   <section id="sec-example" data-doc-section aria-labelledby="h-example" class="scroll-mt-20 border-b border-line py-10">
-    <h2 id="h-example" class="text-sm font-bold tracking-widest text-fg"><span class="mr-2 text-accent">03</span>EXAMPLE</h2>
+    <h2 id="h-example" class="text-sm font-bold tracking-wide text-fg"><span class="mr-2 text-accent">03</span>Example</h2>
     <pre class="mt-6 overflow-x-auto rounded-none border border-line bg-surface px-5 py-4 text-xs leading-relaxed text-soft sm:text-sm"><code>{codeHtml(cExample).map((l) => <Fragment set:html={l + "\n"} />)}</code></pre>
   </section>
 
   <!-- 4. ARGUMENTS & PAYLOADS -->
   <section id="sec-args" data-doc-section aria-labelledby="h-args" class="scroll-mt-20 border-b border-line py-10">
-    <h2 id="h-args" class="text-sm font-bold tracking-widest text-fg"><span class="mr-2 text-accent">04</span>ARGS AND RESULTS</h2>
+    <h2 id="h-args" class="text-sm font-bold tracking-wide text-fg"><span class="mr-2 text-accent">04</span>Args and results</h2>
     <div class="mt-6 max-w-3xl space-y-4 text-sm leading-relaxed text-muted">
       <p>
         <code class="text-accent">kineti_run</code> args:
@@ -134,9 +134,9 @@ function codeHtml(lines: string[]): string[] {
     </div>
   </section>
 
-  <!-- 5. PYTHON QUICKSTART -->
+  <!-- 5. Python quickstart -->
   <section id="sec-python" data-doc-section aria-labelledby="h-python" class="scroll-mt-20 py-10">
-    <h2 id="h-python" class="text-sm font-bold tracking-widest text-fg"><span class="mr-2 text-accent">05</span>PYTHON QUICKSTART</h2>
+    <h2 id="h-python" class="text-sm font-bold tracking-wide text-fg"><span class="mr-2 text-accent">05</span>Python quickstart</h2>
     <pre class="mt-6 overflow-x-auto rounded-none border border-line bg-surface px-5 py-4 text-xs leading-relaxed sm:text-sm"><code><span class="text-accent">from</span> <span class="text-soft">ctypes</span> <span class="text-accent">import</span> <span class="text-soft">CDLL, c_char_p, c_bool, Structure, POINTER</span>
 <span class="text-accent">class</span> <span class="text-fg">R</span>(Structure): <span class="text-soft">_fields_</span> = [(<span class="text-fg">"ok"</span>, c_bool), (<span class="text-fg">"payload"</span>, c_char_p)]
 k = CDLL(<span class="text-fg">"./libkineti.so"</span>); k.kineti_run.restype = R

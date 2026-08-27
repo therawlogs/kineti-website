@@ -15,7 +15,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 
   <section class="border-b border-line">
     <div class="mx-auto max-w-6xl px-4 py-16 sm:px-6">
-      <h2 class="text-xs tracking-widest text-muted"><span class="text-accent">##</span> HOW KEYS ARE HANDLED</h2>
+      <h2 class="text-xs tracking-wide text-muted">How keys are handled</h2>
       <ul class="mt-6 max-w-3xl list-disc space-y-3 pl-5 text-sm leading-relaxed text-muted marker:text-accent">
         <li>Keys live in env vars (<code class="text-accent">GEMINI_API_KEY</code>, <code class="text-accent">XAI_API_KEY</code>) or OAuth tokens in <code class="text-accent">~/.kineti/auth/*</code> 0600. Nothing secret is ever logged.</li>
         <li><code class="text-accent">kineti login</code> uses PKCE (RFC 7636 S256), state validated, waits on 127.0.0.1 loopback. Tokens refresh once, then fall back to env key.</li>
@@ -23,14 +23,14 @@ import BaseLayout from "../layouts/BaseLayout.astro";
         <li>Daemon socket <code class="text-accent">.kineti/kineti.sock</code> is 0600 same-user only; not a boundary against malware running as your user.</li>
       </ul>
 
-      <h2 class="mt-12 text-xs tracking-widest text-muted"><span class="text-accent">##</span> WHAT YOU LOG</h2>
+      <h2 class="mt-12 text-xs tracking-wide text-muted">What you log</h2>
       <ul class="mt-6 max-w-3xl list-disc space-y-3 pl-5 text-sm leading-relaxed text-muted marker:text-accent">
         <li>Receipt / journal: spend, fingerprints, gates, DAG heads, egress tags, clean-files counts. Never raw secrets or source contents.</li>
         <li>No telemetry or phone-home on the marketing site. Installer hits <code class="text-accent">github.com/therawlogs/kineti</code> and your CDN; we do not get your source.</li>
         <li>Verify integrity: <code class="text-accent">curl -fsSL https://getkineti.com/install.sh | sh -s v0.2.0</code> then <code class="text-accent">sha256sum -c SHA256SUMS</code> from the release.</li>
       </ul>
 
-      <h2 class="mt-12 text-xs tracking-widest text-muted"><span class="text-accent">##</span> WHAT IS IN SCOPE</h2>
+      <h2 class="mt-12 text-xs tracking-wide text-muted">What is in scope</h2>
       <ul class="mt-6 max-w-3xl list-disc space-y-3 pl-5 text-sm leading-relaxed text-muted marker:text-accent">
         <li>Path-fence escapes (symlink tricks), prompt-injection → tool execution, hash-chain bypass, spend breaker races, daemon IPC 0600, token theft, worktree teardown path traversal.</li>
       </ul>
@@ -48,7 +48,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
         </ul>
       </div>
 
-      <p class="mt-8 text-xs leading-relaxed text-muted">Contact: <a href="mailto:hello@getkineti.com" class="text-accent hover:underline">hello@getkineti.com</a> · <code class="text-accent">/.well-known/security.txt</code> · Full doc: <a href="/docs/security" class="text-accent hover:underline">/docs/security</a></p>
+      <p class="mt-8 text-xs leading-relaxed text-muted"><code class="text-accent">/.well-known/security.txt</code> · Full doc: <a href="/docs/security" class="text-accent hover:underline">/docs/security</a> · <a href="/pricing" class="text-accent hover:underline">Join waitlist</a></p>
     </div>
   </section>
 </BaseLayout>
