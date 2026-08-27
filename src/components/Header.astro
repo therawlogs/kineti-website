@@ -1,8 +1,15 @@
 ---
-const nav = [{ href: "/docs/getting-started", label: "Docs" }];
+const nav = [
+  { href: "/", label: "Product" },
+  { href: "/docs", label: "Docs" },
+  { href: "/pricing", label: "Pricing" },
+];
 const path = Astro.url.pathname.replace(/\/$/, "") || "/";
-const isActive = (href: string) =>
-  path === href || (href === "/docs/getting-started" && path.startsWith("/docs"));
+const isActive = (href: string) => {
+  if (href === "/") return path === "/";
+  if (href === "/docs") return path.startsWith("/docs");
+  return path === href || path.startsWith(href + "/");
+};
 ---
 
 <header class="sticky top-0 z-50 border-b border-line bg-bg/90 backdrop-blur-sm">

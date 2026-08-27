@@ -1,0 +1,42 @@
+---
+import DocsLayout from "../../layouts/DocsLayout.astro";
+---
+
+<DocsLayout title="Docs — Kineti" description="Kineti docs: install, first evidence, CI, commands, and receipt." active="getting-started">
+  <section class="scroll-mt-20 border-b border-line py-10">
+    <h1 class="text-xl font-bold tracking-tight text-fg sm:text-2xl">Docs</h1>
+    <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">
+      Ship proof + spend cap for any coding agent. Default path is <code class="text-accent">init → evidence → ship-check → verify</code>.
+    </p>
+  </section>
+
+  <section class="scroll-mt-20 py-10">
+    <div class="grid gap-4 sm:grid-cols-2">
+      <a href="/docs/getting-started" class="border border-line bg-surface p-5 transition-colors hover:border-accent">
+        <p class="text-xs tracking-widest text-accent">01</p>
+        <p class="mt-2 font-bold text-fg">Getting started</p>
+        <p class="mt-2 text-sm leading-relaxed text-muted">Install + first <code class="text-accent">evidence</code> / <code class="text-accent">ship-check</code>. Uninstall, platforms, SHA256.</p>
+      </a>
+      <a href="/docs/ci" class="border border-line bg-surface p-5 transition-colors hover:border-accent">
+        <p class="text-xs tracking-widest text-accent">02</p>
+        <p class="mt-2 font-bold text-fg">CI</p>
+        <p class="mt-2 text-sm leading-relaxed text-muted">Copy-paste GitHub Action &amp; GitLab job for <code class="text-accent">ship-check</code> + <code class="text-accent">verify</code>.</p>
+      </a>
+      <a href="/docs/commands" class="border border-line bg-surface p-5 transition-colors hover:border-accent">
+        <p class="text-xs tracking-widest text-accent">03</p>
+        <p class="mt-2 font-bold text-fg">Commands</p>
+        <p class="mt-2 text-sm leading-relaxed text-muted">Default: <code class="text-accent">init, evidence, ship-check, receipt, verify, clean-check</code>. Legacy <code class="text-soft">run</code> at bottom.</p>
+      </a>
+      <a href="/docs/receipt" class="border border-line bg-surface p-5 transition-colors hover:border-accent">
+        <p class="text-xs tracking-widest text-accent">04</p>
+        <p class="mt-2 font-bold text-fg">Receipt</p>
+        <p class="mt-2 text-sm leading-relaxed text-muted">What is stored, what is never stored, how <code class="text-accent">verify --all</code> works.</p>
+      </a>
+    </div>
+    <p class="mt-8 text-sm leading-relaxed text-muted">
+      Also: <a href="/pricing" class="text-accent hover:underline">Pricing</a> ·
+      <a href="/security" class="text-accent hover:underline">Security</a> ·
+      <a href="https://github.com/therawlogs/kineti" target="_blank" rel="noopener noreferrer" class="text-accent hover:underline">Source</a>
+    </p>
+  </section>
+</DocsLayout>

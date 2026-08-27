@@ -1,0 +1,23 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="Privacy — Kineti" description="Minimal privacy: no account on the marketing site, installer hits GitHub, we only keep email if you contact us.">
+  <section class="border-b border-line">
+    <div class="mx-auto max-w-6xl px-4 pt-16 pb-8 sm:px-6 sm:pt-24">
+      <h1 class="text-3xl font-bold tracking-tight text-fg sm:text-4xl">Privacy</h1>
+      <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">Minimal. Last updated 2026-08-27.</p>
+    </div>
+  </section>
+  <section class="border-b border-line">
+    <div class="mx-auto max-w-6xl px-4 py-16 sm:px-6">
+      <div class="max-w-3xl space-y-6 text-sm leading-relaxed text-muted">
+        <p>No account on the marketing site. <code class="text-accent">getkineti.com</code> serves static HTML + <code class="text-accent">/install.sh</code>. We do not collect analytics or run trackers on this domain. If you enable any analytics later, this page will name it.</p>
+        <p><strong class="text-fg">Installer:</strong> <code class="text-accent">install.sh</code> fetches binaries from <code class="text-accent">github.com/therawlogs/kineti/releases</code> and verifies <code class="text-accent">SHA256SUMS</code>. That request goes to GitHub / your CDN, not through us to collect your source. We do not get your source.</p>
+        <p><strong class="text-fg">CLI:</strong> Keys stay on your machine (<code class="text-accent">GEMINI_API_KEY</code> in env, tokens in <code class="text-accent">~/.kineti/auth/</code> 0600). Outbound sends are recorded locally before they leave, keys redacted. No telemetry or phone-home. See <a href="/security" class="text-accent hover:underline">Security</a> and <a href="/docs/receipt" class="text-accent hover:underline">Receipt</a>.</p>
+        <p><strong class="text-fg">Contact form / email:</strong> If you email <a href="mailto:hello@getkineti.com" class="text-accent hover:underline">hello@getkineti.com</a> we keep the email to reply. No marketing list, no sale.</p>
+        <p>Questions: <a href="mailto:hello@getkineti.com" class="text-accent hover:underline">hello@getkineti.com</a></p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

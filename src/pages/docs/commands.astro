@@ -1,0 +1,117 @@
+---
+import DocsLayout from "../../layouts/DocsLayout.astro";
+
+const toc = [
+  { id: "sec-default", label: "01 DEFAULT" },
+  { id: "sec-legacy", label: "02 LEGACY (V0.1)" },
+  { id: "sec-env", label: "03 ENV & EXIT CODES" },
+];
+
+const defaults = [
+  { cmd: "init", purpose: "Scaffold .kineti/ + kineti.toml in this folder" },
+  { cmd: "evidence --cmd \"...\"", purpose: "Run your test and bind result to file fingerprint (writes .kineti/evidence.json)" },
+  { cmd: "ship-check", purpose: "Proof gate — 0 fresh, 1 stale/failed, 2 missing, 3 chain broken. Put this in CI." },
+  { cmd: "verify [--all]", purpose: "Hash-chain check. --all walks every merged branch and orphan closure." },
+  { cmd: "receipt [--last]", purpose: "Spend across workers, gates timeline, DAG state, egress, clean-files" },
+  { cmd: "clean-check", purpose: "Scan for names/home paths/secrets — zero matches required to ship" },
+  { cmd: "wrap -- <cmd>", purpose: "Wrap any agent (claude, cursor) under the spend cap" },
+  { cmd: "gateway [--port 8787]", purpose: "Local OpenAI-compatible proxy with reserve/settle (demo)" },
+  { cmd: "serve [--foreground]", purpose: "Local ledger daemon on .kineti/kineti.sock (0600). Hosted gate is a separate service." },
+  { cmd: "provider-test --provider <p>", purpose: "Smoke-test a provider wire" },
+  { cmd: "login/logout/auth-status", purpose: "OAuth PKCE lifecycle (tokens in ~/.kineti/auth/ 0600)" },
+];
+
+const legacy = [
+  { cmd: "run --goal ... [--cap] [--mode]", purpose: "13-stage pipeline — frozen at v0.1.0, see tag v0.1.0 / docs/v0.1.md" },
+  { cmd: "resume", purpose: "Continue pipeline from last stage (legacy)" },
+  { cmd: "task --task ...", purpose: "One freeform governed task (legacy thin wrapper)" },
+  { cmd: "undo", purpose: "Saga rollback newest-first (legacy)" },
+  { cmd: "merge --branch <id>", purpose: "Fold worker journal into main chain (legacy swarm)" },
+];
+---
+
+<DocsLayout
+  title="Commands — Kineti"
+  description="Default commands: init, evidence, ship-check, receipt, verify, clean-check. Legacy run/task hidden."
+  active="commands"
+  {toc}
+>
+  <section data-doc-section class="scroll-mt-20 border-b border-line py-10">
+    <h1 class="text-xl font-bold tracking-tight text-fg sm:text-2xl">Commands</h1>
+    <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">
+      Default path is <code class="text-accent">evidence → ship-check → verify</code>. Version from release tag. Run <code class="text-accent">kineti --help</code> for full list.
+    </p>
+  </section>
+
+  <section id="sec-default" data-doc-section aria-labelledby="h-default" class="scroll-mt-20 border-b border-line py-10">
+    <h2 id="h-default" class="text-sm font-bold tracking-widest text-fg"><span class="mr-2 text-accent">01</span>DEFAULT</h2>
+    <div class="mt-6 overflow-x-auto border border-line">
+      <table class="w-full min-w-[720px] border-collapse text-left text-sm">
+        <thead>
+          <tr class="border-b border-line bg-surface-2 text-xs tracking-widest text-muted">
+            <th scope="col" class="px-4 py-3 font-normal">COMMAND</th>
+            <th scope="col" class="px-4 py-3 font-normal">PURPOSE</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            defaults.map((c) => (
+              <tr class="border-b border-line transition-colors last:border-b-0 hover:bg-surface-2">
+                <td class="px-4 py-3 font-mono font-bold whitespace-nowrap text-accent">{c.cmd}</td>
+                <td class="px-4 py-3 leading-relaxed text-muted">{c.purpose}</td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="sec-legacy" data-doc-section aria-labelledby="h-legacy" class="scroll-mt-20 border-b border-line py-10">
+    <h2 id="h-legacy" class="text-sm font-bold tracking-widest text-fg"><span class="mr-2 text-accent">02</span>LEGACY PIPELINE (V0.1)</h2>
+    <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">Hidden from default help, frozen. See tag <code class="text-accent">v0.1.0</code>. Swarm guide is <a href="/docs/swarm" class="text-accent hover:underline">v0.1 swarm</a>.</p>
+    <div class="mt-6 overflow-x-auto border border-line">
+      <table class="w-full min-w-[720px] border-collapse text-left text-sm">
+        <thead>
+          <tr class="border-b border-line bg-surface-2 text-xs tracking-widest text-muted">
+            <th scope="col" class="px-4 py-3 font-normal">COMMAND</th>
+            <th scope="col" class="px-4 py-3 font-normal">PURPOSE</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            legacy.map((c) => (
+              <tr class="border-b border-line transition-colors last:border-b-0 hover:bg-surface-2">
+                <td class="px-4 py-3 font-mono whitespace-nowrap text-muted">{c.cmd}</td>
+                <td class="px-4 py-3 leading-relaxed text-muted">{c.purpose}</td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+    <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">Keep <code class="text-accent">serve</code> as “local ledger; hosted gate is a separate service.”</p>
+  </section>
+
+  <section id="sec-env" data-doc-section aria-labelledby="h-env" class="scroll-mt-20 py-10">
+    <h2 id="h-env" class="text-sm font-bold tracking-widest text-fg"><span class="mr-2 text-accent">03</span>ENV &amp; EXIT CODES</h2>
+    <div class="mt-6 overflow-x-auto border border-line">
+      <table class="w-full min-w-[560px] border-collapse text-left text-sm">
+        <thead>
+          <tr class="border-b border-line bg-surface-2 text-xs tracking-widest text-muted">
+            <th scope="col" class="px-4 py-3 font-normal">ENV VAR</th>
+            <th scope="col" class="px-4 py-3 font-normal">EFFECT</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-line"><td class="px-4 py-3 font-mono text-accent">KINETI_FORCE_DIRECT=1</td><td class="px-4 py-3 text-muted">Skip daemon even if one answers</td></tr>
+          <tr class="border-b border-line"><td class="px-4 py-3 font-mono text-accent">KINETI_NO_DAEMON=1</td><td class="px-4 py-3 text-muted">Never spawn/connect daemon</td></tr>
+          <tr><td class="px-4 py-3 font-mono text-accent">KINETI_INSTALL_DIR</td><td class="px-4 py-3 text-muted">Install target override for install.sh</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="mt-6 max-w-3xl text-sm leading-relaxed text-muted">
+      Exit: <code class="text-accent">0</code> ok · <code class="text-danger">1</code> halted/tampered/dirty/refused · <code class="text-soft">2</code> missing proof (ship-check) · fail closed.
+    </p>
+  </section>
+</DocsLayout>

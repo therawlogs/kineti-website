@@ -1,0 +1,65 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="Pricing — Kineti"
+  description="Free OSS vs Team setup vs Hosted. CLI is Apache-2.0. Paid is setup help, not a seat fee."
+>
+  <section class="border-b border-line">
+    <div class="mx-auto max-w-6xl px-4 pt-16 pb-8 sm:px-6 sm:pt-24">
+      <h1 class="max-w-3xl text-3xl font-bold leading-tight tracking-tight text-fg sm:text-4xl">Pricing</h1>
+      <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">You do not have SSO, SOC 2, or a multi-tenant console. Do not sell what does not exist.</p>
+    </div>
+  </section>
+
+  <section class="border-b border-line">
+    <div class="mx-auto max-w-6xl px-4 py-16 sm:px-6">
+      <div class="overflow-x-auto border border-line">
+        <table class="w-full min-w-[720px] border-collapse text-left text-sm">
+          <thead>
+            <tr class="border-b border-line bg-surface-2 text-xs tracking-widest text-muted">
+              <th scope="col" class="px-4 py-3 font-normal"></th>
+              <th scope="col" class="px-4 py-3 font-normal">OPEN SOURCE</th>
+              <th scope="col" class="px-4 py-3 font-normal">TEAM SETUP</th>
+              <th scope="col" class="px-4 py-3 font-normal">HOSTED (WAITLIST)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b border-line">
+              <td class="px-4 py-4 font-bold text-fg">Price</td>
+              <td class="px-4 py-4 font-bold text-accent">$0</td>
+              <td class="px-4 py-4 text-muted">Fixed project fee — quote</td>
+              <td class="px-4 py-4 text-muted">Not generally available</td>
+            </tr>
+            <tr class="border-b border-line">
+              <td class="px-4 py-4 font-bold text-fg">What</td>
+              <td class="px-4 py-4 leading-relaxed text-muted">CLI, GitHub Action, Apache-2.0. <code class="text-accent">evidence</code> + <code class="text-accent">ship-check</code> + <code class="text-accent">verify</code>.</td>
+              <td class="px-4 py-4 leading-relaxed text-muted">We wire cap + required check on your repos. See <a href="/team" class="text-accent hover:underline">Team</a>.</td>
+              <td class="px-4 py-4 leading-relaxed text-muted">Gateway + dashboard when it exists. Today <code class="text-accent">kineti serve</code> is local only.</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-4 font-bold text-fg">Buyer</td>
+              <td class="px-4 py-4 text-muted">Anyone</td>
+              <td class="px-4 py-4 text-muted">Agency / platform lead</td>
+              <td class="px-4 py-4 text-muted">Same, later</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="mt-6 text-sm leading-relaxed text-muted">
+        No $49/seat/month. No fake logos. Paid setup is a separate statement of work.
+      </p>
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a href="/team" class="rounded-none border border-accent bg-surface-2 px-4 py-2 text-sm font-bold text-accent transition-colors hover:bg-surface">Who pays →</a>
+        <a href="/docs/getting-started" class="rounded-none border border-line bg-surface px-4 py-2 text-sm text-fg transition-colors hover:border-accent">Start free →</a>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="mx-auto max-w-6xl px-4 py-10 sm:px-6">
+      <p class="text-xs leading-relaxed text-muted">Questions: <a href="mailto:hello@getkineti.com" class="text-accent hover:underline">hello@getkineti.com</a> · License: Apache-2.0</p>
+    </div>
+  </section>
+</BaseLayout>

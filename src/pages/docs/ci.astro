@@ -1,0 +1,71 @@
+---
+import DocsLayout from "../../layouts/DocsLayout.astro";
+
+const toc = [
+  { id: "sec-github", label: "01 GITHUB ACTION" },
+  { id: "sec-gitlab", label: "02 GITLAB JOB" },
+  { id: "sec-why", label: "03 WHY THIS CHECK" },
+];
+---
+
+<DocsLayout
+  title="CI — Kineti"
+  description="Put kineti ship-check and verify in CI. Copy-paste workflow for GitHub Actions and GitLab."
+  active="ci"
+  {toc}
+>
+  <section data-doc-section class="scroll-mt-20 border-b border-line py-10">
+    <h1 class="text-xl font-bold tracking-tight text-fg sm:text-2xl">CI</h1>
+    <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">
+      This check is what makes teams adopt Kineti. Make <code class="text-accent">ship-check</code> a required check on the default branch.
+    </p>
+  </section>
+
+  <section id="sec-github" data-doc-section aria-labelledby="h-github" class="scroll-mt-20 border-b border-line py-10">
+    <h2 id="h-github" class="text-sm font-bold tracking-widest text-fg"><span class="mr-2 text-accent">01</span>GITHUB ACTION</h2>
+    <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">Copy to <code class="text-accent">.github/workflows/kineti.yml</code>. Pins version, installs via <code class="text-accent">install.sh</code>, runs the proof gate.</p>
+    <pre class="mt-6 overflow-x-auto rounded-none border border-line bg-surface px-5 py-4 text-xs leading-relaxed sm:text-sm"><code><span class="text-soft">name: kineti</span>
+<span class="text-soft">on: [push, pull_request]</span>
+<span class="text-soft">jobs:</span>
+  <span class="text-soft">ship-check:</span>
+    <span class="text-soft">runs-on: ubuntu-latest</span>
+    <span class="text-soft">steps:</span>
+      <span class="text-soft">- uses: actions/checkout@v4</span>
+      <span class="text-soft">- name: Install Kineti (pinned)</span>
+        <span class="text-soft">run: curl -fsSL https://getkineti.com/install.sh | sh -s v0.1.0</span>
+      <span class="text-soft">- name: Ship check + verify</span>
+        <span class="text-soft">run: |</span>
+          <span class="text-fg">kineti ship-check</span>
+          <span class="text-fg">kineti verify --all</span>
+          <span class="text-fg">kineti receipt</span></code></pre>
+    <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">
+      Make the job required in GitHub branch protection. Fails with exit <code class="text-soft">1</code> on stale proof, <code class="text-soft">2</code> on missing proof — <a href="/docs/commands" class="text-accent hover:underline">see commands</a>.
+    </p>
+  </section>
+
+  <section id="sec-gitlab" data-doc-section aria-labelledby="h-gitlab" class="scroll-mt-20 border-b border-line py-10">
+    <h2 id="h-gitlab" class="text-sm font-bold tracking-widest text-fg"><span class="mr-2 text-accent">02</span>GITLAB JOB</h2>
+    <pre class="mt-6 overflow-x-auto rounded-none border border-line bg-surface px-5 py-4 text-xs leading-relaxed sm:text-sm"><code><span class="text-soft">kineti:ship-check:</span>
+  <span class="text-soft">image: ubuntu:latest</span>
+  <span class="text-soft">before_script:</span>
+    <span class="text-soft">- apt-get update &amp;&amp; apt-get install -y curl ca-certificates</span>
+    <span class="text-soft">- curl -fsSL https://getkineti.com/install.sh | sh -s v0.1.0</span>
+    <span class="text-soft">- export PATH="$HOME/.local/bin:$PATH"</span>
+  <span class="text-soft">script:</span>
+    <span class="text-soft">- kineti ship-check</span>
+    <span class="text-soft">- kineti verify --all</span>
+  <span class="text-soft">rules:</span>
+    <span class="text-soft">- if: $CI_PIPELINE_SOURCE == "merge_request_event"</span>
+    <span class="text-soft">- if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH</span></code></pre>
+  </section>
+
+  <section id="sec-why" data-doc-section aria-labelledby="h-why" class="scroll-mt-20 py-10">
+    <h2 id="h-why" class="text-sm font-bold tracking-widest text-fg"><span class="mr-2 text-accent">03</span>WHY THIS CHECK</h2>
+    <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">
+      Without a CI gate, an agent can push code after tests without re-proving it. <code class="text-accent">ship-check</code> compares the file fingerprint at proof time to the current tree and refuses to merge if they differ. Same binary locally and in CI — no hosted gate required for v0.
+    </p>
+    <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">
+      Hosted gateway + dashboard is waitlist-only (see <a href="/pricing" class="text-accent hover:underline">Pricing</a>). Local flow stays <code class="text-accent">evidence → ship-check → verify</code>.
+    </p>
+  </section>
+</DocsLayout>

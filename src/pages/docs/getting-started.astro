@@ -3,14 +3,14 @@ import DocsLayout from "../../layouts/DocsLayout.astro";
 
 const toc = [
   { id: "sec-install", label: "01 INSTALL" },
-  { id: "sec-first-run", label: "02 FIRST GOVERNED RUN" },
-  { id: "sec-see", label: "03 WHAT YOU WILL SEE" },
+  { id: "sec-first", label: "02 FIRST EVIDENCE → SHIP-CHECK" },
+  { id: "sec-legacy", label: "03 LEGACY PIPELINE (V0.1)" },
 ];
 ---
 
 <DocsLayout
   title="Getting started — Kineti"
-  description="Install Kineti, run your first task, and see the checks: stop for spec approval, block on old proof, and stop on spend limit."
+  description="Install Kineti and run your first evidence → ship-check → verify. Default path is init, evidence, ship-check, receipt, verify."
   active="getting-started"
   {toc}
 >
@@ -34,10 +34,8 @@ const toc = [
     <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">Or from source:</p>
     <pre class="mt-3 overflow-x-auto rounded-none border border-line bg-surface px-5 py-4 text-xs leading-relaxed sm:text-sm"><code><span class="text-muted">$</span> <span class="font-bold text-fg">cargo install --git https://github.com/therawlogs/kineti</span></code></pre>
     <p class="mt-6 max-w-3xl text-sm leading-relaxed text-muted">
-      Credentials: an API key per provider (<code class="text-accent">GEMINI_API_KEY</code>,
-      <code class="text-accent">XAI_API_KEY</code>) <strong class="text-fg">or</strong> an OAuth token via
-      <code class="text-accent">kineti login</code>. Keys live in env vars; tokens in
-      <code class="text-accent">~/.kineti/auth/</code> with mode 0600. Nothing secret is ever logged.
+      No sudo. Verify after install from the release page:
+      <code class="text-accent">sha256sum -c SHA256SUMS</code>.
     </p>
     <h3 class="mt-8 text-sm font-bold text-fg">Uninstall</h3>
     <pre class="mt-3 overflow-x-auto rounded-none border border-line bg-surface px-5 py-4 text-xs leading-relaxed sm:text-sm"><code><span class="font-bold text-fg">rm -f /usr/local/bin/kineti "$HOME/.local/bin/kineti" "$HOME/.cargo/bin/kineti"</span>
@@ -46,52 +44,38 @@ const toc = [
 <span class="font-bold text-fg">rm -rf .kineti kineti.toml</span></code></pre>
   </section>
 
-  <!-- 2. FIRST GOVERNED RUN -->
-  <section id="sec-first-run" data-doc-section aria-labelledby="h-first-run" class="scroll-mt-20 border-b border-line py-10">
-    <h2 id="h-first-run" class="text-sm font-bold tracking-widest text-fg"><span class="mr-2 text-accent">02</span>FIRST RUN WITH CHECKS</h2>
-    <pre class="mt-6 overflow-x-auto rounded-none border border-line bg-surface px-5 py-4 text-xs leading-relaxed sm:text-sm"><code><span class="font-bold text-fg">kineti init</span>                                   <span class="text-muted"># create .kineti/ and kineti.toml you can edit</span>
-<span class="font-bold text-fg">kineti provider-test</span> <span class="text-soft">--provider gemini</span>        <span class="text-muted"># test the connection</span>
-<span class="font-bold text-fg">kineti task</span> <span class="text-soft">--task "create hello.txt"</span>         <span class="text-muted"># run one task with checks</span>
-<span class="font-bold text-fg">kineti run</span> <span class="text-soft">--goal "build X"</span>                   <span class="text-muted"># run all 13 steps with gates</span>
-<span class="font-bold text-fg">kineti receipt</span>                                <span class="text-muted"># show run log with hashes</span>
-<span class="font-bold text-fg">kineti verify</span> <span class="text-soft">--all</span>                           <span class="text-muted"># check full history</span></code></pre>
+  <!-- 2. FIRST EVIDENCE → SHIP-CHECK -->
+  <section id="sec-first" data-doc-section aria-labelledby="h-first" class="scroll-mt-20 border-b border-line py-10">
+    <h2 id="h-first" class="text-sm font-bold tracking-widest text-fg"><span class="mr-2 text-accent">02</span>FIRST EVIDENCE → SHIP-CHECK</h2>
+    <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">
+      Default path is <code class="text-accent">init → evidence → ship-check → receipt → verify</code>. Works
+      with any agent — Claude, Cursor, Grok, or a shell script.
+    </p>
+    <pre class="mt-6 overflow-x-auto rounded-none border border-line bg-surface px-5 py-4 text-xs leading-relaxed sm:text-sm"><code><span class="font-bold text-fg">kineti init</span>                                   <span class="text-muted"># scaffold .kineti/ + kineti.toml</span>
+<span class="font-bold text-fg">kineti evidence --cmd "cargo test"</span>          <span class="text-muted"># or npm test / ./greeting.sh — binds result to file hashes</span>
+<span class="font-bold text-fg">kineti ship-check</span>                             <span class="text-muted"># red if files moved since the proof</span>
+<span class="font-bold text-fg">kineti receipt</span>                                <span class="text-muted"># hash-chained run summary</span>
+<span class="font-bold text-fg">kineti verify --all</span>                           <span class="text-muted"># full DAG check</span></code></pre>
+    <div class="mt-6 max-w-3xl space-y-3 text-sm leading-relaxed text-muted">
+      <p><strong class="text-fg">`kineti evidence --cmd "your test"`</strong> runs your verify command and writes <code class="text-accent">.kineti/evidence.json</code> with <code class="text-soft">passed</code>, <code class="text-soft">fingerprint</code> (hash of tracked files), and <code class="text-soft">at</code>. Edit a file — fingerprint flips stale and <code class="text-accent">ship-check</code> refuses.</p>
+      <p><strong class="text-fg">`kineti ship-check`</strong> is what you put in CI required checks. Exit <code class="text-soft">0</code> fresh, <code class="text-soft">1</code> stale/failed, <code class="text-soft">2</code> missing proof.</p>
+      <p><strong class="text-fg">Spend cap:</strong> set <code class="text-accent">[limits].global_usd</code> in <code class="text-accent">kineti.toml</code> or pass <code class="text-accent">--cap</code> to a command. Crossing settled spend halts the run; only a human <code class="text-accent">.kineti/spend.reset</code> file resumes (see <a href="/docs/receipt" class="text-accent hover:underline">Receipt</a>).</p>
+    </div>
+    <p class="mt-8 max-w-3xl text-sm leading-relaxed text-muted">
+      Next: <a href="/docs/ci" class="text-accent hover:underline">CI</a> ·
+      <a href="/docs/commands" class="text-accent hover:underline">Commands</a> ·
+      <a href="/docs/receipt" class="text-accent hover:underline">Receipt</a>
+    </p>
   </section>
 
-  <!-- 3. WHAT YOU WILL SEE -->
-  <section id="sec-see" data-doc-section aria-labelledby="h-see" class="scroll-mt-20 py-10">
-    <h2 id="h-see" class="text-sm font-bold tracking-widest text-fg"><span class="mr-2 text-accent">03</span>WHAT YOU WILL SEE</h2>
-    <ul class="mt-6 max-w-3xl list-disc space-y-3 pl-5 text-sm leading-relaxed text-muted marker:text-accent">
-      <li>You see steps 1 to 13. Files are created as you go.</li>
-      <li>
-        At step 6 it <strong class="text-fg">stops and waits</strong> for you to type
-        <code class="text-accent">y</code>. Try <code class="text-accent">n</code> first — it will not write code
-        and will make a new spec instead.
-      </li>
-      <li>
-        Change a file by hand after step 9, then let it try to ship: you see
-        <code class="text-danger">SHIP REFUSED — STALE proof</code>. Run
-        <code class="text-accent">kineti evidence --cmd "&lt;check command&gt;"</code> to make a fresh proof, then
-        it ships.
-      </li>
-      <li>
-        If you go over your spend limit, it stops between steps until you create
-        <code class="text-accent">.kineti/spend.reset</code> by hand.
-      </li>
-    </ul>
-    <p class="mt-8 max-w-3xl text-sm leading-relaxed text-muted">
-      Full scripted walkthrough (the recording script behind the homepage demo):
-      <a
-        href="https://github.com/therawlogs/kineti/blob/main/docs/DEMO.md"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="text-accent hover:underline">90-second demo</a
-      >.
+  <!-- 3. LEGACY PIPELINE -->
+  <section id="sec-legacy" data-doc-section aria-labelledby="h-legacy" class="scroll-mt-20 py-10">
+    <h2 id="h-legacy" class="text-sm font-bold tracking-widest text-fg"><span class="mr-2 text-accent">03</span>LEGACY PIPELINE (V0.1)</h2>
+    <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">
+      <code class="text-accent">kineti run --goal ...</code>, <code class="text-accent">resume</code>, <code class="text-accent">task</code> and swarm flags are frozen on tag <code class="text-accent">v0.1.0</code>. They still work but are hidden from default help. Use <code class="text-accent">kineti run --help</code> to see them, or read <a href="https://github.com/therawlogs/kineti/blob/main/docs/v0.1.md" target="_blank" rel="noopener noreferrer" class="text-accent hover:underline">docs/v0.1.md</a> on GitHub. See also <a href="/docs/swarm" class="text-accent hover:underline">v0.1 swarm</a>.
     </p>
-    <p class="mt-8 max-w-3xl text-sm leading-relaxed text-muted">
-      Next:
-      <a href="/docs/swarm" class="text-accent hover:underline">Swarm guide</a> ·
-      <a href="/docs/cli" class="text-accent hover:underline">CLI reference</a> ·
-      <a href="/docs/configuration" class="text-accent hover:underline">Configuration</a>
+    <p class="mt-4 max-w-3xl rounded-none border border-line bg-surface px-4 py-3 text-sm leading-relaxed text-muted">
+      <code class="text-accent">kineti serve</code> is the local ledger daemon (<code class="text-soft">.kineti/kineti.sock</code> 0600). Hosted gateway + dashboard is a separate service, not part of the OSS binary.
     </p>
   </section>
 </DocsLayout>

@@ -1,0 +1,62 @@
+---
+import DocsLayout from "../../layouts/DocsLayout.astro";
+
+const toc = [
+  { id: "sec-stored", label: "01 WHAT IS STORED" },
+  { id: "sec-never", label: "02 WHAT IS NEVER STORED" },
+  { id: "sec-verify", label: "03 HOW VERIFY --ALL WORKS" },
+];
+---
+
+<DocsLayout
+  title="Receipt — Kineti"
+  description="What the receipt/journal stores, what is never stored, and how verify --all works."
+  active="receipt"
+  {toc}
+>
+  <section data-doc-section class="scroll-mt-20 border-b border-line py-10">
+    <h1 class="text-xl font-bold tracking-tight text-fg sm:text-2xl">Receipt</h1>
+    <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">
+      <code class="text-accent">.kineti/journal.jsonl</code> is the hash-chained journal. <code class="text-accent">kineti receipt</code> prints the unified summary. <code class="text-accent">kineti verify --all</code> walks it. Do not call it “AI Act certified.”
+    </p>
+  </section>
+
+  <section id="sec-stored" data-doc-section aria-labelledby="h-stored" class="scroll-mt-20 border-b border-line py-10">
+    <h2 id="h-stored" class="text-sm font-bold tracking-widest text-fg"><span class="mr-2 text-accent">01</span>WHAT IS STORED</h2>
+    <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">Today, per record:</p>
+    <ul class="mt-4 max-w-3xl list-disc space-y-2 pl-5 text-sm leading-relaxed text-muted marker:text-accent">
+      <li><code class="text-accent">evidence</code>: <code class="text-soft">command, passed, exit_code, fingerprint (sha256 of tracked files), at</code> — in <code class="text-accent">.kineti/evidence.json</code></li>
+      <li><code class="text-accent">spend</code>: micro-dollar ledger per stage/worker (reserve/settle), <code class="text-accent">spend.reset</code> is a human flag file that resumes only</li>
+      <li><code class="text-accent">journal</code>: every action as sha256-chained JSONL, branch-and-merge DAG with two-parent merge records; <code class="text-accent">journal.w-&lt;task&gt;.jsonl</code> per swarm worker</li>
+      <li><code class="text-accent">receipt</code> fields: <code class="text-soft">goal, last_run, coordinator + worker spend, records + head, causal edges, branches/orphans/errors, gates timeline, egress tags, clean-files</code></li>
+      <li><code class="text-accent">egress</code>: send tag + timestamp, keys redacted, in <code class="text-accent">.kineti/egress.jsonl</code></li>
+    </ul>
+    <pre class="mt-6 overflow-x-auto rounded-none border border-line bg-surface px-5 py-4 text-xs leading-relaxed sm:text-sm"><code><span class="text-muted">$</span> <span class="font-bold text-fg">kineti receipt</span>
+<span class="text-muted">goal       : build X</span>
+<span class="text-muted">spend      : $0.4200 total ...</span>
+<span class="text-muted">history    : 73 records chained · head a3f9...</span>
+<span class="text-muted">egress     : openai: 12 send(s)</span>
+<span class="text-muted">clean-files: ✔ 0 findings</span></code></pre>
+  </section>
+
+  <section id="sec-never" data-doc-section aria-labelledby="h-never" class="scroll-mt-20 border-b border-line py-10">
+    <h2 id="h-never" class="text-sm font-bold tracking-widest text-fg"><span class="mr-2 text-accent">02</span>WHAT IS NEVER STORED</h2>
+    <ul class="mt-4 max-w-3xl list-disc space-y-2 pl-5 text-sm leading-relaxed text-muted marker:text-accent">
+      <li>Keys / raw secrets. <code class="text-accent">GEMINI_API_KEY</code>, <code class="text-accent">XAI_API_KEY</code> stay in env vars. OAuth tokens stay in <code class="text-accent">~/.kineti/auth/*</code> 0600 and never appear in logs or child env.</li>
+      <li>Your source beyond fingerprints. The receipt stores hashes, not file contents.</li>
+      <li>No telemetry or phone-home. Outbound sends are recorded before they leave, with key material redacted.</li>
+    </ul>
+    <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">See <a href="/security" class="text-accent hover:underline">Security: how keys are handled, what you log</a>.</p>
+  </section>
+
+  <section id="sec-verify" data-doc-section aria-labelledby="h-verify" class="scroll-mt-20 py-10">
+    <h2 id="h-verify" class="text-sm font-bold tracking-widest text-fg"><span class="mr-2 text-accent">03</span>HOW VERIFY --ALL WORKS</h2>
+    <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">
+      <code class="text-accent">kineti verify</code> recomputes every sha256 link on the main chain. <code class="text-accent">--all</code> also walks every merged branch, names the tampered branch, and refuses if an orphan or extended-after-merge branch exists. One flipped byte fails.
+    </p>
+    <pre class="mt-6 overflow-x-auto rounded-none border border-line bg-surface px-5 py-4 text-xs leading-relaxed sm:text-sm"><code><span class="text-muted">$</span> <span class="font-bold text-fg">kineti verify --all</span>
+<span class="text-muted">DAG OK: main 73 records (head a3f9...), branches merged: 1, orphans: 0</span>
+<span class="text-muted">   • feat-auth: 12 records, head 7c02...</span></code></pre>
+    <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">Journal bytes come from local files under <code class="text-accent">.kineti/</code>. Weekly export is a file or email of <code class="text-accent">receipt</code> JSON — see <a href="/pricing" class="text-accent hover:underline">Pricing</a>.</p>
+  </section>
+</DocsLayout>

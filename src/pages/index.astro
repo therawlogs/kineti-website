@@ -1,200 +1,127 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Terminal from "../components/Terminal.astro";
-
-type Tone = "cmd" | "ok" | "halt" | "dim" | "bright";
-
-interface Line {
-  t: Tone;
-  s: string;
-}
-
-const guarantees = [
-  {
-    g: "No runaway spend",
-    m: "Reserve/settle ledger with per-stage + per-worker ceilings; only a human flag file resumes",
-    t: "ASI-04",
-  },
-  {
-    g: "No unapproved code",
-    m: "Stages 1–6 get read-only tools; SPEC gate requires literal human y",
-    t: "alignment-as-architecture",
-  },
-  {
-    g: "No silent history edits",
-    m: "Every record sha256-chained into a branch-and-merge DAG; one flipped byte fails verification — per branch, by name",
-    t: "audit integrity",
-  },
-  {
-    g: "No injection execution",
-    m: "Tool output wrapped as DATA; instruction-shaped lines quarantined",
-    t: "ASI-01",
-  },
-  {
-    g: "No unverified results",
-    m: "Schema/range validation between observation and reasoning",
-    t: "ASI-02",
-  },
-  {
-    g: "No untraceable actions",
-    m: "Immutable root goal pinned into every envelope + record",
-    t: "goal drift",
-  },
-  {
-    g: "No stale ships",
-    m: "Test proofs bind to code fingerprints; STALE blocks ship",
-    t: "drift",
-  },
-  {
-    g: "No unlogged egress",
-    m: "Outbound sends recorded before they leave, keys redacted",
-    t: "ASI-05",
-  },
-  {
-    g: "No partial history",
-    m: "Worker journals fold into the main chain via deterministic two-parent merge records; orphan branches block ship",
-    t: "audit integrity",
-  },
-  {
-    g: "No rogue parallel writes",
-    m: "Every swarm worker lives in its own git worktree (or scratchpad); the fence binds to it",
-    t: "race conditions",
-  },
-];
-
-const stream: Line[] = [
-  { t: "cmd", s: 'kineti run --goal "Create greeting.sh that prints KINETI SHIPS"' },
-  { t: "dim", s: "\u2554\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2557" },
-  { t: "dim", s: "\u2551 STAGE  6/13 \u2014 spec                   \u2551" },
-  { t: "dim", s: "\u255a\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u255d" },
-  { t: "halt", s: "\u2550\u2550\u2550 SPEC HARD STOP \u2550\u2550\u2550  \u2026 awaiting human approval [y/N]" },
-  { t: "ok", s: "\u2500\u2500 iteration 12 \u2500\u2500 \u2699 bash \u2192 ./greeting.sh" },
-  { t: "ok", s: "\u2714 proofs FRESH (./greeting.sh)" },
-  { t: "bright", s: "\ud83d\udea2 SHIPPED." },
-];
-
-function esc(s: string): string {
-  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-}
-
-function render(line: Line): string {
-  if (line.t === "cmd") {
-    return `<span class="font-bold text-fg">${esc(line.s)}</span>`;
-  }
-  const token = line.t === "halt" ? '<span class="font-bold text-danger">' : '<span class="text-accent">';
-  return esc(line.s).replace(/\[[^\]]*\]/g, (m) => `${token}${m}</span>`);
-}
-
-const toneText: Record<Tone, string> = {
-  cmd: "",
-  ok: "text-soft",
-  halt: "text-danger",
-  dim: "text-muted",
-  bright: "text-accent font-bold",
-};
 ---
 
 <BaseLayout
-  title="Kineti Ultrafast Agent Harness"
-  description="3 MB Rust program that makes any language model act as a controlled agent. It maintains consistent context, verifies each action cryptographically, limits spending with circuit breakers, runs workers in separate processes, and blocks deployment unless verification proofs are current."
+  title="Kineti — ship proof"
+  description="Ship proof and spend cap for any coding agent. Claude, Cursor, Grok write the code. Kineti binds tests to file hashes, caps the bill, and fails merge if the proof is stale."
 >
-  <!-- HERO + INSTALL (merged) -->
+  <!-- HERO -->
   <section class="border-b border-line">
     <div class="mx-auto max-w-6xl px-4 pt-16 pb-8 sm:px-6 sm:pt-24">
-      <h1 class="max-w-3xl text-3xl font-bold leading-tight tracking-tight text-fg sm:text-5xl">
-        The only mathematically verifiable agent harness.
+      <p class="text-xs tracking-widest text-muted">Apache-2.0 · ~3 MB Rust · macOS &amp; Linux</p>
+      <h1 class="mt-4 max-w-3xl text-3xl font-bold leading-tight tracking-tight text-fg sm:text-5xl">
+        Ship proof and spend cap for any coding agent.
       </h1>
       <p class="mt-6 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
-        3 MB Rust program that makes any language model act as a controlled agent. It maintains consistent
-        context, verifies each action cryptographically, limits spending with circuit breakers, runs workers in
-        separate processes, and blocks deployment unless verification proofs are current.
-      </p>
-    </div>
-    <div class="mx-auto max-w-6xl px-4 pb-16 sm:px-6">
-      <h2 class="text-xs tracking-widest text-muted"><span class="text-accent">##</span> INSTALL</h2>
-      <Terminal class="mt-8 max-w-2xl" />
-      <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">
-        The script checks each download with the release’s
-        <code class="text-accent">SHA256SUMS</code>. It runs without admin rights.
+        Claude, Cursor, Grok, and fx write the code. Kineti binds tests to file
+        hashes, caps the bill, and fails merge if the proof is stale.
       </p>
 
-      <div class="mt-10 flex flex-wrap gap-3">
-        <a
-          href="/docs/getting-started"
+      <div class="mt-8 flex flex-wrap gap-3">
+        <button
+          type="button"
+          data-copy-install
           class="rounded-none border border-accent bg-surface-2 px-4 py-2 text-sm font-bold text-accent transition-colors hover:bg-surface"
-          >Get started →</a
         >
-        <a
-          href="/docs/governance"
-          class="rounded-none border border-line bg-surface px-4 py-2 text-sm text-fg transition-colors hover:border-accent"
-          >Why it works →</a
-        >
+          <span data-copy-label>Copy install</span>
+        </button>
         <a
           href="https://github.com/therawlogs/kineti"
           target="_blank"
           rel="noopener noreferrer"
           class="rounded-none border border-line bg-surface px-4 py-2 text-sm text-fg transition-colors hover:border-accent"
-          >GitHub →</a
+          >Source</a
         >
+        <a
+          href="/docs/getting-started"
+          class="rounded-none border border-line bg-surface px-4 py-2 text-sm text-fg transition-colors hover:border-accent"
+          >Docs</a
+        >
+      </div>
+
+      <div class="mt-8 max-w-2xl">
+        <Terminal />
+        <p class="mt-3 text-xs leading-relaxed text-muted">
+          Install verifies <code class="text-accent">SHA256SUMS</code> from GitHub Releases and never asks for sudo.
+          Pin a version: <code class="text-accent">curl -fsSL https://getkineti.com/install.sh | sh -s v0.1.0</code>
+        </p>
       </div>
     </div>
   </section>
 
-  <!-- GUARANTEES TABLE -->
+  <!-- THREE STEPS -->
   <section class="border-b border-line">
     <div class="mx-auto max-w-6xl px-4 py-16 sm:px-6">
-      <h2 class="text-xs tracking-widest text-muted">
-        <span class="text-accent">##</span> WHY PROMPT GUARDRAILS FAIL — AND WHAT REPLACES THEM
-      </h2>
-      <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">
-        Prompt-based guardrails fail in production because prompts don't survive translation and have no enforcement
-        mechanism. Kineti moves governance out of the prompt and into harness control flow:
+      <h2 class="text-xs tracking-widest text-muted"><span class="text-accent">##</span> THREE STEPS</h2>
+      <div class="mt-8 grid gap-4 sm:grid-cols-3">
+        <div class="border border-line bg-surface p-5">
+          <p class="text-xs tracking-widest text-accent">01</p>
+          <p class="mt-2 font-mono text-sm font-bold text-fg">kineti init</p>
+          <p class="mt-2 text-sm leading-relaxed text-muted">Scaffold <code class="text-accent">.kineti/</code> + <code class="text-accent">kineti.toml</code>. Edit caps in the file.</p>
+        </div>
+        <div class="border border-line bg-surface p-5">
+          <p class="text-xs tracking-widest text-accent">02</p>
+          <p class="mt-2 font-mono text-sm font-bold text-fg">kineti evidence --cmd "your test"</p>
+          <p class="mt-2 text-sm leading-relaxed text-muted">After the agent edits, bind test result to file hashes.</p>
+        </div>
+        <div class="border border-line bg-surface p-5">
+          <p class="text-xs tracking-widest text-accent">03</p>
+          <p class="mt-2 font-mono text-sm font-bold text-fg">kineti ship-check</p>
+          <p class="mt-2 text-sm leading-relaxed text-muted">In CI: red if files moved since the proof. Also <code class="text-accent">kineti verify --all</code>.</p>
+        </div>
+      </div>
+      <p class="mt-6 text-sm leading-relaxed text-muted">
+        Full path: <code class="text-accent">init → evidence → ship-check → receipt → verify</code>.
+        See <a href="/docs/getting-started" class="text-accent hover:underline">Getting started</a>.
       </p>
+    </div>
+  </section>
+
+  <!-- ONE TABLE -->
+  <section class="border-b border-line">
+    <div class="mx-auto max-w-6xl px-4 py-16 sm:px-6">
+      <h2 class="text-xs tracking-widest text-muted"><span class="text-accent">##</span> WHAT IT ENFORCES</h2>
       <div class="mt-8 overflow-x-auto border border-line">
-        <table class="w-full min-w-[860px] border-collapse text-left text-sm">
+        <table class="w-full min-w-[560px] border-collapse text-left text-sm">
           <thead>
             <tr class="border-b border-line bg-surface-2 text-xs tracking-widest text-muted">
-              <th scope="col" class="px-4 py-3 font-normal">GUARANTEE</th>
-              <th scope="col" class="px-4 py-3 font-normal">MECHANISM</th>
-              <th scope="col" class="px-4 py-3 font-normal">THREAT MODEL</th>
+              <th scope="col" class="px-4 py-3 font-normal">IF THIS HAPPENS</th>
+              <th scope="col" class="px-4 py-3 font-normal">KINETI</th>
             </tr>
           </thead>
           <tbody>
-            {
-              guarantees.map((row) => (
-                <tr class="border-b border-line transition-colors last:border-b-0 hover:bg-surface-2">
-                  <td class="px-4 py-3 font-bold whitespace-nowrap text-fg">{row.g}</td>
-                  <td class="px-4 py-3 leading-relaxed text-muted">{row.m}</td>
-                  <td class="px-4 py-3 whitespace-nowrap text-accent">{row.t}</td>
-                </tr>
-              ))
-            }
+            <tr class="border-b border-line transition-colors hover:bg-surface-2">
+              <td class="px-4 py-3 text-muted">Tests ran on old files</td>
+              <td class="px-4 py-3 font-bold text-danger">Ship refused</td>
+            </tr>
+            <tr class="border-b border-line transition-colors hover:bg-surface-2">
+              <td class="px-4 py-3 text-muted">Spend over cap</td>
+              <td class="px-4 py-3 font-bold text-danger">Run stops until a human reset file</td>
+            </tr>
+            <tr class="transition-colors hover:bg-surface-2">
+              <td class="px-4 py-3 text-muted">Journal byte flipped</td>
+              <td class="px-4 py-3 font-bold text-danger"><code class="text-accent">verify</code> fails</td>
+            </tr>
           </tbody>
         </table>
       </div>
+      <p class="mt-6 text-xs leading-relaxed text-muted">
+        v0.1.0 13-stage runner is frozen on tag <code class="text-accent">v0.1.0</code>. Default path is <code class="text-accent">evidence → ship-check → verify</code>.
+        &nbsp;·&nbsp; Apache-2.0 &nbsp;·&nbsp; <a href="https://github.com/therawlogs/kineti" target="_blank" rel="noopener noreferrer" class="text-accent hover:underline">Source</a>
+        &nbsp;·&nbsp; <a href="/docs/commands" class="text-accent hover:underline">Commands</a>
+      </p>
     </div>
   </section>
 
-  <!-- DEMO RUN -->
+  <!-- FOOTER TRUST STRIP -->
   <section>
-    <div class="mx-auto max-w-6xl px-4 py-16 sm:px-6">
-      <p class="text-sm font-bold tracking-wide text-accent">Propose. Enforce. Remember.</p>
-      <div class="mt-6 max-w-2xl border border-line bg-surface">
-        <div class="flex items-center justify-between border-b border-line px-4 py-2">
-          <div class="flex items-center gap-2 text-xs text-muted">
-            <span class="inline-block h-2 w-2 bg-danger"></span>
-            <span class="inline-block h-2 w-2 bg-muted"></span>
-            <span class="inline-block h-2 w-2 bg-accent"></span>
-            <span class="ml-2">kineti — governed run</span>
-          </div>
-          <span class="text-xs text-accent">DEMO</span>
-        </div>
-        <pre class="overflow-x-auto px-4 py-4 text-xs leading-relaxed sm:text-sm"><code>{
-          stream.map((line) => (
-            <span class:list={[toneText[line.t], "block"]} set:html={render(line) + "\n"} />
-          ))
-        }<span class="cursor-blink"></span></code></pre>
-      </div>
+    <div class="mx-auto max-w-6xl px-4 py-10 sm:px-6">
+      <p class="text-xs leading-relaxed text-muted">
+        One ~3 MB binary. macOS (Apple silicon &amp; Intel) and Linux x64/arm64 (musl-static).<br />
+        Installer hits GitHub Releases directly — keys never touch getkineti.com. <a href="/security" class="text-accent hover:underline">How keys are handled →</a>
+      </p>
     </div>
   </section>
 </BaseLayout>

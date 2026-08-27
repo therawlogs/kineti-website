@@ -3,17 +3,17 @@ export const prerender = true;
 const SITE = "https://www.getkineti.com";
 
 const pages: { loc: string; lastmod: string }[] = [
-  { loc: "/", lastmod: "2026-08-26" },
-  { loc: "/docs/getting-started", lastmod: "2026-08-26" },
-  { loc: "/governance", lastmod: "2026-08-26" },
-  { loc: "/docs/swarm", lastmod: "2026-08-26" },
-  { loc: "/docs/cli", lastmod: "2026-08-26" },
-  { loc: "/docs/configuration", lastmod: "2026-08-26" },
-  { loc: "/security", lastmod: "2026-08-26" },
-  { loc: "/architecture", lastmod: "2026-08-26" },
-  { loc: "/docs/c-api", lastmod: "2026-08-26" },
-  { loc: "/changelog", lastmod: "2026-08-25" },
-  { loc: "/faq", lastmod: "2026-08-26" },
+  { loc: "/", lastmod: "2026-08-27" },
+  { loc: "/docs", lastmod: "2026-08-27" },
+  { loc: "/docs/getting-started", lastmod: "2026-08-27" },
+  { loc: "/docs/ci", lastmod: "2026-08-27" },
+  { loc: "/docs/commands", lastmod: "2026-08-27" },
+  { loc: "/docs/receipt", lastmod: "2026-08-27" },
+  { loc: "/pricing", lastmod: "2026-08-27" },
+  { loc: "/team", lastmod: "2026-08-27" },
+  { loc: "/security", lastmod: "2026-08-27" },
+  { loc: "/legal/privacy", lastmod: "2026-08-27" },
+  { loc: "/legal/terms", lastmod: "2026-08-27" },
 ];
 
 export async function GET() {

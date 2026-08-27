@@ -18,15 +18,12 @@ const { title, description, active, toc = [] } = Astro.props;
 
 const pages = [
   { slug: "getting-started", num: "01", label: "Getting started" },
-  { slug: "governance", num: "02", label: "Governance" },
-  { slug: "architecture", num: "03", label: "Architecture" },
-  { slug: "swarm", num: "04", label: "Swarm guide" },
-  { slug: "cli", num: "05", label: "CLI reference" },
-  { slug: "configuration", num: "06", label: "Configuration" },
-  { slug: "security", num: "07", label: "Security" },
-  { slug: "c-api", num: "08", label: "C API" },
-  { slug: "faq", num: "09", label: "FAQ" },
-  { slug: "changelog", num: "10", label: "Changelog" },
+  { slug: "ci", num: "02", label: "CI" },
+  { slug: "commands", num: "03", label: "Commands" },
+  { slug: "receipt", num: "04", label: "Receipt" },
+  // legacy — buried, not in v0 nav
+  // { slug: "configuration", num: "—", label: "Configuration" },
+  // { slug: "swarm", num: "—", label: "Swarm (v0.1)" },
 ];
 
 const related: { href: string; label: string }[] = [];
