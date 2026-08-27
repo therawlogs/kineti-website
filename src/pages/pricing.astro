@@ -15,28 +15,29 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 
   <section class="border-b border-line">
     <div class="mx-auto max-w-6xl px-4 py-16 sm:px-6">
-      <div class="overflow-x-auto border border-line">
-        <table class="w-full min-w-[720px] border-collapse text-left text-sm">
+      <!-- Desktop table -->
+      <div class="hidden overflow-x-auto border border-line sm:block">
+        <table class="w-full border-collapse text-left text-sm">
           <thead>
             <tr class="border-b border-line bg-surface-2 text-xs tracking-widest text-muted">
-              <th scope="col" class="px-4 py-3 font-normal"></th>
-              <th scope="col" class="px-4 py-3 font-normal">OPEN SOURCE</th>
-              <th scope="col" class="px-4 py-3 font-normal">TEAM SETUP</th>
-              <th scope="col" class="px-4 py-3 font-normal">HOSTED (WAITLIST)</th>
+              <th scope="col" class="w-[14%] px-4 py-3 font-normal"></th>
+              <th scope="col" class="w-[28%] px-4 py-3 font-normal">Open source</th>
+              <th scope="col" class="w-[29%] px-4 py-3 font-normal">Team setup</th>
+              <th scope="col" class="w-[29%] px-4 py-3 font-normal">Hosted (waitlist)</th>
             </tr>
           </thead>
           <tbody>
             <tr class="border-b border-line">
               <td class="px-4 py-4 font-bold text-fg">Price</td>
               <td class="px-4 py-4 font-bold text-accent">$0</td>
-              <td class="px-4 py-4 text-muted">Fixed project fee — quote</td>
+              <td class="px-4 py-4 text-muted">Fixed project fee (you set, e.g. quote)</td>
               <td class="px-4 py-4 text-muted">Not generally available</td>
             </tr>
             <tr class="border-b border-line">
               <td class="px-4 py-4 font-bold text-fg">What</td>
-              <td class="px-4 py-4 leading-relaxed text-muted">CLI, GitHub Action, Apache-2.0. <code class="text-accent">evidence</code> + <code class="text-accent">ship-check</code> + <code class="text-accent">verify</code>.</td>
-              <td class="px-4 py-4 leading-relaxed text-muted">We wire cap + required check on your repos. See <a href="/team" class="text-accent hover:underline">Team</a>.</td>
-              <td class="px-4 py-4 leading-relaxed text-muted">Gateway + dashboard when it exists. Today <code class="text-accent">kineti serve</code> is local only.</td>
+              <td class="px-4 py-4 leading-relaxed text-muted">CLI, Action, Apache-2.0</td>
+              <td class="px-4 py-4 leading-relaxed text-muted">You wire cap + required check on their repos</td>
+              <td class="px-4 py-4 leading-relaxed text-muted">Gateway + dashboard when it exists</td>
             </tr>
             <tr>
               <td class="px-4 py-4 font-bold text-fg">Buyer</td>
@@ -47,6 +48,35 @@ import BaseLayout from "../layouts/BaseLayout.astro";
           </tbody>
         </table>
       </div>
+
+      <!-- Mobile cards (no horizontal scroll) -->
+      <div class="grid gap-3 sm:hidden">
+        <div class="border border-line bg-surface p-4">
+          <p class="text-xs tracking-widest text-accent">OPEN SOURCE</p>
+          <dl class="mt-3 space-y-2 text-sm">
+            <div class="flex justify-between gap-4"><dt class="font-bold text-fg">Price</dt><dd class="font-bold text-accent">$0</dd></div>
+            <div><dt class="font-bold text-fg">What</dt><dd class="text-muted">CLI, Action, Apache-2.0</dd></div>
+            <div class="flex justify-between gap-4"><dt class="font-bold text-fg">Buyer</dt><dd class="text-muted">Anyone</dd></div>
+          </dl>
+        </div>
+        <div class="border border-line bg-surface p-4">
+          <p class="text-xs tracking-widest text-accent">TEAM SETUP</p>
+          <dl class="mt-3 space-y-2 text-sm">
+            <div><dt class="font-bold text-fg">Price</dt><dd class="text-muted">Fixed project fee (you set, e.g. quote)</dd></div>
+            <div><dt class="font-bold text-fg">What</dt><dd class="text-muted">You wire cap + required check on their repos</dd></div>
+            <div class="flex justify-between gap-4"><dt class="font-bold text-fg">Buyer</dt><dd class="text-muted">Agency / platform lead</dd></div>
+          </dl>
+        </div>
+        <div class="border border-line bg-surface p-4">
+          <p class="text-xs tracking-widest text-accent">HOSTED (WAITLIST)</p>
+          <dl class="mt-3 space-y-2 text-sm">
+            <div><dt class="font-bold text-fg">Price</dt><dd class="text-muted">Not generally available</dd></div>
+            <div><dt class="font-bold text-fg">What</dt><dd class="text-muted">Gateway + dashboard when it exists</dd></div>
+            <div class="flex justify-between gap-4"><dt class="font-bold text-fg">Buyer</dt><dd class="text-muted">Same, later</dd></div>
+          </dl>
+        </div>
+      </div>
+
       <p class="mt-6 text-sm leading-relaxed text-muted">
         No $49/seat/month. No fake logos. Paid setup is a separate statement of work.
       </p>
