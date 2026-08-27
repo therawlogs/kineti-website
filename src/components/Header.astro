@@ -1,12 +1,12 @@
 ---
 const nav = [
-  { href: "/docs", label: "Docs" },
+  { href: "/docs/getting-started", label: "Docs" },
   { href: "/pricing", label: "Pricing" },
 ];
 const path = Astro.url.pathname.replace(/\/$/, "") || "/";
 const isActive = (href: string) => {
   if (href === "/") return path === "/";
-  if (href === "/docs") return path.startsWith("/docs");
+  if (href.startsWith("/docs")) return path.startsWith("/docs");
   return path === href || path.startsWith(href + "/");
 };
 ---
@@ -65,7 +65,7 @@ const isActive = (href: string) => {
         document.querySelectorAll("header nav a").forEach(function (a) {
           var href = a.getAttribute("href");
           var active = false;
-          if (href === "/docs") active = path === "/docs" || path.startsWith("/docs/");
+          if (href && href.startsWith("/docs")) active = path === "/docs" || path.startsWith("/docs/");
           else if (href === "/pricing") active = path === "/pricing" || path.startsWith("/pricing");
           else active = path === href;
           if (active) {
