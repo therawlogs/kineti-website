@@ -25,18 +25,23 @@ const toc = [
     <h2 id="h-stored" class="text-sm font-bold tracking-wide text-fg"><span class="mr-2 text-accent">01</span>What is stored</h2>
     <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">Today, per record:</p>
     <ul class="mt-4 max-w-3xl list-disc space-y-2 pl-5 text-sm leading-relaxed text-muted marker:text-accent">
-      <li><code class="text-accent">evidence</code>: <code class="text-soft">command, passed, exit_code, fingerprint (sha256 of tracked files), at</code> — in <code class="text-accent">.kineti/evidence.json</code></li>
+      <li><code class="text-accent">.kineti/evidence.json v1</code>: <code class="text-soft">v, at, cmd, passed, fingerprint (sha256), chain_head, cost_usd</code> — text example below, matches <code class="text-accent">README.md:90</code> and <code class="text-accent">kineti receipt</code> summary</li>
       <li><code class="text-accent">spend</code>: micro-dollar ledger per stage/worker (reserve/settle), <code class="text-accent">spend.reset</code> is a human flag file that resumes only</li>
-      <li><code class="text-accent">journal</code>: every action as sha256-chained JSONL, branch-and-merge DAG with two-parent merge records; <code class="text-accent">journal.w-&lt;task&gt;.jsonl</code> per swarm worker</li>
-      <li><code class="text-accent">receipt</code> fields: <code class="text-soft">goal, last_run, coordinator + worker spend, records + head, causal edges, branches/orphans/errors, gates timeline, egress tags, clean-files</code></li>
+      <li><code class="text-accent">journal</code>: every action as sha256-chained JSONL, branch-and-merge DAG with two-parent merge records; <code class="text-accent">journal.w-&lt;task&gt;.jsonl</code> per swarm worker (legacy swarm)</li>
+      <li><code class="text-accent">receipt</code> fields: <code class="text-soft">goal, last_run, coordinator + worker spend, records + head, causal edges, branches/orphans/errors, gates timeline, egress tags, clean-files</code> — plus v1 <code class="text-soft">v, cost_usd, chain_head</code></li>
       <li><code class="text-accent">egress</code>: send tag + timestamp, keys redacted, in <code class="text-accent">.kineti/egress.jsonl</code></li>
     </ul>
-    <pre class="mt-6 overflow-x-auto rounded-none border border-line bg-surface px-5 py-4 text-xs leading-relaxed sm:text-sm"><code><span class="text-muted">$</span> <span class="font-bold text-fg">kineti receipt</span>
+    <pre class="mt-6 overflow-x-auto rounded-none border border-line bg-surface px-5 py-4 text-xs leading-relaxed sm:text-sm"><code><span class="text-muted">// .kineti/evidence.json v1 — same as README</span>
+<span class="text-soft">&#123;"v":"1","at":"2026-08-27T…Z","cmd":"cargo test","passed":true,"fingerprint":"abc…","chain_head":"def…","cost_usd":0.042&#125;</span>
+
+<span class="text-muted">$</span> <span class="font-bold text-fg">kineti receipt</span>
 <span class="text-muted">goal       : build X</span>
 <span class="text-muted">spend      : $0.4200 total ...</span>
 <span class="text-muted">history    : 73 records chained · head a3f9...</span>
 <span class="text-muted">egress     : openai: 12 send(s)</span>
-<span class="text-muted">clean-files: ✔ 0 findings</span></code></pre>
+<span class="text-muted">clean-files: ✔ 0 findings</span>
+<span class="text-muted">v          : 1  cost_usd 0.042  chain_head def…</span></code></pre>
+    <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">FFI <code class="text-accent">kineti_receipt()</code> JSON shape (<code class="text-soft">goal, spend, gates, dag, …</code>) is in <code class="text-accent">include/kineti.h:79-88</code>.</p>
   </section>
 
   <section id="sec-never" data-doc-section aria-labelledby="h-never" class="scroll-mt-20 border-b border-line py-10">

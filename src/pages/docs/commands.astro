@@ -13,14 +13,16 @@ const defaults = [
   { cmd: "ship-check", purpose: "Proof gate — 0 fresh, 1 stale/failed, 2 missing, 3 chain broken. Put this in CI." },
   { cmd: "verify [--all]", purpose: "Hash-chain check. --all walks every merged branch and orphan closure." },
   { cmd: "receipt [--last]", purpose: "Spend across workers, gates timeline, DAG state, egress, clean-files" },
+  { cmd: "wrap -- <cmd>", purpose: "Run any command under the cap" },
+  { cmd: "gateway --port 8787", purpose: "OpenAI proxy demo (hosted in kineti-pro)" },
   { cmd: "clean-check", purpose: "Scan for names/home paths/secrets — zero matches required to ship" },
-  { cmd: "serve [--foreground]", purpose: "Local ledger daemon on .kineti/kineti.sock (0600). Hosted gate is a separate service." },
+  { cmd: "serve [--foreground]", purpose: "Local ledger daemon on .kineti/kineti.sock (0600)" },
   { cmd: "provider-test --provider <p>", purpose: "Smoke-test a provider wire" },
   { cmd: "login/logout/auth-status", purpose: "OAuth PKCE lifecycle (tokens in ~/.kineti/auth/ 0600)" },
 ];
 
 const legacy = [
-  { cmd: "run --goal ... [--cap] [--mode]", purpose: "13-stage pipeline — frozen at v0.1.0, see tag v0.1.0 / docs/v0.1.md" },
+  { cmd: "run --legacy --goal ... [--cap] [--mode]", purpose: "13-stage pipeline — frozen at v0.1.0, see tag v0.1.0 / docs/v0.1.md (hidden, kineti run --help shows --legacy)" },
   { cmd: "resume", purpose: "Continue pipeline from last stage (legacy)" },
   { cmd: "task --task ...", purpose: "One freeform governed task (legacy thin wrapper)" },
   { cmd: "undo", purpose: "Saga rollback newest-first (legacy)" },
@@ -67,7 +69,7 @@ const legacy = [
 
   <section id="sec-legacy" data-doc-section aria-labelledby="h-legacy" class="scroll-mt-20 border-b border-line py-10">
     <h2 id="h-legacy" class="text-sm font-bold tracking-wide text-fg"><span class="mr-2 text-accent">02</span>Legacy pipeline (v0.1)</h2>
-    <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">Hidden from default help, frozen. See tag <code class="text-accent">v0.1.0</code>. Swarm guide is <a href="/docs/swarm" class="text-accent hover:underline">v0.1 swarm</a>.</p>
+    <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">Hidden from default help, frozen. See tag <code class="text-accent">v0.1.0</code>. Swarm guide is <a href="https://github.com/therawlogs/kineti/blob/main/docs/v0.1.md" target="_blank" rel="noopener noreferrer" class="text-accent hover:underline">docs/v0.1.md</a>.</p>
     <div class="mt-6 overflow-x-auto border border-line">
       <table class="w-full min-w-[720px] border-collapse text-left text-sm">
         <thead>
@@ -88,7 +90,6 @@ const legacy = [
         </tbody>
       </table>
     </div>
-    <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">Keep <code class="text-accent">serve</code> as “local ledger; hosted gate is a separate service.”</p>
   </section>
 
   <section id="sec-env" data-doc-section aria-labelledby="h-env" class="scroll-mt-20 py-10">

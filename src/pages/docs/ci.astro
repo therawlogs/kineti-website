@@ -23,23 +23,24 @@ const toc = [
 
   <section id="sec-github" data-doc-section aria-labelledby="h-github" class="scroll-mt-20 border-b border-line py-10">
     <h2 id="h-github" class="text-sm font-bold tracking-wide text-fg"><span class="mr-2 text-accent">01</span>GitHub Action</h2>
-    <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">Copy to <code class="text-accent">.github/workflows/kineti.yml</code>. Pins version, installs via <code class="text-accent">install.sh</code>, runs the proof gate.</p>
-    <pre class="mt-6 overflow-x-auto rounded-none border border-line bg-surface px-5 py-4 text-xs leading-relaxed sm:text-sm"><code><span class="text-soft">name: kineti</span>
-<span class="text-soft">on: [push, pull_request]</span>
+    <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">Uses the composite at <code class="text-accent">.github/actions/kineti-receipt</code> on <code class="text-accent">main</code> — no server, same as README.</p>
+    <pre class="mt-6 overflow-x-auto rounded-none border border-line bg-surface px-5 py-4 text-xs leading-relaxed sm:text-sm"><code><span class="text-soft"># .github/workflows/kineti-receipt.yml</span>
+<span class="text-soft">name: kineti-receipt</span>
+<span class="text-soft">on: [pull_request]</span>
 <span class="text-soft">jobs:</span>
-  <span class="text-soft">ship-check:</span>
+  <span class="text-soft">receipt:</span>
     <span class="text-soft">runs-on: ubuntu-latest</span>
     <span class="text-soft">steps:</span>
       <span class="text-soft">- uses: actions/checkout@v4</span>
-      <span class="text-soft">- name: Install Kineti (pinned)</span>
-        <span class="text-soft">run: curl -fsSL https://getkineti.com/install.sh | sh -s v0.2.0</span>
-      <span class="text-soft">- name: Ship check + verify</span>
-        <span class="text-soft">run: |</span>
-          <span class="text-fg">kineti ship-check</span>
-          <span class="text-fg">kineti verify --all</span>
-          <span class="text-fg">kineti receipt</span></code></pre>
+      <span class="text-soft">- uses: ./.github/actions/kineti-receipt</span>
+        <span class="text-soft">with:</span>
+          <span class="text-soft">verify-command: "cargo test --all"</span></code></pre>
+    <ul class="mt-4 max-w-3xl list-disc space-y-2 pl-5 text-sm leading-relaxed text-muted marker:text-accent">
+      <li>With <code class="text-accent">verify-command</code> set, the action runs <code class="text-accent">kineti evidence --cmd "&lt;verify-command&gt;"</code> then <code class="text-accent">ship-check</code> + <code class="text-accent">verify --all</code> — no prior <code class="text-accent">.kineti/</code> needed.</li>
+      <li>Without it, run <code class="text-accent">kineti evidence --cmd "..."</code> in a prior step first, then the action runs <code class="text-accent">ship-check</code>/<code class="text-accent">verify</code>.</li>
+    </ul>
     <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">
-      Make the job required in GitHub branch protection. Fails with exit <code class="text-soft">1</code> on stale proof, <code class="text-soft">2</code> on missing proof — <a href="/docs/commands" class="text-accent hover:underline">see commands</a>.
+      Fails if receipt missing, stale, or fingerprint doesn't match — <a href="/docs/commands" class="text-accent hover:underline">see commands</a>.
     </p>
   </section>
 
