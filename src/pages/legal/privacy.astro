@@ -12,7 +12,7 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
   <section class="border-b border-line">
     <div class="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 py-16">
       <div class="max-w-3xl space-y-6 text-sm leading-relaxed text-muted">
-        <p>No account on the marketing site. <code class="text-accent">getkineti.com</code> serves static HTML + <code class="text-accent">/install.sh</code>. We do not collect analytics or run trackers on this domain. If you enable any analytics later, this page will name it.</p>
+        <p>No account on the marketing site. <code class="text-accent">getkineti.com</code> serves static HTML + <code class="text-accent">/install.sh</code>. We do not collect analytics or run trackers on this domain.</p>
         <p><strong class="text-fg">Installer:</strong> <code class="text-accent">install.sh</code> fetches binaries from <code class="text-accent">github.com/therawlogs/kineti/releases</code> and verifies <code class="text-accent">SHA256SUMS</code>. That request goes to GitHub / your CDN, not through us to collect your source. We do not get your source.</p>
         <p><strong class="text-fg">CLI:</strong> Keys stay on your machine (<code class="text-accent">GEMINI_API_KEY</code> in env, tokens in <code class="text-accent">~/.kineti/auth/</code> 0600). Outbound sends are recorded locally before they leave, keys redacted. No telemetry or phone-home. See <a href="/security" class="text-accent hover:underline">Security</a> and <a href="/docs/receipt" class="text-accent hover:underline">Receipt</a>.</p>
         <p><strong class="text-fg">Contact:</strong> Use the waitlist form on <a href="/pricing" class="text-accent hover:underline">Pricing</a>. We keep the email only to reply. No marketing list, no sale.</p>
