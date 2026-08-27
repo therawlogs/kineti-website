@@ -9,7 +9,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
   <section class="border-b border-line">
     <div class="mx-auto max-w-6xl px-4 pt-16 pb-8 sm:px-6 sm:pt-24">
       <h1 class="max-w-3xl text-3xl font-bold leading-tight tracking-tight text-fg sm:text-4xl">Pricing</h1>
-      <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">You do not have SSO, SOC 2, or a multi-tenant console. Do not sell what does not exist.</p>
+      <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">Ship proof + spend cap. Start free, add a team setup if you want us to wire it.</p>
     </div>
   </section>
 
@@ -31,19 +31,19 @@ import BaseLayout from "../layouts/BaseLayout.astro";
               <td class="px-4 py-4 font-bold text-fg">Price</td>
               <td class="px-4 py-4 font-bold text-accent">$0</td>
               <td class="px-4 py-4 text-muted">Fixed project fee (you set, e.g. quote)</td>
-              <td class="px-4 py-4 text-muted">Not generally available</td>
+              <td class="px-4 py-4 text-muted">Coming soon</td>
             </tr>
             <tr class="border-b border-line">
               <td class="px-4 py-4 font-bold text-fg">What</td>
               <td class="px-4 py-4 leading-relaxed text-muted">CLI, Action, Apache-2.0</td>
               <td class="px-4 py-4 leading-relaxed text-muted">You wire cap + required check on their repos</td>
-              <td class="px-4 py-4 leading-relaxed text-muted">Gateway + dashboard when it exists</td>
+              <td class="px-4 py-4 text-muted">Coming soon</td>
             </tr>
             <tr>
               <td class="px-4 py-4 font-bold text-fg">Buyer</td>
               <td class="px-4 py-4 text-muted">Anyone</td>
               <td class="px-4 py-4 text-muted">Agency / platform lead</td>
-              <td class="px-4 py-4 text-muted">Same, later</td>
+              <td class="px-4 py-4 text-muted">Coming soon</td>
             </tr>
           </tbody>
         </table>
@@ -70,18 +70,44 @@ import BaseLayout from "../layouts/BaseLayout.astro";
         <div class="border border-line bg-surface p-4">
           <p class="text-xs tracking-widest text-accent">HOSTED (WAITLIST)</p>
           <dl class="mt-3 space-y-2 text-sm">
-            <div><dt class="font-bold text-fg">Price</dt><dd class="text-muted">Not generally available</dd></div>
-            <div><dt class="font-bold text-fg">What</dt><dd class="text-muted">Gateway + dashboard when it exists</dd></div>
-            <div class="flex justify-between gap-4"><dt class="font-bold text-fg">Buyer</dt><dd class="text-muted">Same, later</dd></div>
+            <div class="flex justify-between gap-4"><dt class="font-bold text-fg">Price</dt><dd class="text-muted">Coming soon</dd></div>
+            <div class="flex justify-between gap-4"><dt class="font-bold text-fg">What</dt><dd class="text-muted">Coming soon</dd></div>
+            <div class="flex justify-between gap-4"><dt class="font-bold text-fg">Buyer</dt><dd class="text-muted">Coming soon</dd></div>
           </dl>
         </div>
       </div>
 
-      <p class="mt-6 text-sm leading-relaxed text-muted">
-        No $49/seat/month. No fake logos. Paid setup is a separate statement of work.
-      </p>
-      <div class="mt-8 flex flex-wrap gap-3">
-        <a href="/team" class="rounded-none border border-accent bg-surface-2 px-4 py-2 text-sm font-bold text-accent transition-colors hover:bg-surface">Who pays →</a>
+      <div class="mt-10 border border-line bg-surface p-6">
+        <h2 class="text-sm font-bold tracking-widest text-fg">JOIN HOSTED WAITLIST</h2>
+        <p class="mt-2 text-sm leading-relaxed text-muted">Hosted gateway + dashboard is not live yet. Leave your email — we notify you.</p>
+        <form
+          id="waitlist-form"
+          class="mt-4 flex flex-col gap-3 sm:flex-row"
+          novalidate
+        >
+          <label class="sr-only" for="waitlist-email">Email</label>
+          <input
+            id="waitlist-email"
+            name="email"
+            type="email"
+            required
+            autocomplete="email"
+            placeholder="you@company.com"
+            class="w-full flex-1 rounded-none border border-line bg-bg px-4 py-2.5 text-sm text-fg placeholder:text-muted focus:border-accent focus:outline-none"
+          />
+          <button
+            id="waitlist-btn"
+            type="submit"
+            class="rounded-none border border-accent bg-surface-2 px-6 py-2.5 text-sm font-bold text-accent transition-colors hover:bg-surface disabled:opacity-50"
+          >
+            Join waitlist
+          </button>
+        </form>
+        <p id="waitlist-msg" class="mt-3 hidden text-sm"></p>
+        <p class="mt-3 text-xs leading-relaxed text-muted">Or email directly: <a href="mailto:hello@getkineti.com?subject=Hosted%20waitlist" class="text-accent hover:underline">hello@getkineti.com</a></p>
+      </div>
+
+      <div class="mt-8">
         <a href="/docs/getting-started" class="rounded-none border border-line bg-surface px-4 py-2 text-sm text-fg transition-colors hover:border-accent">Start free →</a>
       </div>
     </div>
@@ -92,4 +118,58 @@ import BaseLayout from "../layouts/BaseLayout.astro";
       <p class="text-xs leading-relaxed text-muted">Questions: <a href="mailto:hello@getkineti.com" class="text-accent hover:underline">hello@getkineti.com</a> · License: Apache-2.0</p>
     </div>
   </section>
+
+  <script is:inline>
+    (function () {
+      var form = document.getElementById("waitlist-form");
+      var email = document.getElementById("waitlist-email");
+      var btn = document.getElementById("waitlist-btn");
+      var msg = document.getElementById("waitlist-msg");
+      if (!form || !email || !btn || !msg) return;
+
+      function show(text, ok) {
+        msg.textContent = text;
+        msg.classList.remove("hidden", "text-accent", "text-danger");
+        msg.classList.add(ok ? "text-accent" : "text-danger");
+      }
+
+      form.addEventListener("submit", async function (e) {
+        e.preventDefault();
+        var val = (email.value || "").trim();
+        if (!val || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)) {
+          show("Enter a valid email.", false);
+          return;
+        }
+        btn.disabled = true;
+        btn.textContent = "Joining…";
+        try {
+          // Primary: FormSubmit (sends to hello@getkineti.com without backend). No key needed; first submission requires confirmation on their side.
+          var res = await fetch("https://formsubmit.co/ajax/hello@getkineti.com", {
+            method: "POST",
+            headers: { "Content-Type": "application/json", Accept: "application/json" },
+            body: JSON.stringify({
+              email: val,
+              _subject: "Kineti Hosted Waitlist — " + val,
+              _template: "table",
+              message: "New hosted waitlist signup: " + val + " from pricing page",
+            }),
+          });
+          if (res.ok) {
+            show("You're on the list — we'll notify you. Check your inbox.", true);
+            email.value = "";
+          } else {
+            // fallback to mailto
+            window.location.href = "mailto:hello@getkineti.com?subject=" + encodeURIComponent("Hosted waitlist — " + val) + "&body=" + encodeURIComponent("New waitlist signup: " + val);
+            show("Opening your mail app as fallback — or email hello@getkineti.com", true);
+          }
+        } catch (err) {
+          window.location.href = "mailto:hello@getkineti.com?subject=" + encodeURIComponent("Hosted waitlist — " + val) + "&body=" + encodeURIComponent("New waitlist signup: " + val);
+          show("Opening your mail app as fallback — or email hello@getkineti.com", true);
+        } finally {
+          btn.disabled = false;
+          btn.textContent = "Join waitlist";
+        }
+      });
+    })();
+  </script>
 </BaseLayout>
