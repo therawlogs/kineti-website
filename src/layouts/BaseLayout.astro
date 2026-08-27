@@ -23,7 +23,7 @@ const Install_CMD = "curl -fsSL https://getkineti.com/install.sh | sh";
     <title>{title}</title>
     <link rel="canonical" href={`https://www.getkineti.com${Astro.url.pathname}`} />
     <link rel="preconnect" href="https://github.com" />
-    <ClientRouter fallback="animate" />
+    <ClientRouter fallback="swap" />
     <script is:inline>
       (function () {
         var mq = window.matchMedia("(prefers-color-scheme: light)");
@@ -38,7 +38,7 @@ const Install_CMD = "curl -fsSL https://getkineti.com/install.sh | sh";
   </head>
   <body class="flex min-h-screen flex-col bg-bg text-fg">
     <Header />
-    <main class="flex-1" transition:animate="fade">
+    <main class="flex-1" transition:animate="none">
       <slot />
     </main>
 
