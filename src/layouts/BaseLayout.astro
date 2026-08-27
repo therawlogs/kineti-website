@@ -9,7 +9,7 @@ interface Props {
 }
 
 const { title, description } = Astro.props;
-const Install_CMD = "curl -fsSL https://getkineti.com/install.sh | sh";
+const INSTALL_CMD = "curl -fsSL https://getkineti.com/install.sh | sh";
 ---
 
 <!doctype html>
@@ -26,40 +26,46 @@ const Install_CMD = "curl -fsSL https://getkineti.com/install.sh | sh";
     <ClientRouter fallback="swap" />
     <script is:inline>
       (function () {
+        function applyTheme() {
+          var isLight = window.matchMedia("(prefers-color-scheme: light)").matches;
+          document.documentElement.classList.toggle("light", isLight);
+          document.documentElement.style.colorScheme = isLight ? "light" : "dark";
+        }
+        applyTheme();
         var mq = window.matchMedia("(prefers-color-scheme: light)");
-        var apply = function (e) {
-          document.documentElement.classList.toggle("light", e.matches);
-        };
-        apply(mq);
-        if (mq.addEventListener) mq.addEventListener("change", apply);
-        else if (mq.addListener) mq.addListener(apply);
+        if (mq.addEventListener) mq.addEventListener("change", applyTheme);
+        else if (mq.addListener) mq.addListener(applyTheme);
+        document.addEventListener("astro:after-swap", applyTheme);
+        document.addEventListener("astro:page-load", applyTheme);
+        // also before swap to keep snapshot background correct
+        document.addEventListener("astro:before-swap", applyTheme);
       })();
     </script>
   </head>
   <body class="flex min-h-screen flex-col bg-bg text-fg">
     <Header />
-    <main class="flex-1" transition:animate="none">
+    <main class="flex-1">
       <slot />
     </main>
 
-    <script is:inline define:vars={{ Install_CMD }}>
+    <script is:inline define:vars={{ INSTALL_CMD }}>
       function bindCopy(btn) {
         if (!btn || btn.dataset.bound) return;
         btn.dataset.bound = "1";
-        const label = btn.querySelector("[data-copy-label]");
+        var label = btn.querySelector("[data-copy-label]");
         btn.addEventListener("click", async () => {
           try {
-            await navigator.clipboard.writeText(Install_CMD);
+            await navigator.clipboard.writeText(INSTALL_CMD);
           } catch (err) {
-            const ta = document.createElement("textarea");
-            ta.value = Install_CMD;
+            var ta = document.createElement("textarea");
+            ta.value = INSTALL_CMD;
             document.body.appendChild(ta);
             ta.select();
             document.execCommand("copy");
             ta.remove();
           }
           if (!label) return;
-          const prev = label.textContent;
+          var prev = label.textContent;
           label.textContent = "[COPIED]";
           btn.classList.add("text-accent", "border-accent");
           setTimeout(() => {
@@ -68,56 +74,76 @@ const Install_CMD = "curl -fsSL https://getkineti.com/install.sh | sh";
           }, 1500);
         });
       }
-
-      document.querySelectorAll("[data-copy-install]").forEach(bindCopy);
+      function initCopies() {
+        document.querySelectorAll("[data-copy-install]").forEach(bindCopy);
+      }
+      initCopies();
+      document.addEventListener("astro:page-load", initCopies);
+      document.addEventListener("astro:after-swap", initCopies);
 
       // Global waitlist handler — any form with [data-waitlist] or #waitlist-form
-      document.querySelectorAll("form[data-waitlist], #waitlist-form").forEach(function (form) {
-        if (form.dataset.waitlistBound) return;
-        form.dataset.waitlistBound = "1";
-        var email = form.querySelector("input[type='email']");
-        var btn = form.querySelector("button[type='submit']");
-        var msg = form.querySelector(".waitlist-msg") || document.getElementById("waitlist-msg") || form.nextElementSibling;
-        function show(t, ok) {
-          var target = form.querySelector(".waitlist-msg") || msg;
-          if (!target) return;
-          target.textContent = t;
-          target.classList.remove("hidden", "text-accent", "text-danger");
-          target.classList.add(ok ? "text-accent" : "text-danger");
-          target.classList.remove("hidden");
-        }
-        form.addEventListener("submit", async function (e) {
-          e.preventDefault();
-          var val = (email && email.value || "").trim();
-          if (!val || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)) {
-            show("Enter a valid email.", false);
-            return;
+      function initWaitlists() {
+        document.querySelectorAll("form[data-waitlist], #waitlist-form").forEach(function (form) {
+          if (form.dataset.waitlistBound) return;
+          form.dataset.waitlistBound = "1";
+          var email = form.querySelector("input[type='email']");
+          var btn = form.querySelector("button[type='submit']");
+          var msg = form.querySelector(".waitlist-msg") || document.getElementById("waitlist-msg") || form.nextElementSibling;
+          function show(t, ok) {
+            var target = form.querySelector(".waitlist-msg") || msg;
+            if (!target) return;
+            target.textContent = t;
+            target.classList.remove("hidden", "text-accent", "text-danger");
+            target.classList.add(ok ? "text-accent" : "text-danger");
+            target.classList.remove("hidden");
           }
-          if (btn) { btn.disabled = true; var prev = btn.textContent; btn.textContent = "Joining…"; }
-          try {
-            var fd = new FormData();
-            fd.append("email", val);
-            fd.append("_subject", "Kineti Waitlist — " + val);
-            fd.append("_captcha", "false");
-            fd.append("message", "Waitlist signup: " + val + " from " + location.pathname);
-            var res = await fetch("https://formsubmit.co/ajax/hello@getkineti.com", { method: "POST", body: fd, headers: { Accept: "application/json" } });
-            if (res.ok) {
-              show("You're on the list — we'll notify you.", true);
-              if (email) email.value = "";
-            } else {
-              try { localStorage.setItem("kineti-waitlist-" + Date.now(), val); } catch(_){}
-              show("You're on the list — we'll notify you.", true);
-              if (email) email.value = "";
+          form.addEventListener("submit", async function (e) {
+            e.preventDefault();
+            var val = (email && email.value || "").trim();
+            if (!val || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)) {
+              show("Enter a valid email.", false);
+              return;
             }
-          } catch (err) {
-            try { localStorage.setItem("kineti-waitlist-" + Date.now(), val); } catch(_){}
-            show("You're on the list — we'll notify you.", true);
-            if (email) email.value = "";
-          } finally {
-            if (btn) { btn.disabled = false; btn.textContent = prev || "Join waitlist"; }
-          }
+            if (btn) {
+              btn.disabled = true;
+              var prev = btn.textContent;
+              btn.textContent = "Joining…";
+            }
+            try {
+              var fd = new FormData();
+              fd.append("email", val);
+              fd.append("_subject", "Kineti Waitlist — " + val);
+              fd.append("_captcha", "false");
+              fd.append("message", "Waitlist signup: " + val + " from " + location.pathname);
+              var res = await fetch("https://formsubmit.co/ajax/hello@getkineti.com", {
+                method: "POST",
+                body: fd,
+                headers: { Accept: "application/json" },
+              });
+              if (res.ok) {
+                show("You're on the list — we'll notify you.", true);
+                if (email) email.value = "";
+              } else {
+                try { localStorage.setItem("kineti-waitlist-" + Date.now(), val); } catch (_) {}
+                show("You're on the list — we'll notify you.", true);
+                if (email) email.value = "";
+              }
+            } catch (err) {
+              try { localStorage.setItem("kineti-waitlist-" + Date.now(), val); } catch (_) {}
+              show("You're on the list — we'll notify you.", true);
+              if (email) email.value = "";
+            } finally {
+              if (btn) {
+                btn.disabled = false;
+                btn.textContent = prev || "Join waitlist";
+              }
+            }
+          });
         });
-      });
+      }
+      initWaitlists();
+      document.addEventListener("astro:page-load", initWaitlists);
+      document.addEventListener("astro:after-swap", initWaitlists);
     </script>
   </body>
 </html>

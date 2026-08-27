@@ -45,43 +45,61 @@
 
 html {
   background-color: var(--bg);
+  color: var(--fg);
   scroll-behavior: smooth;
 }
 
-/* View transitions — instant swap, header persists, no flash */
-@view-transition {
-  navigation: auto;
+body {
+  font-family: ui-monospace, "SF Mono", "Fira Code", "JetBrains Mono", Menlo, Consolas, monospace;
+  background-color: var(--bg);
+  color: var(--fg);
+  -webkit-font-smoothing: antialiased;
 }
+
+/* View transitions — soft, no white flash */
+:root::view-transition {
+  background-color: var(--bg);
+}
+
+html::view-transition-group(root),
+html::view-transition-group(header),
+html::view-transition-image-pair(root),
+html::view-transition-image-pair(header) {
+  background-color: var(--bg);
+}
+
 ::view-transition-old(root),
 ::view-transition-new(root) {
-  animation: none;
+  animation-duration: 180ms;
+  animation-timing-function: cubic-bezier(0.25, 0, 0.25, 1);
   mix-blend-mode: normal;
+  background-color: var(--bg);
 }
+
 ::view-transition-old(header),
 ::view-transition-new(header) {
-  animation: none;
+  animation-duration: 180ms;
+  animation-timing-function: cubic-bezier(0.25, 0, 0.25, 1);
+  background-color: var(--bg);
 }
+
 [data-astro-transition-persist="header"] {
   view-transition-name: header;
 }
-[data-astro-transition-scope] {
-  animation: none !important;
-}
 
+/* Soft UI transitions */
 a,
 button {
   transition:
     color 150ms ease,
     background-color 150ms ease,
     border-color 150ms ease,
-    opacity 150ms ease,
-    transform 150ms ease;
+    opacity 150ms ease;
 }
 
 a:active,
 button:active {
-  transform: translateY(0.5px);
-  opacity: 0.95;
+  opacity: 0.88;
 }
 
 *:focus-visible {
@@ -98,12 +116,14 @@ button:active {
     transition: none;
   }
   ::view-transition-old(root),
-  ::view-transition-new(root) {
-    animation-duration: 0ms;
+  ::view-transition-new(root),
+  ::view-transition-old(header),
+  ::view-transition-new(header) {
+    animation: none !important;
   }
 }
 
-/* Hide all scrollbars site-wide but keep scroll - thorough */
+/* Hide scrollbars but keep scroll */
 html,
 body {
   scrollbar-width: none;
@@ -128,13 +148,6 @@ body::-webkit-scrollbar {
   height: 0;
 }
 
-body {
-  font-family: ui-monospace, "SF Mono", "Fira Code", "JetBrains Mono", Menlo, Consolas, monospace;
-  background-color: var(--bg);
-  color: var(--fg);
-  -webkit-font-smoothing: antialiased;
-}
-
 ::selection {
   background-color: var(--accent);
   color: var(--bg);
@@ -147,6 +160,11 @@ body {
 }
 
 @keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
 }
