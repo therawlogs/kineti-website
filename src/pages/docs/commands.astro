@@ -14,8 +14,6 @@ const defaults = [
   { cmd: "verify [--all]", purpose: "Hash-chain check. --all walks every merged branch and orphan closure." },
   { cmd: "receipt [--last]", purpose: "Spend across workers, gates timeline, DAG state, egress, clean-files" },
   { cmd: "clean-check", purpose: "Scan for names/home paths/secrets — zero matches required to ship" },
-  { cmd: "wrap -- <cmd>", purpose: "Wrap any agent (claude, cursor) under the spend cap" },
-  { cmd: "gateway [--port 8787]", purpose: "Local OpenAI-compatible proxy with reserve/settle (demo)" },
   { cmd: "serve [--foreground]", purpose: "Local ledger daemon on .kineti/kineti.sock (0600). Hosted gate is a separate service." },
   { cmd: "provider-test --provider <p>", purpose: "Smoke-test a provider wire" },
   { cmd: "login/logout/auth-status", purpose: "OAuth PKCE lifecycle (tokens in ~/.kineti/auth/ 0600)" },
@@ -106,7 +104,7 @@ const legacy = [
         <tbody>
           <tr class="border-b border-line"><td class="px-4 py-3 font-mono text-accent">KINETI_FORCE_DIRECT=1</td><td class="px-4 py-3 text-muted">Skip daemon even if one answers</td></tr>
           <tr class="border-b border-line"><td class="px-4 py-3 font-mono text-accent">KINETI_NO_DAEMON=1</td><td class="px-4 py-3 text-muted">Never spawn/connect daemon</td></tr>
-          <tr><td class="px-4 py-3 font-mono text-accent">KINETI_Install_DIR</td><td class="px-4 py-3 text-muted">Install target override for install.sh</td></tr>
+          <tr><td class="px-4 py-3 font-mono text-accent">KINETI_INSTALL_DIR</td><td class="px-4 py-3 text-muted">Install target override for install.sh</td></tr>
         </tbody>
       </table>
     </div>
