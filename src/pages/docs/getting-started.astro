@@ -50,17 +50,20 @@ const toc = [
     <h2 id="h-first" class="text-sm font-bold tracking-wide text-fg">First evidence → ship-check</h2>
     <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">
       Default path is <code class="text-accent">init → evidence → ship-check → receipt → verify</code>. Works
-      with any agent — Claude, Cursor, Grok, or a shell script.
+      with any agent — Claude, Cursor, Grok, shell, or data pipeline. Fingerprint honors <code class="text-accent">[artifacts]</code> in <code class="text-accent">kineti.toml</code>.
     </p>
     <pre class="mt-6 overflow-x-auto rounded-none border border-line bg-surface px-5 py-4 text-xs leading-relaxed sm:text-sm"><code><span class="font-bold text-fg">kineti init</span>                                   <span class="text-muted"># scaffold .kineti/ + kineti.toml</span>
-<span class="font-bold text-fg">kineti evidence --cmd "cargo test"</span>          <span class="text-muted"># or npm test / ./greeting.sh — binds result to file hashes</span>
-<span class="font-bold text-fg">kineti ship-check</span>                             <span class="text-muted"># red if files moved since the proof</span>
+<span class="font-bold text-fg">kineti evidence --cmd "cargo test"</span>          <span class="text-muted"># any verify cmd: pytest / npm test / ./verify.sh / make check</span>
+<span class="font-bold text-fg">kineti evidence</span>                               <span class="text-muted"># uses [proof].command from kineti.toml when --cmd omitted</span>
+<span class="font-bold text-fg">kineti ship-check</span>                             <span class="text-muted"># red if artifacts moved since the proof</span>
 <span class="font-bold text-fg">kineti receipt</span>                                <span class="text-muted"># hash-chained run summary</span>
 <span class="font-bold text-fg">kineti verify --all</span>                           <span class="text-muted"># full DAG check</span></code></pre>
     <div class="mt-6 max-w-3xl space-y-3 text-sm leading-relaxed text-muted">
-      <p><strong class="text-fg">`kineti evidence --cmd "your test"`</strong> runs your verify command and writes <code class="text-accent">.kineti/evidence.json</code> with <code class="text-soft">passed</code>, <code class="text-soft">fingerprint</code> (hash of tracked files), and <code class="text-soft">at</code>. Edit a file — fingerprint flips stale and <code class="text-accent">ship-check</code> refuses.</p>
+      <p><strong class="text-fg">`kineti evidence --cmd "your verify"`</strong> runs your verification (code tests, docs lint, data check, shell) and writes <code class="text-accent">.kineti/evidence.json</code> with <code class="text-soft">passed</code>, <code class="text-soft">fingerprint</code> (hash of <code class="text-accent">[artifacts]</code> — not just code), and <code class="text-soft">at</code>. Edit a tracked file — fingerprint flips stale and <code class="text-accent">ship-check</code> refuses.</p>
+      <p><strong class="text-fg">`[artifacts]`</strong> in <code class="text-accent">kineti.toml</code> controls what counts: <code class="text-soft">include/exclude</code> globs, <code class="text-soft">max_file_bytes</code>. Defaults skip <code class="text-accent">.git/target/node_modules/dist/build</code> etc.</p>
       <p><strong class="text-fg">`kineti ship-check`</strong> is what you put in CI required checks. Exit <code class="text-soft">0</code> fresh, <code class="text-soft">1</code> stale/failed, <code class="text-soft">2</code> missing proof.</p>
-      <p><strong class="text-fg">Spend cap:</strong> set <code class="text-accent">[limits].global_usd</code> in <code class="text-accent">kineti.toml</code> or pass <code class="text-accent">--cap</code> to a command. Crossing settled spend halts the run; only a human <code class="text-accent">.kineti/spend.reset</code> file resumes (see <a href="/docs/receipt" class="text-accent hover:underline">Receipt</a>).</p>
+      <p><strong class="text-fg">Swarm (one command):</strong> <code class="text-accent">kineti swarm --tasks tasks.jsonl --cap 10</code> fans out N agents (each task <code class="text-soft">prompt</code> for LLM or <code class="text-soft">command</code> for shell) under one spend cap, merges branches, and auto re-proofs with <code class="text-accent">[proof].command</code>.</p>
+      <p><strong class="text-fg">Spend cap (any agent):</strong> set <code class="text-accent">[limits].global_usd</code> in <code class="text-accent">kineti.toml</code> or pass <code class="text-accent">--cap</code> to <code class="text-accent">swarm/wrap/gateway</code>. Applies to gateway + wrap + swarm. Crossing settled spend halts; only a human <code class="text-accent">.kineti/spend.reset</code> resumes (see <a href="/docs/receipt" class="text-accent hover:underline">Receipt</a>).</p>
     </div>
     <p class="mt-8 max-w-3xl text-sm leading-relaxed text-muted">
       Next: <a href="/docs/ci" class="text-accent hover:underline">CI</a> ·

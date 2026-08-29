@@ -63,7 +63,7 @@ const toc = [
   <section id="sec-why" data-doc-section aria-labelledby="h-why" class="scroll-mt-20 py-10">
     <h2 id="h-why" class="text-sm font-bold tracking-wide text-fg"><span class="mr-2 text-accent">03</span>Why this check</h2>
     <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">
-      Without a CI gate, an agent can push code after tests without re-proving it. <code class="text-accent">ship-check</code> compares the file fingerprint at proof time to the current tree and refuses to merge if they differ. Same binary locally and in CI — no hosted gate required for v0.
+      Without a CI gate, any agent can push artifacts after verification without re-proving them. <code class="text-accent">ship-check</code> compares the artifact fingerprint (honoring <code class="text-accent">[artifacts]</code> in <code class="text-accent">kineti.toml</code>) at proof time to the current tree and refuses to merge if they differ. Works for code, docs, data, or configs — same binary locally and in CI.
     </p>
     <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">
       Hosted gateway + dashboard is waitlist-only (see <a href="/pricing" class="text-accent hover:underline">Pricing</a>). Local flow stays <code class="text-accent">evidence → ship-check → verify</code>.

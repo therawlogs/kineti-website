@@ -4,8 +4,8 @@ import Terminal from "../components/Terminal.astro";
 ---
 
 <BaseLayout
-  title="Ship proof and spend cap for any coding agent · Kineti"
-  description="Ship proof and spend cap for any coding agent. Claude, Cursor, Grok, and fx write the code. Kineti binds tests to file hashes, caps the bill, and fails merge if the proof is stale."
+  title="Ship proof and spend cap for any agent · Kineti"
+  description="Ship proof and spend cap for any agent — code, docs, data, configs. Claude, Cursor, Grok, and fx produce artifacts. Kineti binds any verification to hashes, caps the bill, and fails merge if the proof is stale."
 >
   <!-- HERO -->
   <section class="border-b border-line">
@@ -14,8 +14,7 @@ import Terminal from "../components/Terminal.astro";
         Ship proof and spend cap for any agent.
       </h1>
       <p class="mt-6 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
-        Claude, Cursor, Grok, and fx write the code. Kineti binds tests to file hashes,
-        caps the bill, and fails merge if the proof is stale.
+        Claude, Cursor, Grok, and fx produce artifacts — code, docs, data, configs. Kineti binds <em class="text-fg not-italic">any</em> verification to artifact hashes, caps the bill, and fails merge if the proof is stale.
       </p>
 
       <div class="mt-8 flex flex-wrap gap-3">
@@ -46,10 +45,11 @@ import Terminal from "../components/Terminal.astro";
 
       <div class="mt-6 max-w-2xl">
         <pre class="overflow-x-auto rounded-none border border-line bg-surface px-5 py-4 text-xs leading-relaxed sm:text-sm"><code><span class="font-bold text-fg">kineti init</span>
-<span class="font-bold text-fg">kineti evidence --cmd "cargo test"</span>
+<span class="font-bold text-fg">kineti evidence --cmd "cargo test"</span>  <span class="text-muted"># or pytest / npm test / ./verify.sh</span>
+<span class="font-bold text-fg">kineti swarm --tasks tasks.jsonl --cap 10</span>  <span class="text-muted"># one cmd, N agents</span>
 <span class="font-bold text-fg">kineti ship-check</span></code></pre>
         <div class="mt-3 flex items-center justify-between rounded-none border border-line bg-surface-2 px-4 py-3 text-xs sm:text-sm">
-          <span class="text-muted">Files changed after evidence</span>
+          <span class="text-muted">Artifacts changed after evidence</span>
           <span class="font-bold text-danger">→ ship-check exit 1</span>
         </div>
       </div>
@@ -70,12 +70,16 @@ import Terminal from "../components/Terminal.astro";
           </thead>
           <tbody>
             <tr class="border-b border-line transition-colors hover:bg-surface-2">
-              <td class="px-4 py-3 text-muted">Tests ran on old files</td>
+              <td class="px-4 py-3 text-muted">Verification ran on old artifacts</td>
               <td class="px-4 py-3 font-bold text-danger">Ship refused</td>
             </tr>
             <tr class="border-b border-line transition-colors hover:bg-surface-2">
-              <td class="px-4 py-3 text-muted">Spend over cap</td>
+              <td class="px-4 py-3 text-muted">Spend over cap (any agent via gateway/wrap/swarm)</td>
               <td class="px-4 py-3 font-bold text-danger">Run stops until a human reset file</td>
+            </tr>
+            <tr class="border-b border-line transition-colors hover:bg-surface-2">
+              <td class="px-4 py-3 text-muted">Artifacts changed after proof</td>
+              <td class="px-4 py-3 font-bold text-danger">Stale — re-run proof</td>
             </tr>
             <tr class="transition-colors hover:bg-surface-2">
               <td class="px-4 py-3 text-muted">Journal byte flipped</td>

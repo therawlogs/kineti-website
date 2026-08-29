@@ -9,12 +9,13 @@ const toc = [
 
 const defaults = [
   { cmd: "init", purpose: "Scaffold .kineti/ + kineti.toml in this folder" },
-  { cmd: "evidence --cmd \"...\"", purpose: "Run your test and bind result to file fingerprint (writes .kineti/evidence.json)" },
-  { cmd: "ship-check", purpose: "Proof gate — 0 fresh, 1 stale/failed, 2 missing, 3 chain broken. Put this in CI." },
+  { cmd: "evidence [--cmd \"...\"]", purpose: "Bind any verification to artifact fingerprint (writes .kineti/evidence.json). Honors [artifacts] + [proof].command. Examples: cargo test | pytest | npm test | ./verify.sh" },
+  { cmd: "ship-check", purpose: "Proof gate — 0 fresh, 1 stale/failed, 2 missing, 3 chain broken. Uses [artifacts] fingerprint; put in CI." },
+  { cmd: "swarm --tasks <file> [--cap N] [--provider P]", purpose: "One command: fan-out N agents (each task {id, prompt} for LLM or {id, command} for shell) under one cap; merges branches + auto re-proofs." },
   { cmd: "verify [--all]", purpose: "Hash-chain check. --all walks every merged branch and orphan closure." },
   { cmd: "receipt [--last]", purpose: "Spend across workers, gates timeline, DAG state, egress, clean-files" },
-  { cmd: "wrap -- <cmd>", purpose: "Run any command under the cap" },
-  { cmd: "gateway --port 8787", purpose: "OpenAI proxy demo (hosted in kineti-pro)" },
+  { cmd: "wrap -- <cmd>", purpose: "Run any command under the cap (any agent via shell)" },
+  { cmd: "gateway --port 8787", purpose: "OpenAI proxy — any agent cap via reserve/settle (demo; hosted in kineti-pro)" },
   { cmd: "clean-check", purpose: "Scan for names/home paths/secrets — zero matches required to ship" },
   { cmd: "serve [--foreground]", purpose: "Local ledger daemon on .kineti/kineti.sock (0600)" },
   { cmd: "provider-test --provider <p>", purpose: "Smoke-test a provider wire" },
