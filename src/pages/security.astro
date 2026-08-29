@@ -27,7 +27,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
       <ul class="mt-6 max-w-3xl list-disc space-y-3 pl-5 text-sm leading-relaxed text-muted marker:text-accent">
         <li>Receipt / journal: spend, fingerprints, gates, DAG heads, egress tags, clean-files counts. Never raw secrets or source contents.</li>
         <li>No telemetry or phone-home on the marketing site. Installer hits <code class="text-accent">github.com/therawlogs/kineti</code> and your CDN; we do not get your source.</li>
-        <li>Verify integrity: <code class="text-accent">curl -fsSL https://getkineti.com/install.sh | sh -s v0.2.0</code> then <code class="text-accent">sha256sum -c SHA256SUMS</code> from the release.</li>
+        <li>Verify integrity: <code class="text-accent">curl -fsSL https://getkineti.com/install.sh | sh -s v0.2.2</code> then <code class="text-accent">sha256sum -c SHA256SUMS</code> from the release. <code class="text-accent">cargo install kineti</code> now pulls 0.2.2 from crates.io.</li>
       </ul>
 
       <h2 class="mt-12 text-xs tracking-wide text-muted">What is in scope</h2>
@@ -40,12 +40,14 @@ import BaseLayout from "../layouts/BaseLayout.astro";
       </p>
 
       <div class="mt-8 border-l-2 border-line pl-4">
-        <p class="text-sm font-bold text-fg">Honest limits (v0.1)</p>
+        <p class="text-sm font-bold text-fg">Honest limits (v0.2.2)</p>
         <ul class="mt-3 list-disc space-y-2 pl-5 text-sm leading-relaxed text-muted marker:text-accent">
-          <li><code class="text-accent">bash</code> runs with your user permissions — no syscall sandbox yet. Swarm workers unfenced inside their worktrees; safety is scope partitioning + git merge, not the kernel.</li>
-          <li>Quarantine is heuristic pattern-matching, not dual-model isolation. Network of spawned processes not restricted.</li>
+          <li><code class="text-accent">bash</code> (via <code class="text-accent">evidence --cmd</code>, <code class="text-accent">wrap</code>, or <code class="text-accent">swarm</code>) runs with your user permissions — no syscall sandbox yet. Safety is <code class="text-accent">[artifacts]</code> scope + <code class="text-accent">ship-check</code>, not the kernel.</li>
+          <li>Gateway + <code class="text-accent">swarm</code>/<code class="text-accent">wrap</code> store hashes + counts only; a compromised gateway worker sees prompts in memory while forwarding. <code class="text-accent">verify</code> and <code class="text-accent">ship-check</code> trust local files.</li>
+          <li> Tokens on disk (<code class="text-accent">~/.kineti/auth/*</code> 0600, daemon <code class="text-accent">.kineti/kineti.sock</code> 0600) are only as safe as your user account. Network of spawned processes not restricted.</li>
           <li>Treat Kineti as blast-radius reduction and audit infra — not a hard boundary against a fully compromised host.</li>
         </ul>
+        <p class="mt-3 text-xs leading-relaxed text-muted">Legacy v0.1 swarm details: workers' bash unfenced inside worktrees, quarantine is pattern-matching, same network/token caveats — see <a href="/docs/security" class="text-accent hover:underline">full docs</a>.</p>
       </div>
 
       <p class="mt-8 text-xs leading-relaxed text-muted"><code class="text-accent">/.well-known/security.txt</code> · Full doc: <a href="/docs/security" class="text-accent hover:underline">/docs/security</a> · <a href="/pricing" class="text-accent hover:underline">Join waitlist</a></p>

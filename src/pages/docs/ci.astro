@@ -23,7 +23,7 @@ const toc = [
 
   <section id="sec-github" data-doc-section aria-labelledby="h-github" class="scroll-mt-20 border-b border-line py-10">
     <h2 id="h-github" class="text-sm font-bold tracking-wide text-fg"><span class="mr-2 text-accent">01</span>GitHub Action</h2>
-    <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">Uses the composite at <code class="text-accent">.github/actions/kineti-receipt</code> on <code class="text-accent">main</code> — no server, same as README.</p>
+    <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">Uses the composite at <code class="text-accent">.github/actions/kineti-receipt</code> on <code class="text-accent">main</code> — no server, same as README. Accepts <code class="text-accent">verify-command</code> or <code class="text-accent">proof-command</code>; any verify cmd works (<code class="text-accent">cargo test</code> | <code class="text-accent">pytest</code> | <code class="text-accent">npm test</code>).</p>
     <pre class="mt-6 overflow-x-auto rounded-none border border-line bg-surface px-5 py-4 text-xs leading-relaxed sm:text-sm"><code><span class="text-soft"># .github/workflows/kineti-receipt.yml</span>
 <span class="text-soft">name: kineti-receipt</span>
 <span class="text-soft">on: [pull_request]</span>
@@ -36,8 +36,8 @@ const toc = [
         <span class="text-soft">with:</span>
           <span class="text-soft">verify-command: "cargo test --all"</span></code></pre>
     <ul class="mt-4 max-w-3xl list-disc space-y-2 pl-5 text-sm leading-relaxed text-muted marker:text-accent">
-      <li>With <code class="text-accent">verify-command</code> set, the action runs <code class="text-accent">kineti evidence --cmd "&lt;verify-command&gt;"</code> then <code class="text-accent">ship-check</code> + <code class="text-accent">verify --all</code> — no prior <code class="text-accent">.kineti/</code> needed.</li>
-      <li>Without it, run <code class="text-accent">kineti evidence --cmd "..."</code> in a prior step first, then the action runs <code class="text-accent">ship-check</code>/<code class="text-accent">verify</code>.</li>
+      <li>With <code class="text-accent">verify-command</code> (or <code class="text-accent">proof-command</code>) set, the action runs <code class="text-accent">kineti evidence --cmd "&lt;verify-command&gt;"</code> then <code class="text-accent">ship-check</code> + <code class="text-accent">verify --all</code> — no prior <code class="text-accent">.kineti/</code> needed.</li>
+      <li>Without it, run <code class="text-accent">kineti evidence --cmd "..."</code> (or <code class="text-accent">kineti evidence</code> with <code class="text-accent">[proof].command</code> in <code class="text-accent">kineti.toml</code>) in a prior step first, then the action runs <code class="text-accent">ship-check</code>/<code class="text-accent">verify</code>.</li>
     </ul>
     <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">
       Fails if receipt missing, stale, or fingerprint doesn't match — <a href="/docs/commands" class="text-accent hover:underline">see commands</a>.
@@ -50,7 +50,7 @@ const toc = [
   <span class="text-soft">image: ubuntu:latest</span>
   <span class="text-soft">before_script:</span>
     <span class="text-soft">- apt-get update &amp;&amp; apt-get install -y curl ca-certificates</span>
-    <span class="text-soft">- curl -fsSL https://getkineti.com/install.sh | sh -s v0.2.0</span>
+    <span class="text-soft">- curl -fsSL https://getkineti.com/install.sh | sh -s v0.2.2</span>
     <span class="text-soft">- export PATH="$HOME/.local/bin:$PATH"</span>
   <span class="text-soft">script:</span>
     <span class="text-soft">- kineti ship-check</span>

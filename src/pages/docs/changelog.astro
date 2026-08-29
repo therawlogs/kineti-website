@@ -6,6 +6,8 @@ const toc = [
   { id: "sec-v01", label: "02 v0.1.0 — WHAT SHIPPED" },
   { id: "sec-deferred", label: "03 WHAT IS LATER" },
   { id: "sec-migrate", label: "04 Upgrade notes" },
+  { id: "sec-v02", label: "05 v0.2.0 / v0.2.1 — any-agent" },
+  { id: "sec-v022", label: "06 v0.2.2 — docs polish + crates.io" },
 ];
 
 const assets = [
@@ -41,7 +43,7 @@ const deferred = [
 
 <DocsLayout
   title="Changelog — Kineti"
-  description="Release files, how to verify SHA256SUMS, what shipped in v0.1.0, what is planned later, and upgrade notes."
+  description="Release files, how to verify SHA256SUMS, what shipped in v0.1.0, v0.2.0/v0.2.1 any-agent, and v0.2.2 docs polish."
   active="changelog"
   {toc}
 >
@@ -57,12 +59,13 @@ const deferred = [
       <code class="text-accent">SHA256SUMS</code>, and
       <code class="text-accent">include/kineti.h</code>. Binaries are served from GitHub Releases only — this
       domain serves nothing but <code class="text-accent">install.sh</code>, kept byte-identical to the
-      repository's main branch by an automated sync job and checked weekly by CI.
+      repository's main branch by an automated sync job and checked weekly by CI. <code class="text-accent">cargo install kineti</code> now pulls <code class="text-accent">0.2.2</code> from crates.io.
     </p>
     <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">
       Install integrity check:
     </p>
-    <pre class="mt-3 max-w-3xl overflow-x-auto rounded-none border border-line bg-surface px-5 py-4 text-xs leading-relaxed sm:text-sm"><code><span class="text-muted">$</span> <span class="font-bold text-fg">curl -fsSL https://getkineti.com/install.sh | sh</span>
+    <pre class="mt-3 max-w-3xl overflow-x-auto rounded-none border border-line bg-surface px-5 py-4 text-xs leading-relaxed sm:text-sm"><code><span class="text-muted">$</span> <span class="font-bold text-fg">curl -fsSL https://getkineti.com/install.sh | sh -s v0.2.2</span>
+<span class="text-muted"># or: cargo install kineti  # 0.2.2</span>
 <span class="text-muted"># verify after install:</span>
 <span class="font-bold text-fg">sha256sum -c SHA256SUMS</span>   <span class="text-muted"># from the release page</span></code></pre>
   </section>
@@ -81,7 +84,7 @@ const deferred = [
     </ul>
     <div class="mt-8 max-w-3xl">
       <h3 class="text-sm font-bold text-fg">Check after install</h3>
-      <pre class="mt-3 overflow-x-auto rounded-none border border-line bg-surface px-5 py-4 text-xs leading-relaxed sm:text-sm"><code><span class="text-muted">$</span> <span class="font-bold text-fg">curl -fsSL https://getkineti.com/install.sh | sh</span>
+      <pre class="mt-3 overflow-x-auto rounded-none border border-line bg-surface px-5 py-4 text-xs leading-relaxed sm:text-sm"><code><span class="text-muted">$</span> <span class="font-bold text-fg">curl -fsSL https://getkineti.com/install.sh | sh -s v0.2.2</span>
 <span class="text-muted"># from the release page:</span>
 <span class="font-bold text-fg">sha256sum -c SHA256SUMS</span></code></pre>
     </div>
@@ -112,17 +115,29 @@ const deferred = [
     <h2 id="h-migrate" class="text-sm font-bold tracking-wide text-fg"><span class="mr-2 text-accent">04</span>Upgrade notes</h2>
     <ul class="mt-4 max-w-3xl list-disc space-y-2 pl-5 text-sm leading-relaxed text-muted marker:text-accent">
       <li><strong class="text-fg">v0.2.0 → v0.2.1:</strong> drop-in. New <code class="text-accent">[artifacts]</code> + <code class="text-accent">[proof].command</code>; legacy <code class="text-accent">[limits].verify_command</code> still works. New fingerprint excludes <code class="text-soft">dist/build/.next/coverage/tmp/.cache/legacy</code> + 4 MiB cap — re-run <code class="text-accent">kineti evidence</code> if you have those dirs or large files.</li>
+      <li><strong class="text-fg">v0.2.1 → v0.2.2:</strong> docs only — no code change. Fingerprint & wire format still <code class="text-accent">v1</code>. Drop-in via <code class="text-accent">cargo install kineti</code> (0.2.2) or <code class="text-accent">install.sh -s v0.2.2</code>.</li>
       <li><strong class="text-fg">v0.1.0 → v0.2.x:</strong> <code class="text-accent">kineti run --legacy</code> still works (frozen); product is now <code class="text-accent">evidence → ship-check → verify</code> + <code class="text-accent">swarm</code>.</li>
     </ul>
   </section>
 
-  <section id="sec-v02" data-doc-section aria-labelledby="h-v02" class="scroll-mt-20 py-10">
-    <h2 id="h-v02" class="text-sm font-bold tracking-wide text-fg"><span class="mr-2 text-accent">02b</span>v0.2.0 / v0.2.1 — gateway + any-agent swarm</h2>
+  <section id="sec-v02" data-doc-section aria-labelledby="h-v02" class="scroll-mt-20 border-b border-line py-10">
+    <h2 id="h-v02" class="text-sm font-bold tracking-wide text-fg"><span class="mr-2 text-accent">05</span>v0.2.0 / v0.2.1 — gateway + any-agent swarm</h2>
     <p class="mt-2 max-w-3xl text-xs tracking-wide text-muted">Tags <code class="text-accent">v0.2.0</code> (2026-08-27) + <code class="text-accent">v0.2.1</code> (2026-08-29) · same assets</p>
     <ul class="mt-4 max-w-3xl list-disc space-y-2 pl-5 text-sm leading-relaxed text-muted marker:text-accent">
       <li><code class="text-accent">evidence --cmd</code> now generic — any verify cmd; <code class="text-accent">[artifacts]</code> globs control fingerprint</li>
       <li><code class="text-accent">kineti swarm --tasks tasks.jsonl --cap 10</code> — one command, N agents (LLM <code class="text-soft">prompt</code> or shell <code class="text-soft">command</code>) under one cap</li>
       <li><code class="text-accent">[proof].command</code> with legacy <code class="text-soft">limits.verify_command</code> alias</li>
+    </ul>
+  </section>
+
+  <section id="sec-v022" data-doc-section aria-labelledby="h-v022" class="scroll-mt-20 py-10">
+    <h2 id="h-v022" class="text-sm font-bold tracking-wide text-fg"><span class="mr-2 text-accent">06</span>v0.2.2 — docs polish + crates.io README sync (2026-08-29)</h2>
+    <p class="mt-2 max-w-3xl text-xs tracking-wide text-muted">Tag <code class="text-accent">v0.2.2</code> · same 8 assets · <code class="text-accent">cargo install kineti</code> → 0.2.2</p>
+    <ul class="mt-4 max-w-3xl list-disc space-y-2 pl-5 text-sm leading-relaxed text-muted marker:text-accent">
+      <li><code class="text-accent">README.md</code> pin now <code class="text-accent">v0.2.2</code> + <code class="text-accent">cargo install kineti</code> note; Status now <code class="text-accent">v0.2.2 any-agent</code></li>
+      <li><code class="text-accent">SECURITY.md</code> scope now <code class="text-accent">v0.2.2</code> any-agent (<code class="text-accent">[artifacts]</code> + <code class="text-accent">swarm</code>); <code class="text-accent">CONTRIBUTING.md</code> product <code class="text-accent">v0.2.2</code> + any-cmd note</li>
+      <li><code class="text-accent">.github/actions/kineti-receipt</code> now <code class="text-accent">verify-command</code> + <code class="text-accent">proof-command</code> alias, description any-agent (<code class="text-accent">pytest</code>/<code class="text-accent">npm test</code>/<code class="text-accent">./verify.sh</code>)</li>
+      <li>No code change beyond docs; fingerprint & wire format still <code class="text-accent">v1</code></li>
     </ul>
     <p class="mt-8 text-sm leading-relaxed text-muted">
       Next: <a href="/docs/getting-started" class="text-accent hover:underline">Getting started</a> ·
