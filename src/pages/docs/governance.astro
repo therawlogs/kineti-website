@@ -30,7 +30,7 @@ const gates = [
   {
     gate: "Feasibility (5)",
     fires: "budget, data, or team check fails",
-    failure: "go back to diagnosis. No code has been written yet.",
+    failure: "go back to diagnosis. No artifacts have been produced yet.",
   },
   {
     gate: "Spec (6)",
@@ -40,7 +40,7 @@ const gates = [
   {
     gate: "Ship (11)",
     fires: "ready to ship",
-    failure: "blocked unless tests match the current code, security checks pass, history is clean, and files are clean.",
+    failure: "blocked unless proof matches current artifacts, security checks pass, history is clean, and files are clean.",
   },
 ];
 
@@ -59,8 +59,8 @@ const inventory = [
     body: "Checks on shape and range run between what is seen and what is decided.",
   },
   {
-    name: "Test tie to code",
-    body: "Test results are tied to a hash of the code. If you edit the code, you must run tests again. Old proof does not ship.",
+    name: "Proof tie to artifacts",
+    body: "Verification results are tied to hashes of tracked artifacts (code, docs, data, configs via [artifacts]). Edit a tracked file → re-run proof, old proof does not ship.",
   },
   {
     name: "Send log",
@@ -152,8 +152,8 @@ const inventory = [
   <section id="sec-why" data-doc-section aria-labelledby="h-why" class="scroll-mt-20 py-10">
     <h2 id="h-why" class="text-sm font-bold tracking-wide text-fg"><span class="mr-2 text-accent">04</span>Why this way</h2>
     <p class="mt-4 max-w-3xl text-sm leading-relaxed text-muted">
-      The strong guarantees (no code without your approval, no runaway spend, no hidden history edits) are in
-      code the model does not control. The easy-to-change parts (prompts) stay editable. The hard parts are built
+      The strong guarantees (no artifacts without your approved proof, no runaway spend for any agent, no hidden history edits) are in
+      code the model does not control. The easy-to-change parts (prompts, <code class="text-accent">[artifacts]</code> globs, <code class="text-accent">[proof].command</code>) stay editable. The hard parts are built
       into one ~3 MB binary.
     </p>
     <p class="mt-8 text-sm leading-relaxed text-muted">

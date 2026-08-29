@@ -8,7 +8,7 @@ const toc = [
   { id: "spend-explodes", label: "04 What if spend jumps?" },
   { id: "trust-history", label: "05 Can I trust history?" },
   { id: "why-daemon", label: "06 Why a daemon?" },
-  { id: "code-sent", label: "07 Is my code sent anywhere?" },
+  { id: "code-sent", label: "07 Is my code or data sent anywhere?" },
   { id: "not-solved", label: "08 What is not solved yet?" },
   { id: "uninstall", label: "09 How do I uninstall?" },
   { id: "install-tamper", label: "10 Can the install script be tampered with?" },
@@ -47,8 +47,8 @@ const faqs = [
   },
   {
     id: "code-sent",
-    q: "Is my code sent anywhere?",
-    a: "Only to the model providers you choose. Each send is saved before it leaves (with secrets removed) and shows in kineti receipt. There is no telemetry, no phone-home, no analytics.",
+    q: "Is my code or data sent anywhere?",
+    a: "Only to the model providers you choose (any agent — code, docs, data, configs). Each send is saved before it leaves (keys redacted) and shows in kineti receipt as hashes/counts only, never raw prompts by default. No telemetry, no phone-home, no analytics.",
   },
   {
     id: "not-solved",
